@@ -26,6 +26,11 @@ export const routes: Routes = [
         redirectTo: '/tabs/tab1',
         pathMatch: 'full',
       },
+
+      {
+        path: 'perfil-jugador',
+        loadComponent: () => import('../perfil-jugador/perfil-jugador.page').then( m => m.PerfilJugadorPage)
+      },
     ],
   },
   {
