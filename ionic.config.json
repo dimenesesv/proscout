@@ -1,0 +1,7 @@
+{
+  "name": "proscout",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
