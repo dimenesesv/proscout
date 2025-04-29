@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
 import { Subscription } from 'rxjs';
-import { getAuth } from 'firebase/auth';
-
+import { getAuth, signOut } from 'firebase/auth';
+import { Router } from '@angular/router'; // Asegúrate de importar Router
 @Component({
   selector: 'app-tab4',
   templateUrl: './tab4.page.html',
@@ -14,7 +14,9 @@ export class Tab4Page implements OnInit, OnDestroy {
   userProfile: any;
   private profileSubscription: Subscription | undefined;
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private firebaseService: FirebaseService,
+              private router: Router, // Asegúrate de importar Router
+  ) {}
 
   ngOnInit() {
     const auth = getAuth();
@@ -41,5 +43,17 @@ export class Tab4Page implements OnInit, OnDestroy {
     if (this.profileSubscription) {
       this.profileSubscription.unsubscribe();
     }
+  }
+
+  // Método para cerrar sesión
+  logout() {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      console.log('Sesión cerrada correctamente');
+      // Aquí podrías redirigir a otra página o realizar cualquier otra acción.
+      this.router.navigate(['/login']); // Asegúrate de importar Router y agregarlo en el constructor
+    }).catch((error) => {
+      console.error('Error al cerrar sesión:', error);
+    });
   }
 }
