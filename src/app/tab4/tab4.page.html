@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="text-center">Vicente Gonzalez</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="perfil-page">
+  <div class="tabs-header">
+    <div class="tab active">Perfil</div>
+    <div class="tab">Estadísticas</div>
+    <div class="tab">Galería</div>
+  </div>
+
+  <ion-card class="perfil-card">
+    <div class="info">
+      <div class="info-group">
+        <label>Edad</label>
+        <div>{{ userProfile?.edad }}</div>
+      </div>
+      <div class="info-group">
+        <label>Posición</label>
+        <div>{{ userProfile?.posicion }}</div>
+      </div>
+      <div class="info-group">
+        <label>Altura</label>
+        <div>{{ userProfile?.altura }}</div>
+      </div>
+      <div class="info-group">
+        <label>Peso</label>
+        <div>{{ userProfile?.peso }}</div>
+      </div>
+    </div>
+    <img [src]="userProfile?.fotoUrl || 'https://placehold.co/185x185'" class="player-photo" />
+  </ion-card>
+
+  <ion-card class="detalles-card">
+    <ion-item lines="none">
+      <ion-label>
+        <p class="label">Posición secundaria</p>
+        <h2>{{ userProfile?.secundaria }}</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>
+        <p class="label">Pierna hábil</p>
+        <h2>{{ userProfile?.piernaHabil }}</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>
+        <p class="label">Equipo actual</p>
+        <h2>{{ userProfile?.equipo }}</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>
+        <p class="label">Disponibilidad de fichaje</p>
+        <h2>{{ userProfile?.fichaje }}</h2>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <div class="extra-info">
+    <div class="info-box">
+      <p class="mini-label">Nacionalidad</p>
+      <h3>{{ userProfile?.nacionalidad }}</h3>
+    </div>
+    <div class="info-box">
+      <p class="mini-label">Fecha de nacimiento</p>
+      <h3>{{ userProfile?.nacimiento }}</h3>
+    </div>
+    <div class="info-box">
+      <p class="mini-label">Tutor</p>
+      <h3>{{ userProfile?.tutor }}</h3>
+      <p class="mini-label">Parentesco: {{ userProfile?.parentesco }}</p>
+    </div>
+  </div>
+
+  <div class="acciones">
+    <ion-button expand="block" color="success" shape="round">Enviar solicitud de contacto</ion-button>
+    <ion-button expand="block" color="dark" shape="round">Añadir a favoritos</ion-button>
+  </div>
+</ion-content>
