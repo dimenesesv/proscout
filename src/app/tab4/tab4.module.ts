@@ -8,6 +8,10 @@ import { Tab4PageRoutingModule } from './tab4-routing.module';
 
 import { Tab4Page } from './tab4.page';
 import { FirebaseService } from '../services/firebase.service';
+import { RadarChartComponent } from '../radar-chart/radar-chart.component'; // ajusta la ruta
+
+
+
 
 @NgModule({
   imports: [
@@ -16,7 +20,7 @@ import { FirebaseService } from '../services/firebase.service';
     IonicModule,
     Tab4PageRoutingModule
   ],
-  declarations: [Tab4Page],
+  declarations: [Tab4Page,RadarChartComponent],
   providers: [FirebaseService]
 })
 export class Tab4PageModule {}

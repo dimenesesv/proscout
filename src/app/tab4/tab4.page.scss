@@ -1,3 +1,4 @@
+
 .perfil-page {
     .text-center {
       text-align: center;
@@ -105,3 +106,174 @@
       }
     }
   }
+
+  .profile-card {
+  width: 100%;
+  background-color: white;
+
+  .header {
+    background: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 16px;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .back-arrow {
+    cursor: pointer;
+  }
+
+  .profile-name {
+    h2 {
+      font-size: 32px;
+      font-family: Helvetica Neue;
+      font-weight: 700;
+      color: black;
+    }
+  }
+
+  .stats-container {
+    margin: 16px 0;
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #7d7d7d;
+
+      span {
+        font-weight: 400;
+      }
+    }
+  }
+
+  .profile-physical-stats,
+  .profile-technical-stats {
+    margin-top: 16px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  ion-item {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  ion-footer {
+    padding: 8px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, white 59%);
+  }
+
+  .footer-buttons {
+    display: flex;
+    justify-content: space-between;
+
+    ion-button {
+      flex: 1;
+      margin: 4px;
+    }
+  }
+}
+.profile-stats-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+
+  .radar-chart-container {
+    position: relative;
+    margin: 20px auto;
+    width: 280px; // Ajusta el tamaño según necesites
+    height: 280px;
+
+    #radarChart {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .legend {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      font-size: 0.8em;
+      color: var(--ion-color-medium-shade);
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        .legend-color {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+
+          &.habilidad {
+            background-color: rgba(102, 187, 106, 0.7); // Ejemplo de color
+          }
+
+          &.fisico {
+            background-color: rgba(255, 167, 38, 0.7); // Ejemplo de color
+          }
+
+          &.tecnico {
+            background-color: rgba(63, 81, 181, 0.7); // Ejemplo de color
+          }
+        }
+      }
+    }
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+
+    .stats-group {
+      h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: var(--ion-color-dark-shade);
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+
+      &.fisicos h3 {
+        color: rgba(255, 167, 38, 1);
+      }
+
+      &.tecnicos h3 {
+        color: rgba(63, 81, 181, 1);
+      }
+
+      ion-item {
+        --inner-padding-end: 0;
+        padding: 8px 0;
+
+        ion-label {
+          h2 {
+            margin: 0;
+            font-size: 1.2em;
+            color: var(--ion-color-dark);
+          }
+          p {
+            margin: 0;
+            font-size: 0.9em;
+            color: var(--ion-color-medium);
+          }
+        }
+
+        ion-badge {
+          font-size: 0.9em;
+          padding: 6px 8px;
+        }
+      }
+    }
+  }
+}

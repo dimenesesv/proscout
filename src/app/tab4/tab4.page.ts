@@ -1,21 +1,30 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
 import { Subscription } from 'rxjs';
 import { getAuth, signOut } from 'firebase/auth';
-import { Router } from '@angular/router'; // Asegúrate de importar Router
+import { Router } from '@angular/router';
+import Swiper from 'swiper';
+import SwiperOptions from 'swiper';
+import { Chart } from 'chart.js/auto';
+
+
 @Component({
   selector: 'app-tab4',
   templateUrl: './tab4.page.html',
   styleUrls: ['./tab4.page.scss'],
   standalone: false,
 })
-export class Tab4Page implements OnInit, OnDestroy {
+export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
 
   userProfile: any;
   private profileSubscription: Subscription | undefined;
 
-  constructor(private firebaseService: FirebaseService,
-              private router: Router, // Asegúrate de importar Router
+  activeTab: number = 0;
+  swiper: Swiper | undefined;
+
+  constructor(
+    private firebaseService: FirebaseService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -31,12 +40,27 @@ export class Tab4Page implements OnInit, OnDestroy {
     const path = `usuarios/${userId}`;
 
     this.firebaseService.getDocument(path)
-      .then(data => {
+      .then((data) => {
         this.userProfile = data;
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error al obtener el perfil del usuario:', error);
       });
+  }
+
+  ngAfterViewInit() {
+    // Configuración básica de Swiper
+    this.swiper = new Swiper('.swiper-container', {
+      slidesPerView: 1,
+      spaceBetween: 10,
+    });
+  
+    // Evento básico para actualizar el índice activo
+    this.swiper.on('slideChange', () => {
+      this.activeTab = this.swiper?.activeIndex || 0;
+    });
+
+
   }
 
   ngOnDestroy() {
@@ -45,13 +69,16 @@ export class Tab4Page implements OnInit, OnDestroy {
     }
   }
 
-  // Método para cerrar sesión
+  slideTo(index: number) {
+    this.activeTab = index;
+    this.swiper?.slideTo(index);
+  }
+
   logout() {
     const auth = getAuth();
     signOut(auth).then(() => {
       console.log('Sesión cerrada correctamente');
-      // Aquí podrías redirigir a otra página o realizar cualquier otra acción.
-      this.router.navigate(['/login']); // Asegúrate de importar Router y agregarlo en el constructor
+      this.router.navigate(['/login']);
     }).catch((error) => {
       console.error('Error al cerrar sesión:', error);
     });

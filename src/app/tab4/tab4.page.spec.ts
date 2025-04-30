@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Tab4Page } from './tab4.page';
+import Swiper from 'swiper';
 
 describe('Tab4Page', () => {
   let component: Tab4Page;
