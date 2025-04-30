@@ -1,13 +1,28 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>nacionalidad</ion-title>
+    <ion-title>Nacionalidad</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">nacionalidad</ion-title>
+      <ion-title size="large">Nacionalidad</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <form (ngSubmit)="guardarNacionalidad()">
+    <ion-item>
+      <ion-label>Nacionalidad</ion-label>
+      <ion-select [(ngModel)]="nacionalidad" name="nacionalidad" placeholder="Selecciona una">
+        <ion-select-option *ngFor="let pais of nacionalidades" [value]="pais">
+          {{ pais }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" class="ion-margin-top">
+      Guardar
+    </ion-button>
+  </form>
 </ion-content>

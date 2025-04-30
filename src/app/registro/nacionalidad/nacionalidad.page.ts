@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { RegistroService } from 'src/app/services/registro.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-nacionalidad',
   templateUrl: './nacionalidad.page.html',
@@ -7,10 +8,45 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class NacionalidadPage implements OnInit {
+  nacionalidades: string[] = [
+    'Argentina',
+    'Bolivia',
+    'Brasil',
+    'Chile',
+    'Colombia',
+    'Ecuador',
+    'Paraguay',
+    'Perú',
+    'Uruguay',
+    'Venezuela',
+    'México',
+    'España',
+    'Estados Unidos',
+    'Canadá',
+    'Francia',
+    'Italia',
+    'Alemania',
+    'Reino Unido',
+    'Japón',
+    'China',
+    'India',
+    'Australia',
+  ];
+  nacionalidad: string = '';
 
-  constructor() { }
+  constructor(private registroService: RegistroService,
+              private router: Router
+  ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  guardarNacionalidad() {
+    if (this.nacionalidad) {
+      this.registroService.setNacionality(this.nacionalidad); // Guarda la nacionalidad en el servicio
+      console.log('Nacionalidad guardada:', this.nacionalidad);
+      this.router.navigate(['/registro/correo']); // Navega a la siguiente página
+    } else {
+      console.log('Por favor selecciona una nacionalidad.');
+    }
   }
-
 }

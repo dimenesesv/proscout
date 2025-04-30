@@ -25,4 +25,7 @@ export class LoginPage {
         // Aquí podrías mostrar un mensaje de error
       });
   }
+  goToRegister() {
+    this.router.navigate(['/registro']); // Redirige a la página de registro
+  }
 }

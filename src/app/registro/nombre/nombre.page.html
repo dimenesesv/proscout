@@ -1,13 +1,25 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>nombre</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">nombre</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form [formGroup]="nameForm" (ngSubmit)="onSubmit()" style="padding: 16px;" class="formulario-boton">
+    <ion-item>
+      <ion-label position="floating">Ingresa tu nombre</ion-label>
+      <ion-input type="text" formControlName="name" class="input"></ion-input>
+    </ion-item>
+
+    <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" style="color: red; margin-top: 8px;">
+      <div *ngIf="name?.errors?.['required']">El nombre es obligatorio.</div>
+      <div *ngIf="name?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres.</div>
+      <div *ngIf="name?.errors?.['maxlength']">El nombre no puede exceder los 50 caracteres.</div>
+      <div *ngIf="name?.errors?.['pattern']">El nombre solo puede contener letras y espacios.</div>
+    </div>
+
+    <div style="margin-top: 16px; display: flex; justify-content: center;">
+      <button
+        type="submit"
+        [disabled]="nameForm.invalid"
+        style="background-color: black; color: white; border: none; border-radius: 15px; padding: 10px 20px; display: flex; align-items: center;"
+      >
+        <ion-icon name="chevron-forward-outline" style="font-size: 20px; margin-left: 5px;"></ion-icon>
+      </button>
+    </div>
+  </form>
 </ion-content>

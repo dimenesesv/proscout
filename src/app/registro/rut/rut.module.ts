@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { RutPageRoutingModule } from './rut-routing.module';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { RutPage } from './rut.page';
 
 @NgModule({
@@ -13,7 +13,8 @@ import { RutPage } from './rut.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    RutPageRoutingModule
+    RutPageRoutingModule,
+    ReactiveFormsModule,
   ],
   declarations: [RutPage]
 })

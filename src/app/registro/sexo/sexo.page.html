@@ -1,13 +1,25 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>sexo</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">sexo</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">
+        ¿Cómo te identificas?
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="ion-padding">
+        <ion-button expand="block" color="primary" class="custom-button" (click)="setSexo('Niño')">
+          <ion-icon name="man-outline" slot="icon-only"></ion-icon>
+          <span>Niño</span>
+        </ion-button>
+        <ion-button expand="block" color="secondary" class="custom-button" (click)="setSexo('Niña')">
+          <ion-icon name="woman-outline" slot="icon-only"></ion-icon>
+          <span>Niña</span>
+        </ion-button>
+        <ion-button expand="block" color="tertiary" class="custom-button" (click)="setSexo('Prefiero no decirlo')">
+          <ion-icon name="help-outline" slot="icon-only"></ion-icon>
+          <span>Prefiero no decirlo</span>
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
