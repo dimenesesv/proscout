@@ -1,0 +1,71 @@
+.objectives-wrapper {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .progress-section {
+    text-align: center;
+    margin-bottom: 20px;
+  
+    h2 {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+  
+    .progress-text {
+      margin-top: 8px;
+      font-weight: 500;
+    }
+  }
+  
+  .cards-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .objective-card {
+    border-left: 6px solid #d3d3d3;
+    transition: 0.3s ease;
+    border-radius: 12px;
+  
+    &.completed {
+      border-left-color: #28a745;
+      background: #e6ffe6;
+    }
+  }
+  
+  .status {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .status-icon {
+    font-size: 24px;
+    margin-right: 8px;
+  }
+  
+  .trophy-earned {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #ffc107;
+    animation: bounce 1s infinite alternate;
+  }
+  
+  @keyframes bounce {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-5px);
+    }
+  }

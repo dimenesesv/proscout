@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NotificationService, Notification } from '../services/notification.service';
 
 @Component({
   selector: 'app-tab3',
@@ -8,6 +9,34 @@ import { Component } from '@angular/core';
 })
 export class Tab3Page {
 
-  constructor() {}
+   notifications: Notification[] = [];
+
+  constructor( private notificationService: NotificationService ) {}
+
+  ngOnInit() {
+    this.loadNotifications();
+  }
+
+  loadNotifications() {
+    this.notificationService.getNotifications().subscribe(data => {
+      this.notifications = data;
+    });
+  }
+
+  getIcon(type: string): string {
+    switch (type) {
+      case 'profileView':
+        return 'eye-outline';
+      case 'eventNearby':
+        return 'location-outline';
+      case 'metricRated':
+        return 'star-outline';
+      default:
+        return 'notifications-outline';
+    }
+  }
 
 }
+
+
+

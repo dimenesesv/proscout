@@ -1,17 +1,40 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Objetivos Semanales</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="objectives-wrapper">
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+    <div class="progress-section">
+      <h2>Progreso Semanal</h2>
+      <ion-progress-bar [value]="progress" color="success"></ion-progress-bar>
+      <p class="progress-text">{{ progress * 100 | number: '1.0-0' }}% Completado</p>
+    </div>
+
+    <div class="cards-container">
+      <ion-card *ngFor="let objetivo of objetivos" class="objective-card" [class.completed]="objetivo.completado">
+        <ion-card-header>
+          <ion-card-title>{{ objetivo.texto }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="status">
+            <ion-icon
+              [name]="objetivo.completado ? 'checkmark-circle' : 'ellipse-outline'"
+              slot="start"
+              class="status-icon"
+              color="success"
+            ></ion-icon>
+            <span>{{ objetivo.completado ? 'Completado' : 'Pendiente' }}</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div *ngIf="trofeoObtenido" class="trophy-earned">
+      🏆 ¡Has completado todos los objetivos!
+    </div>
+
+  </div>
 </ion-content>
