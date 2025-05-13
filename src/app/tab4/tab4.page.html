@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="text-center">{{userProfile?.nombre}}</ion-title>
+    <ion-title class="text-center">{{userProfile?.name}}</ion-title>
     <ion-button (click)="logout()">Cerrar sesión</ion-button>
   </ion-toolbar>
 </ion-header>
@@ -20,19 +20,19 @@
           <div class="info">
             <div class="info-group">
               <label>Edad</label>
-              <div>{{ userProfile?.edad }}</div>
+              <div>{{ userProfile?.age }}</div>
             </div>
             <div class="info-group">
               <label>Posición</label>
-              <div>{{ userProfile?.posicion }}</div>
+              <div>{{ userProfile?.position }}</div>
             </div>
             <div class="info-group">
               <label>Altura</label>
-              <div>{{ userProfile?.altura }}</div>
+              <div>{{ userProfile?.height }}</div>
             </div>
             <div class="info-group">
               <label>Peso</label>
-              <div>{{ userProfile?.peso }}</div>
+              <div>{{ userProfile?.weight }}</div>
             </div>
           </div>
           <img [src]="userProfile?.fotoUrl || 'https://placehold.co/185x185'" class="player-photo" />

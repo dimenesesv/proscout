@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { NombrePage } from './nombre/nombre.page';
 
 @Component({
   selector: 'app-registro',
@@ -8,9 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistroPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  navigateTo(path: string): void {
+    this.router.navigate(['registro/nombre']);
   }
 
 }

@@ -24,7 +24,7 @@ export class NombrePage implements OnInit {
           Validators.required,
           Validators.minLength(3), // Minimum 3 characters
           Validators.maxLength(50), // Maximum 50 characters
-          Validators.pattern(/^[a-zA-Z\s]*$/), // Only letters and spaces
+          Validators.pattern(/^[a-zA-Z\sáéíóú]*$/), // Only letters, spaces, and ´
         ],
       ],
     });

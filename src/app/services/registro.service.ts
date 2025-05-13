@@ -9,6 +9,7 @@ export class RegistroService {
 
   constructor() {}
 
+  // Setters
   setNombre(name: string) {
     this.usuario.name = name;
   }
@@ -60,6 +61,8 @@ export class RegistroService {
   setUsuario(usuario: Usuario) {
     this.usuario = usuario;
   }
+
+  // Getters
   getNombre() {
     return this.usuario.name;
   }
@@ -90,11 +93,11 @@ export class RegistroService {
   getBirthDate() {
     return this.usuario.birthDate;
   }
-  getTutor() {
-    return this.usuario.tutor;
-  }
   getSex() {
     return this.usuario.sex;
+  }
+  getTutor() {
+    return this.usuario.tutor;
   }
   getEmergencyContact() {
     return this.usuario.emergencyContact;
@@ -108,7 +111,6 @@ export class RegistroService {
   getIsScouter() {
     return this.usuario.isscouter;
   }
-
   getUsuario() {
     return this.usuario;
   }

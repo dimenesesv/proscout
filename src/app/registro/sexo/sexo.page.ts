@@ -15,7 +15,7 @@ export class SexoPage implements OnInit {
 
   setSexo(sexo: string) {
     this.registroService.setSex(sexo); // Guarda el sexo en el servicio
-    console.log('Sexo seleccionado:', sexo);
+    console.log('Usuario actualizado', this.registroService.getUsuario());
     this.router.navigate(['/registro/nacionalidad']); // Navega a la siguiente página
   }
 }
