@@ -43,4 +43,6 @@ export class FirebaseService {
       alert('Ocurrió un error al actualizar el documento. Por favor, inténtalo de nuevo.');
     }
   }
+
+  
 }

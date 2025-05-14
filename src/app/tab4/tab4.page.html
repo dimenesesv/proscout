@@ -125,9 +125,24 @@
        </div>
 
       <!-- Slide 3: Galería -->
-      <div class="swiper-slide">
-      
+<div class="swiper-slide">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Galería</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <!-- Botón para seleccionar imágenes -->
+      <ion-button expand="full" (click)="selectImage()">Subir Imagen</ion-button>
+
+      <!-- Mostrar imágenes subidas -->
+      <div class="gallery">
+        <div *ngFor="let imageUrl of galleryUrls" class="gallery-item">
+          <img [src]="imageUrl" alt="Imagen subida" />
+        </div>
       </div>
+    </ion-card-content>
+  </ion-card>
+</div>
     </div>
   </div>
 
