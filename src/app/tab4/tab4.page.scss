@@ -1,298 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:host {
+  --color-primario: #225C73;
+  --color-secundario: #35748C;
+  --color-acento: #7698A6;
+  --color-fondo: #E9F0F2;
+  --color-claro: #BFD1D9;
+}
 
 .perfil-page {
-    .text-center {
-      text-align: center;
-    }
-  
-    .tabs-header {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 10px;
-  
-      .tab {
-        font-weight: 700;
-        font-size: 18px;
-        color: black;
-        padding: 10px;
-        border-bottom: 2px solid transparent;
-  
-        &.active {
-          color: #00ff55;
-          border-color: #00ff55;
-        }
-      }
-    }
-  
-    .perfil-card {
-      display: flex;
-      justify-content: space-between;
-      padding: 16px;
-  
-      .info {
-        display: flex;
-        flex-wrap: wrap;
-        width: 50%;
-  
-        .info-group {
-          width: 50%;
-          margin-bottom: 10px;
-  
-          label {
-            font-size: 12px;
-            color: #7d7d7d;
-          }
-  
-          div {
-            font-size: 20px;
-            font-weight: 700;
-          }
-        }
-      }
-  
-      .player-photo {
-        width: 45%;
-        border-radius: 15px;
-      }
-    }
-  
-    .detalles-card {
-      margin-top: 20px;
-  
-      ion-label {
-        h2 {
-          font-weight: 700;
-          font-size: 20px;
-        }
-  
-        .label {
-          font-size: 12px;
-          color: #7d7d7d;
-        }
-      }
-    }
-  
-    .extra-info {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin: 20px 10px;
-  
-      .info-box {
-        width: 30%;
-        background: white;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-        padding: 10px;
-        border-radius: 15px;
-  
-        h3 {
-          margin: 5px 0;
-          font-size: 14px;
-        }
-  
-        .mini-label {
-          font-size: 8px;
-          color: #757575;
-        }
-      }
-    }
-  
-    .acciones {
-      margin: 20px 16px;
-  
-      ion-button {
-        margin-bottom: 10px;
-        font-weight: 500;
-        font-size: 18px;
-      }
-    }
+  --background: var(--color-fondo);
+  background-color: var(--color-fondo);
+
+  ion-card-title,
+  ion-button,
+  ion-label,
+  ion-item,
+  ion-input,
+  ion-text {
+    font-family: 'Bebas Neue', sans-serif !important;
   }
 
-  .profile-card {
-  width: 100%;
-  background-color: white;
-
-  .header {
-    background: white;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    padding: 16px;
+  ion-card-title {
+    font-size: 1.2rem;
   }
 
-  .header-content {
+  .tabs-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    justify-content: space-around;
+    padding: 10px 0;
+    background-color: var(--color-claro);
 
-  .back-arrow {
-    cursor: pointer;
-  }
-
-  .profile-name {
-    h2 {
-      font-size: 32px;
-      font-family: Helvetica Neue;
-      font-weight: 700;
-      color: black;
-    }
-  }
-
-  .stats-container {
-    margin: 16px 0;
-
-    .stat {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #7d7d7d;
-
-      span {
-        font-weight: 400;
-      }
-    }
-  }
-
-  .profile-physical-stats,
-  .profile-technical-stats {
-    margin-top: 16px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  }
-
-  ion-item {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  ion-footer {
-    padding: 8px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, white 59%);
-  }
-
-  .footer-buttons {
-    display: flex;
-    justify-content: space-between;
-
-    ion-button {
+    .tab {
       flex: 1;
-      margin: 4px;
+      text-align: center;
+      padding: 10px 0;
+      color: var(--color-primario);
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+
+      &.active {
+        border-color: var(--color-secundario);
+        color: var(--color-secundario);
+      }
     }
   }
-}
-.profile-stats-content {
-  --padding-start: 16px;
-  --padding-end: 16px;
 
-  .radar-chart-container {
-    position: relative;
-    margin: 20px auto;
-    width: 280px; // Ajusta el tamaño según necesites
-    height: 280px;
+  .perfil-card {
+    background-color: var(--color-claro);
+    color: var(--color-primario);
 
-    #radarChart {
-      width: 100% !important;
-      height: 100% !important;
+    .info-group label {
+      font-weight: 600;
+      color: var(--color-primario);
     }
 
-    .legend {
-      position: absolute;
-      bottom: -40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      font-size: 0.8em;
-      color: var(--ion-color-medium-shade);
+    .player-photo {
+      width: 100%;
+      max-width: 200px;
+      margin: 16px auto;
+      display: block;
+      border-radius: 50%;
+      border: 4px solid var(--color-primario);
+    }
+  }
 
-      .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
+  .detalles-card ion-item {
+    --background: var(--color-fondo);
+    --color: var(--color-primario);
+  }
 
-        .legend-color {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
+  .extra-info .info-box {
+    margin-top: 8px;
+    padding: 10px;
+    background-color: var(--color-fondo);
+    border-radius: 8px;
+  }
 
-          &.habilidad {
-            background-color: rgba(102, 187, 106, 0.7); // Ejemplo de color
-          }
+  .acciones ion-button {
+    margin-top: 12px;
+    font-weight: bold;
 
-          &.fisico {
-            background-color: rgba(255, 167, 38, 0.7); // Ejemplo de color
-          }
+    &.ion-color-success {
+      --background: var(--color-secundario);
+    }
 
-          &.tecnico {
-            background-color: rgba(63, 81, 181, 0.7); // Ejemplo de color
-          }
-        }
-      }
+    &.ion-color-dark {
+      --background: var(--color-primario);
     }
   }
 
   .stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
 
-    .stats-group {
+    .stat-item {
+      background-color: var(--color-fondo);
+      padding: 12px;
+      border-radius: 8px;
+      color: var(--color-primario);
+      text-align: center;
+
       h3 {
-        margin-top: 0;
-        margin-bottom: 10px;
-        color: var(--ion-color-dark-shade);
-        font-size: 1.1em;
+        font-size: 1rem;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 1.2rem;
         font-weight: bold;
       }
+    }
+  }
 
-      &.fisicos h3 {
-        color: rgba(255, 167, 38, 1);
+  .img {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .galeria-card {
+    background-color: white;
+    border-radius: 16px;
+    padding: 16px;
+
+    ion-card-header {
+      background-color: var(--color-secundario);
+      padding: 12px 16px;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+
+      ion-card-title {
+        color: white;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+    }
+
+    ion-button {
+      --background: var(--color-primario);
+      --border-radius: 12px;
+      font-weight: 500;
+      font-family: 'Bebas Neue', sans-serif !important;
+      width: 100%;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    ion-grid {
+      margin-top: 8px;
+
+      ion-row {
+        gap: 8px;
       }
 
-      &.tecnicos h3 {
-        color: rgba(63, 81, 181, 1);
-      }
+      ion-col {
+        padding: 0;
 
-      ion-item {
-        --inner-padding-end: 0;
-        padding: 8px 0;
-
-        ion-label {
-          h2 {
-            margin: 0;
-            font-size: 1.2em;
-            color: var(--ion-color-dark);
-          }
-          p {
-            margin: 0;
-            font-size: 0.9em;
-            color: var(--ion-color-medium);
-          }
-        }
-
-        ion-badge {
-          font-size: 0.9em;
-          padding: 6px 8px;
+        ion-img {
+          width: 100%;
+          height: 100px;
+          object-fit: cover;
+          border-radius: 12px;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
       }
     }
   }
-  .gallery {
+
+  ion-card {
+    margin: 16px;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background-color: white;
+
+    ion-card-header {
+      background-color: var(--color-secundario);
+      color: white;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      padding: 12px 16px;
+    }
+  }
+}
+
+.swiper-slide {
+  padding: 0 !important;
+  margin: 0 !important;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
+  flex-direction: column;
 }
 
-.gallery-item {
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
-  border-radius: 8px;
+.swiper-slide > ion-card {
+  margin: 0 !important;
 }
 
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+ion-app {
+  font-family: 'Bebas Neue', sans-serif;
 }

@@ -1,149 +1,85 @@
+
 <ion-header>
   <ion-toolbar>
-    <ion-title class="text-center">{{userProfile?.name}}</ion-title>
+    <ion-title class="text-center">{{ userProfile?.name }}</ion-title>
     <ion-button (click)="logout()">Cerrar sesión</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="perfil-page">
-  <div class="tabs-header">
-    <div class="tab" [class.active]="activeTab === 0" (click)="slideTo(0)">Perfil</div>
-    <div class="tab" [class.active]="activeTab === 1" (click)="slideTo(1)">Estadísticas</div>
-    <div class="tab" [class.active]="activeTab === 2" (click)="slideTo(2)">Galería</div>
-  </div>
+  <app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></app-tabs-header>
 
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <!-- Slide 1: Perfil -->
       <div class="swiper-slide">
-        <ion-card class="perfil-card">
-          <div class="info">
-            <div class="info-group">
-              <label>Edad</label>
-              <div>{{ userProfile?.age }}</div>
-            </div>
-            <div class="info-group">
-              <label>Posición</label>
-              <div>{{ userProfile?.position }}</div>
-            </div>
-            <div class="info-group">
-              <label>Altura</label>
-              <div>{{ userProfile?.height }}</div>
-            </div>
-            <div class="info-group">
-              <label>Peso</label>
-              <div>{{ userProfile?.weight }}</div>
-            </div>
-          </div>
-          <img [src]="userProfile?.fotoUrl || 'https://placehold.co/185x185'" class="player-photo" />
-        </ion-card>
-        <ion-card class="detalles-card">
-          <ion-item lines="none">
-            <ion-label>
-              <p class="label">Posición secundaria</p>
-              <h2>{{ userProfile?.secundaria }}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-label>
-              <p class="label">Pierna hábil</p>
-              <h2>{{ userProfile?.piernaHabil }}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-label>
-              <p class="label">Equipo actual</p>
-              <h2>{{ userProfile?.equipo }}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-label>
-              <p class="label">Disponibilidad de fichaje</p>
-              <h2>{{ userProfile?.fichaje }}</h2>
-            </ion-label>
-          </ion-item>
-        </ion-card>
-        <div class="extra-info">
-          <div class="info-box">
-            <p class="mini-label">Nacionalidad</p>
-            <h3>{{ userProfile?.nacionalidad }}</h3>
-          </div>
-          <div class="info-box">
-            <p class="mini-label">Fecha de nacimiento</p>
-            <h3>{{ userProfile?.nacimiento }}</h3>
-          </div>
-          <div class="info-box">
-            <p class="mini-label">Tutor</p>
-            <h3>{{ userProfile?.tutor }}</h3>
-            <p class="mini-label">Parentesco: {{ userProfile?.parentesco }}</p>
-          </div>
-        </div>
-        <div class="acciones">
-          <ion-button expand="block" color="success" shape="round">Enviar solicitud de contacto</ion-button>
-          <ion-button expand="block" color="dark" shape="round">Añadir a favoritos</ion-button>
-        </div>
+       
+        <app-perfil-card [userProfile]="userProfile"></app-perfil-card>
       </div>
-
-
 
       <!-- Slide 2: Estadísticas -->
       <div class="swiper-slide">
         <ion-card>
-          <ion-card-header>
-            <ion-card-title>Estadísticas</ion-card-title>
-          </ion-card-header>
           <ion-card-content>
-            <app-radar-chart
-            [labels]="['Ataque', 'pepito', 'Habilidad', 'Táctica', 'Creatividad']"
-            [data]="[75, 50, 25, 25, 100]">
-            </app-radar-chart>
-            
-            <div class="stats-grid">
-              <div class="stat-item">
-                <h3>Partidos jugados</h3>
-                <p>{{ userProfile?.partidosJugados }}</p>
-              </div>
-              <div class="stat-item">
-                <h3>Goles</h3>
-                <p>{{ userProfile?.goles }}</p>
-              </div>
-              <div class="stat-item">
-                <h3>Asistencias</h3>
-                <p>{{ userProfile?.asistencias }}</p>
-              </div>
-              <div class="stat-item">
-                <h3>Tarjetas amarillas</h3>
-                <p>{{ userProfile?.tarjetasAmarillas }}</p>
-              </div>
-              <div class="stat-item">
-                <h3>Tarjetas rojas</h3>
-                <p>{{ userProfile?.tarjetasRojas }}</p>
-              </div>
-            </div>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Estadísticas</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <app-radar-chart
+                  [labels]="['Ataque', 'pepito', 'Habilidad', 'Táctica', 'Creatividad']"
+                  [data]="[75, 50, 25, 25, 100]"
+                ></app-radar-chart>
+
+                <div class="stats-grid">
+                  <div class="stat-item">
+                    <h3>Partidos jugados</h3>
+                    <p>{{ userProfile?.partidosJugados }}</p>
+                  </div>
+                  <div class="stat-item">
+                    <h3>Goles</h3>
+                    <p>{{ userProfile?.goles }}</p>
+                  </div>
+                  <div class="stat-item">
+                    <h3>Asistencias</h3>
+                    <p>{{ userProfile?.asistencias }}</p>
+                  </div>
+                  <div class="stat-item">
+                    <h3>Tarjetas amarillas</h3>
+                    <p>{{ userProfile?.tarjetasAmarillas }}</p>
+                  </div>
+                  <div class="stat-item">
+                    <h3>Tarjetas rojas</h3>
+                    <p>{{ userProfile?.tarjetasRojas }}</p>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
           </ion-card-content>
         </ion-card>
-       </div>
+      </div>
 
       <!-- Slide 3: Galería -->
-<div class="swiper-slide">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Galería</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <!-- Botón para seleccionar imágenes -->
-      <ion-button expand="full" (click)="selectImage()">Subir Imagen</ion-button>
+      <div class="swiper-slide">
+        <ion-card class="galeria-card">
+          <ion-card-header>
+            <ion-card-title>Galería</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-button expand="block" (click)="selectImage()">Subir Imagen</ion-button>
 
-      <!-- Mostrar imágenes subidas -->
-      <div class="gallery">
-        <div *ngFor="let imageUrl of galleryUrls" class="gallery-item">
-          <img [src]="imageUrl" alt="Imagen subida" />
-        </div>
+            <ion-progress-bar *ngIf="uploadProgress !== null" [value]="uploadProgress"></ion-progress-bar>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6" *ngFor="let imageUrl of galleryUrls">
+                  <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
       </div>
-    </ion-card-content>
-  </ion-card>
-</div>
     </div>
   </div>
-
 </ion-content>

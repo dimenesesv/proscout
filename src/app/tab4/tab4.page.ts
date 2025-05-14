@@ -1,20 +1,24 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
-import { StorageService } from '../services/storage.service'; // Importar el StorageService
+import { StorageService } from '../services/storage.service';
+import { LoadingController } from '@ionic/angular'; // Importar LoadingController
 import { Subscription } from 'rxjs';
 import { getAuth, signOut } from 'firebase/auth';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
 
+
 @Component({
   selector: 'app-tab4',
   templateUrl: './tab4.page.html',
   styleUrls: ['./tab4.page.scss'],
+  
   standalone: false,
 })
 export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   userProfile: any;
-  galleryUrls: string[] = []; // Array para almacenar las URLs de las imágenes
+  galleryUrls: string[] = [];
+  uploadProgress: number | null = null; // Progreso de la subida
   private profileSubscription: Subscription | undefined;
 
   activeTab: number = 0;
@@ -22,7 +26,8 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private firebaseService: FirebaseService,
-    private storageService: StorageService, // Inyectar el StorageService
+    private storageService: StorageService,
+    private loadingController: LoadingController, // Inyectar LoadingController
     private router: Router
   ) {}
 
@@ -42,7 +47,7 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     this.firebaseService.getDocument(path)
       .then((data) => {
         this.userProfile = data;
-        this.galleryUrls = data?.gallery || []; // Cargar las imágenes existentes
+        this.galleryUrls = data?.gallery || [];
       })
       .catch((error) => {
         console.error('Error al obtener el perfil del usuario:', error);
@@ -50,13 +55,11 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Configuración básica de Swiper
     this.swiper = new Swiper('.swiper-container', {
       slidesPerView: 1,
       spaceBetween: 10,
     });
 
-    // Evento básico para actualizar el índice activo
     this.swiper.on('slideChange', () => {
       this.activeTab = this.swiper?.activeIndex || 0;
     });
@@ -110,13 +113,36 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     const userId = user.uid;
     const filePath = `usuarios/${userId}/gallery/${Date.now()}_${file.name}`;
 
+    // Mostrar el overlay de carga
+    const loading = await this.loadingController.create({
+      message: 'Subiendo imagen...',
+      spinner: 'crescent', // Spinner de tipo "crescent"
+    });
+    await loading.present();
+
     try {
-      // Subir la imagen y obtener la URL de descarga
-      const downloadUrl = await this.storageService.uploadFile(filePath, file);
+      // Subir la imagen y obtener el progreso
+      const task = this.storageService.uploadFileWithProgress(filePath, file);
+
+      // Escuchar el progreso de la subida
+      task.percentageChanges().subscribe((progress) => {
+        this.uploadProgress = progress ? progress / 100 : null;
+        loading.message = `Subiendo imagen... ${Math.round(progress || 0)}%`; // Actualizar el mensaje
+      });
+
+      // Esperar a que la subida termine y obtener la URL
+      const downloadUrl = await task.snapshotChanges().toPromise().then(() => {
+        return this.storageService.getDownloadUrl(filePath);
+      });
+
       this.galleryUrls.push(downloadUrl); // Agregar la URL al array local
       this.updateGalleryInFirestore(userId); // Actualizar Firestore
     } catch (error) {
       console.error('Error al subir la imagen:', error);
+    } finally {
+      // Cerrar el overlay de carga
+      await loading.dismiss();
+      this.uploadProgress = null; // Reiniciar el progreso
     }
   }
 
