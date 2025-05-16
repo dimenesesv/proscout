@@ -11,16 +11,21 @@ const routes: Routes = [
     path: 'registro',
     loadChildren: () => import('./registro/registro.module').then(m => m.RegistroPageModule),
   },
-  {
-    path: '',
-    loadChildren: () => import('./scouter/tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: '',
-    loadChildren: () => import('./player/tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate: [AuthGuard],
-  },
+{
+  path: 'scouter',
+  loadChildren: () => import('./scouter/tabs/tabs.module').then(m => m.TabsPageModule),
+  canActivate: [AuthGuard],
+},
+{
+  path: 'player',
+  loadChildren: () => import('./player/tabs/tabs.module').then(m => m.TabsPageModule),
+  canActivate: [AuthGuard],
+},
+{
+  path: '',
+  redirectTo: 'login',
+  pathMatch: 'full',
+}
 ];
 
 @NgModule({

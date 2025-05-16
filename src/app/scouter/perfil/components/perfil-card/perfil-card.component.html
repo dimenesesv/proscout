@@ -1,0 +1,73 @@
+<ion-card>
+  <ion-card-content>
+    <ion-card class="perfil-card">
+      <div class="info">
+        <div class="info-group">
+          <label>Edad</label>
+          <div>{{ userProfile?.age }}</div>
+        </div>
+        <div class="info-group">
+          <label>Posición</label>
+          <div>{{ userProfile?.position }}</div>
+        </div>
+        <div class="info-group">
+          <label>Altura</label>
+          <div>{{ userProfile?.height }}</div>
+        </div>
+        <div class="info-group">
+          <label>Peso</label>
+          <div>{{ userProfile?.weight }}</div>
+        </div>
+      </div>
+      <img [src]="userProfile?.fotoUrl || 'https://placehold.co/185x185'" class="player-photo" />
+    </ion-card>
+
+    <ion-card class="detalles-card">
+      <ion-item lines="none">
+        <ion-label>
+          <p class="label">Posición secundaria</p>
+          <h2>{{ userProfile?.secundaria }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <p class="label">Pierna hábil</p>
+          <h2>{{ userProfile?.piernaHabil }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <p class="label">Equipo actual</p>
+          <h2>{{ userProfile?.equipo }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <p class="label">Disponibilidad de fichaje</p>
+          <h2>{{ userProfile?.fichaje }}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+    <div class="extra-info">
+      <div class="info-box">
+        <p class="mini-label">Nacionalidad</p>
+        <h3>{{ userProfile?.nacionalidad }}</h3>
+      </div>
+      <div class="info-box">
+        <p class="mini-label">Fecha de nacimiento</p>
+        <h3>{{ userProfile?.nacimiento }}</h3>
+      </div>
+      <div class="info-box">
+        <p class="mini-label">Tutor</p>
+        <h3>{{ userProfile?.tutor }}</h3>
+        <p class="mini-label">Parentesco: {{ userProfile?.parentesco }}</p>
+      </div>
+    </div>
+
+    <div class="acciones">
+      <ion-button expand="block" color="success" shape="round">Enviar solicitud de contacto</ion-button>
+      <ion-button expand="block" color="dark" shape="round">Añadir a favoritos</ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>
