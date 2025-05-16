@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NotificationService, Notification } from '../services/notification.service';
+import { NotificationService, Notification } from '../../services/notification.service';
 
 @Component({
   selector: 'app-tab3',

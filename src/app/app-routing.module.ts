@@ -4,17 +4,22 @@ import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate: [AuthGuard], // Aplicar el guard a esta ruta
-  },
-  {
     path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule),
   },
   {
     path: 'registro',
     loadChildren: () => import('./registro/registro.module').then(m => m.RegistroPageModule),
+  },
+  {
+    path: '',
+    loadChildren: () => import('./scouter/tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: '',
+    loadChildren: () => import('./player/tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [AuthGuard],
   },
 ];
 

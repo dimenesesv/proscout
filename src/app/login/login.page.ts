@@ -18,7 +18,7 @@ export class LoginPage {
     this.authService.login(this.email, this.password)
       .then(userCredential => {
         console.log('Usuario logeado:', userCredential);
-        this.router.navigate(['/tabs/tab1']); // Redirige a la página que quieras
+        this.router.navigate(['/player/tab1']); // Redirige a la página que quieras
       })
       .catch(error => {
         console.error('Error en login:', error);

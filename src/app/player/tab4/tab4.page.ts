@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { FirebaseService } from '../services/firebase.service';
-import { StorageService } from '../services/storage.service';
+import { FirebaseService } from '../../services/firebase.service';
+import { StorageService } from '../../services/storage.service';
 import { LoadingController } from '@ionic/angular'; // Importar LoadingController
 import { Subscription } from 'rxjs';
 import { getAuth, signOut } from 'firebase/auth';
