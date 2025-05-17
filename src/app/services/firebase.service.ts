@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { doc, getDoc, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
-  private readonly firestore = getFirestore(); // Instancia de Firestore
-  private readonly path = 'usuarios/KH661jqP2qPPhmbR4ZAMuc6bz032'; // Path del documento
+  constructor(private afs: AngularFirestore) {}
 
   // Función para establecer un documento
   async setDocument(path: string, data: any): Promise<void> {
     try {
-      await setDoc(doc(this.firestore, path), data); // Agrega o actualiza el documento
+      await this.afs.doc(path).set(data);
     } catch (error: any) {
       console.error('Error al establecer el documento:', error);
       alert('Ocurrió un error al guardar el documento. Por favor, inténtalo de nuevo.');
@@ -21,8 +21,12 @@ export class FirebaseService {
   // Función para obtener un documento
   async getDocument(path: string): Promise<any> {
     try {
-      const snapshot = await getDoc(doc(this.firestore, path));
-      return snapshot.exists() ? snapshot.data() : null; // Retorna los datos si existen
+      console.log('[FirebaseService] Intentando leer documento en:', path);
+      const snapshot = await firstValueFrom(this.afs.doc(path).get());
+      console.log('[FirebaseService] Documento existe:', snapshot.exists);
+      console.log('[FirebaseService] Documento completo:', snapshot);
+      console.log('[FirebaseService] Datos:', snapshot.data());
+      return snapshot?.data() ?? null;
     } catch (error: any) {
       console.error('Error al obtener el documento:', error);
       if (error.code === 'unavailable') {
@@ -37,12 +41,10 @@ export class FirebaseService {
   // Función para actualizar un documento
   async updateDocument(path: string, data: any): Promise<void> {
     try {
-      await updateDoc(doc(this.firestore, path), data);
+      await this.afs.doc(path).update(data);
     } catch (error: any) {
       console.error('Error al actualizar el documento:', error);
       alert('Ocurrió un error al actualizar el documento. Por favor, inténtalo de nuevo.');
     }
   }
-
-  
 }

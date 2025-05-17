@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 // Firebase
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth'; // <-- Importar este módulo
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig), // Inicializar Firebase
     AngularFireAuthModule, // <-- Importar el módulo de autenticación
+    AngularFirestoreModule, // <-- Importar el módulo de Firestore
     FormsModule,
     ReactiveFormsModule,
   ],

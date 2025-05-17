@@ -7,14 +7,14 @@
 </ion-header>
 
 <ion-content class="perfil-page">
-  <app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></app-tabs-header>
+  <player-app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></player-app-tabs-header>
 
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <!-- Slide 1: Perfil -->
       <div class="swiper-slide">
        
-        <app-perfil-card [userProfile]="userProfile"></app-perfil-card>
+        <player-app-perfil-card [userProfile]="userProfile"></player-app-perfil-card>
       </div>
 
       <!-- Slide 2: Estadísticas -->

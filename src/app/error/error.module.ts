@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SeleccionRolPageRoutingModule } from './seleccion-rol-routing.module';
+import { ErrorPageRoutingModule } from './error-routing.module';
 
-import { SeleccionRolPage } from './seleccion-rol.page';
+import { ErrorPage } from './error.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SeleccionRolPageRoutingModule
+    ErrorPageRoutingModule
   ],
-  declarations: [SeleccionRolPage]
+  declarations: [ErrorPage]
 })
-export class SeleccionRolPageModule {}
+export class ErrorPageModule {}

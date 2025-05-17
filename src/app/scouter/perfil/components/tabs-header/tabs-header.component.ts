@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   selector: 'app-tabs-header',
   templateUrl: './tabs-header.component.html',
   styleUrls: ['./tabs-header.component.scss'],
-  standalone: true
+  standalone: false
 })
 export class TabsHeaderComponent {
   @Input() activeTab: number = 0;

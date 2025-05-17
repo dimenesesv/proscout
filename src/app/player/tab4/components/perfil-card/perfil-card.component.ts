@@ -2,11 +2,11 @@ import { Component, Input } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
-  selector: 'app-perfil-card',
+  selector: 'player-app-perfil-card',
   templateUrl: './perfil-card.component.html',
-  imports: [IonicModule],
   styleUrls: ['./perfil-card.component.scss'],
+  standalone: false
 })
-export class PerfilCardComponent {
+export class PlayerPerfilCardComponent {
   @Input() userProfile: any;
 }

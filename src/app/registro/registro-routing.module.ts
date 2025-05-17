@@ -9,10 +9,6 @@ const routes: Routes = [
     component: RegistroPage
   },
   {
-    path: 'seleccion-rol',
-    loadChildren: () => import('./seleccion-rol/seleccion-rol.module').then( m => m.SeleccionRolPageModule)
-  },
-  {
     path: 'rut',
     loadChildren: () => import('./rut/rut.module').then( m => m.RutPageModule)
   },
@@ -43,6 +39,14 @@ const routes: Routes = [
   {
     path: 'bienvenida',
     loadChildren: () => import('./bienvenida/bienvenida.module').then( m => m.BienvenidaPageModule)
+  },
+  {
+    path: 'fecha-nacimiento',
+    loadChildren: () => import('./fecha-nacimiento/fecha-nacimiento.module').then( m => m.FechaNacimientoPageModule)
+  },
+  {
+    path: 'tutor-legal',
+    loadChildren: () => import('./tutor-legal/tutor-legal.module').then( m => m.TutorLegalPageModule)
   }
 ];
 

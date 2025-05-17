@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Fecha de Nacimiento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="formulario" (ngSubmit)="continuar()">
+    <ion-item>
+      <ion-label position="floating">Fecha de nacimiento</ion-label>
+      <ion-datetime
+        formControlName="birthDate"
+        presentation="date"
+        [max]="hoy"
+      ></ion-datetime>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="formulario.invalid">
+      Continuar
+    </ion-button>
+  </form>
+</ion-content>

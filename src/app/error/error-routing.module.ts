@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { SeleccionRolPage } from './seleccion-rol.page';
+import { ErrorPage } from './error.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SeleccionRolPage
+    component: ErrorPage
   }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SeleccionRolPageRoutingModule {}
+export class ErrorPageRoutingModule {}

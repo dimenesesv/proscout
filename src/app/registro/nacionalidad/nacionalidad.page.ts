@@ -44,7 +44,7 @@ export class NacionalidadPage implements OnInit {
     if (this.nacionalidad) {
       this.registroService.setNacionality(this.nacionalidad); // Guarda la nacionalidad en el servicio
       console.log('Nacionalidad guardada:', this.nacionalidad);
-      this.router.navigate(['/registro/correo']); // Navega a la siguiente página
+      this.router.navigate(['/registro/fecha-nacimiento']); // Navega a la siguiente página
     } else {
       console.log('Por favor selecciona una nacionalidad.');
     }

@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-tabs-header',
+  selector: 'player-app-tabs-header',
   templateUrl: './tabs-header.component.html',
   styleUrls: ['./tabs-header.component.scss'],
-  standalone: true
+  standalone: false
 })
-export class TabsHeaderComponent {
+export class PlayerTabsHeaderComponent {
   @Input() activeTab: number = 0;
   @Output() tabChange = new EventEmitter<number>();
 

@@ -44,7 +44,7 @@ export class VerificacionPage implements OnInit {
       if (user?.emailVerified) {
         clearInterval(interval); // Detener la verificación periódica
         this.isCheckingVerification = false;
-        this.router.navigate(['/registro/siguiente-pagina']); // Redirigir a la siguiente página
+        this.router.navigate(['/registro/bienvenida']); // Redirigir a la siguiente página
       }
     }, 3000); // Verificar cada 3 segundos
   }

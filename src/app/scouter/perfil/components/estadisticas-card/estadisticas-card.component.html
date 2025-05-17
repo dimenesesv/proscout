@@ -1,0 +1,38 @@
+<ion-card>
+  <ion-card-content>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Estadísticas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <app-radar-chart
+          [labels]="['Ataque', 'pepito', 'Habilidad', 'Táctica', 'Creatividad']"
+          [data]="[75, 50, 25, 25, 100]"
+        ></app-radar-chart>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h3>Partidos jugados</h3>
+            <p>{{ userProfile?.partidosJugados }}</p>
+          </div>
+          <div class="stat-item">
+            <h3>Goles</h3>
+            <p>{{ userProfile?.goles }}</p>
+          </div>
+          <div class="stat-item">
+            <h3>Asistencias</h3>
+            <p>{{ userProfile?.asistencias }}</p>
+          </div>
+          <div class="stat-item">
+            <h3>Tarjetas amarillas</h3>
+            <p>{{ userProfile?.tarjetasAmarillas }}</p>
+          </div>
+          <div class="stat-item">
+            <h3>Tarjetas rojas</h3>
+            <p>{{ userProfile?.tarjetasRojas }}</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-card-content>
+</ion-card>

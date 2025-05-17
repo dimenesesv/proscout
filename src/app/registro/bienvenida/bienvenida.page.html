@@ -12,8 +12,25 @@
   </ion-header>
 
   <div class="welcome-container">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Bienvenida</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Bienvenida</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="welcome-container">
     <h1>¡Bienvenido a nuestra aplicación!</h1>
     <p>Haz clic en el botón de abajo para ir a la página de inicio.</p>
-    <ion-button expand="full" routerLink="/tabs/tab1">Ir a Home</ion-button>
+    <ion-button expand="full" (click)="irAHOME()">Ir a Home</ion-button>
+  </div>
+</ion-content>
+
   </div>
 </ion-content>

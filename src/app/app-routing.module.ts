@@ -25,7 +25,11 @@ const routes: Routes = [
   path: '',
   redirectTo: 'login',
   pathMatch: 'full',
-}
+},
+  {
+    path: 'error',
+    loadChildren: () => import('./error/error.module').then( m => m.ErrorPageModule)
+  }
 ];
 
 @NgModule({
