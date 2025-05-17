@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
+import { ref, uploadBytesResumable, getDownloadURL, UploadTask, getStorage } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageService {
-  constructor(private storage: AngularFireStorage) {}
+  private storage = getStorage();
 
   // Subir un archivo a Firebase Storage con progreso
-  uploadFileWithProgress(path: string, file: File): AngularFireUploadTask {
-    return this.storage.upload(path, file);
+  uploadFileWithProgress(path: string, file: File): UploadTask {
+    const storageRef = ref(this.storage, path);
+    return uploadBytesResumable(storageRef, file);
   }
 
   // Obtener la URL de descarga de un archivo
   async getDownloadUrl(path: string): Promise<string> {
-    const fileRef = this.storage.ref(path);
-    return fileRef.getDownloadURL().toPromise();
+    const storageRef = ref(this.storage, path);
+    return await getDownloadURL(storageRef);
   }
 }

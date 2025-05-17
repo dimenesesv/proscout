@@ -117,14 +117,16 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     try {
       const task = this.storageService.uploadFileWithProgress(filePath, file);
 
-      task.percentageChanges().subscribe((progress) => {
-        this.uploadProgress = progress ? progress / 100 : null;
-        loading.message = `Subiendo imagen... ${Math.round(progress || 0)}%`;
+      // Escuchar el progreso de la subida usando el evento 'state_changed'
+      task.on('state_changed', (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.uploadProgress = progress / 100;
+        loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
       });
 
-      const downloadUrl = await task.snapshotChanges().toPromise().then(() => {
-        return this.storageService.getDownloadUrl(filePath);
-      });
+      // Esperar a que la subida termine y obtener la URL
+      await task;
+      const downloadUrl = await this.storageService.getDownloadUrl(filePath);
 
       this.galleryUrls.push(downloadUrl);
       this.updateGalleryInFirestore(userId);

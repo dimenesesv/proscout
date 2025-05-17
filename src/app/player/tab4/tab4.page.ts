@@ -116,7 +116,7 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     // Mostrar el overlay de carga
     const loading = await this.loadingController.create({
       message: 'Subiendo imagen...',
-      spinner: 'crescent', // Spinner de tipo "crescent"
+      spinner: 'crescent',
     });
     await loading.present();
 
@@ -124,25 +124,24 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
       // Subir la imagen y obtener el progreso
       const task = this.storageService.uploadFileWithProgress(filePath, file);
 
-      // Escuchar el progreso de la subida
-      task.percentageChanges().subscribe((progress) => {
-        this.uploadProgress = progress ? progress / 100 : null;
-        loading.message = `Subiendo imagen... ${Math.round(progress || 0)}%`; // Actualizar el mensaje
+      // Escuchar el progreso de la subida usando el evento 'state_changed'
+      task.on('state_changed', (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.uploadProgress = progress / 100;
+        loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
       });
 
       // Esperar a que la subida termine y obtener la URL
-      const downloadUrl = await task.snapshotChanges().toPromise().then(() => {
-        return this.storageService.getDownloadUrl(filePath);
-      });
+      await task;
+      const downloadUrl = await this.storageService.getDownloadUrl(filePath);
 
-      this.galleryUrls.push(downloadUrl); // Agregar la URL al array local
-      this.updateGalleryInFirestore(userId); // Actualizar Firestore
+      this.galleryUrls.push(downloadUrl);
+      this.updateGalleryInFirestore(userId);
     } catch (error) {
       console.error('Error al subir la imagen:', error);
     } finally {
-      // Cerrar el overlay de carga
       await loading.dismiss();
-      this.uploadProgress = null; // Reiniciar el progreso
+      this.uploadProgress = null;
     }
   }
 

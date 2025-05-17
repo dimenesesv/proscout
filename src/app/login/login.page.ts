@@ -15,36 +15,41 @@ export class LoginPage {
 
   constructor(private authService: AuthService, private router: Router, private firebaseService: FirebaseService) {}
 
-  async login() {
-    try {
-      const userCredential = await this.authService.login(this.email, this.password);
-      console.log('Usuario logeado:', userCredential);
-      const uid = userCredential.user?.uid;
-      alert('UID obtenido: ' + uid);
-      if (!uid) {
-        throw new Error('No se pudo obtener el UID del usuario.');
-      }
-      console.log('[DEBUG] UID:', uid);
-      const path = `usuarios/${uid}`;
-      console.log('[DEBUG] Path usado:', path);
-      const userData = await this.firebaseService.getDocument(path);
-      console.log('[DEBUG] userData:', userData);
-      if (userData) {
-        if (userData.isplayer) {
-          this.router.navigate(['/player/tabs/tab1']);
-        } else if (userData.isscouter) {
-          this.router.navigate(['/scouter/tabs/mapa']);
-        } else {
-          this.router.navigate(['/error']);
-        }
+async login() {
+  try {
+    console.log('[DEBUG] Iniciando login con:', this.email);
+    const userCredential = await this.authService.login(this.email, this.password);
+    console.log('[DEBUG] Credencial:', userCredential);
+
+    const uid = userCredential.user?.uid;
+    if (!uid) throw new Error('No se pudo obtener el UID del usuario.');
+    console.log('[DEBUG] UID:', uid);
+
+    const path = `usuarios/${uid}`;
+    console.log('[DEBUG] Path usado:', path);
+    const userData = await this.firebaseService.getDocument(path);
+    console.log('[DEBUG] Datos del usuario:', userData);
+
+    if (userData) {
+      if (userData.isplayer) {
+        console.log('[DEBUG] Usuario es jugador');
+        this.router.navigate(['/player/player/tab1']);
+      } else if (userData.isscouter) {
+        console.log('[DEBUG] Usuario es visor');
+        this.router.navigate(['/scouter/scouter/mapa']);
       } else {
+        console.warn('[DEBUG] Usuario sin rol definido');
         this.router.navigate(['/error']);
       }
-    } catch (error) {
-      console.error('Error en login:', error);
-      // Aquí podrías mostrar un mensaje de error
+    } else {
+      console.warn('[DEBUG] No se encontraron datos del usuario');
+      this.router.navigate(['/error']);
     }
+  } catch (error) {
+    console.error('[ERROR] Fallo en login:', error);
+    alert('Ocurrió un error al iniciar sesión. Revisa tu conexión o credenciales.');
   }
+}
 
   goToRegister() {
     this.router.navigate(['/registro']); // Redirige a la página de registro
