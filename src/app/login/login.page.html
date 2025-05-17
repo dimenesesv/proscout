@@ -16,6 +16,12 @@
       <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
     </ion-item>
 
+    <!-- Mensaje de error - se muestra justo debajo del campo de contraseña -->
+    <div *ngIf="showError" class="error-message" style="color: var(--ion-color-danger); display: flex; align-items: center; margin-top: 8px;">
+      <ion-icon name="warning" color="danger" style="margin-right: 8px;"></ion-icon>
+      {{ errorMessage }}
+    </div>
+
     <ion-button expand="full" type="submit" class="ion-margin-top">
       Iniciar Sesión
     </ion-button>
