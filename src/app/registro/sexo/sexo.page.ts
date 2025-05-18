@@ -14,7 +14,7 @@ export class SexoPage implements OnInit {
   ngOnInit() {}
 
   setSexo(sexo: string) {
-    this.registroService.setSex(sexo); // Guarda el sexo en el servicio
+    this.registroService.setSexo(sexo); // Guarda el sexo en el servicio
     console.log('Usuario actualizado', this.registroService.getUsuario());
     this.router.navigate(['/registro/nacionalidad']); // Navega a la siguiente página
   }

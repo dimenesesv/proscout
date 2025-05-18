@@ -1,15 +1,15 @@
 export interface Stats {
     id?: string; // ID del jugador
-    speed?: number; // Velocidad del jugador
-    resistance?: number; // Resistencia del jugador
-    strength?: number; // Fuerza del jugador
-    agility?: number; // Agilidad del jugador
-    balance?: number; // Equilibrio del jugador
-    coordination?: number; // Coordinación del jugador
-    jumping?: number; // Salto del jugador
-    ballControl?: number; // Control del balón del jugador
-    dribbling?: number; // Regate del jugador
-    passing?: number; // Pase del jugador
-    shooting?: number; // Tiro del jugador
-    heading?: number; // Cabeceo del jugador
+    velocidad?: number; // Velocidad del jugador
+    resistencia?: number; // Resistencia del jugador
+    fuerza?: number; // Fuerza del jugador
+    agilidad?: number; // Agilidad del jugador
+    equilibrio?: number; // Equilibrio del jugador
+    coordinacion?: number; // Coordinación del jugador
+    salto?: number; // Salto del jugador
+    controlBalon?: number; // Control del balón del jugador
+    regate?: number; // Regate del jugador
+    pase?: number; // Pase del jugador
+    tiro?: number; // Tiro del jugador
+    cabeceo?: number; // Cabeceo del jugador
 }

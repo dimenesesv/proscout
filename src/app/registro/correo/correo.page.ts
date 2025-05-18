@@ -27,7 +27,7 @@ export class CorreoPage {
       const userCredential = await this.authService.register(this.email, this.password);
 
       // Guardar el correo en el servicio de registro
-      this.registroService.setEmail(this.email);
+      this.registroService.setCorreo(this.email);
 
       // Obtener el UID del usuario creado
       const uid = userCredential.user?.uid;

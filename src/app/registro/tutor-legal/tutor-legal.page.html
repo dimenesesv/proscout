@@ -4,52 +4,95 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form [formGroup]="formulario" (ngSubmit)="guardar()">
-    <ion-list>
-      <ion-item>
-        <ion-label position="floating">Nombre</ion-label>
-        <ion-input formControlName="name"></ion-input>
-      </ion-item>
+<ion-content [fullscreen]="true">
+  <ion-card class="formulario-boton">
+    <ion-card-content>
+      <form [formGroup]="formulario" (ngSubmit)="guardar()">
+        <ion-label class="form-title">Completa los datos del tutor legal</ion-label>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Nombre Completo</ion-label>
+            <ion-input formControlName="name"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">RUT</ion-label>
-        <ion-input formControlName="rut"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">RUT</ion-label>
+            <ion-input formControlName="rut" placeholder="Ej: 12345678-9"></ion-input>
+            <ion-note  *ngIf="formulario.get('rut')?.errors?.['rutInvalido'] && (formulario.get('rut')?.dirty || formulario.get('rut')?.touched)">
+              <div>El RUT ingresado no es válido.</div>
+            </ion-note>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Correo</ion-label>
-        <ion-input type="email" formControlName="email"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Correo</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Teléfono</ion-label>
-        <ion-input formControlName="phone"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Teléfono</ion-label>
+            <div class="phone-input-wrapper">
+              <span class="phone-prefix">+56</span>
+              <ion-input type="tel" formControlName="phone" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="912345678"></ion-input>
+            </div>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Dirección</ion-label>
-        <ion-input formControlName="address"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Dirección</ion-label>
+            <ion-input formControlName="address" (ionInput)="onAddressInput($event)" autocomplete="off"></ion-input>
+          </ion-item>
+          <ion-list *ngIf="showSuggestions" class="autocomplete-list">
+            <ion-item button *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+              {{ suggestion.description }}
+            </ion-item>
+          </ion-list>
 
-      <ion-item>
-        <ion-label position="floating">Ciudad</ion-label>
-        <ion-input formControlName="city"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Comuna</ion-label>
+            <ion-input formControlName="comuna"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Ciudad</ion-label>
+            <ion-input formControlName="city"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Región</ion-label>
-        <ion-input formControlName="region"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Región</ion-label>
+            <ion-input formControlName="region"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">País</ion-label>
-        <ion-input formControlName="country"></ion-input>
-      </ion-item>
-    </ion-list>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Parentesco</ion-label>
+            <ion-select formControlName="parentezco" placeholder="Selecciona una opción">
+              <ion-select-option value="Padre">Padre</ion-select-option>
+              <ion-select-option value="Madre">Madre</ion-select-option>
+              <ion-select-option value="Abuelo/a">Abuelo/a</ion-select-option>
+              <ion-select-option value="Tío/a">Tío/a</ion-select-option>
+              <ion-select-option value="Hermano/a">Hermano/a</ion-select-option>
+              <ion-select-option value="Tutor legal">Tutor legal</ion-select-option>
+              <ion-select-option value="Otro">Otro</ion-select-option>
+            </ion-select>
+          </ion-item>
 
-    <ion-button expand="full" type="submit" [disabled]="formulario.invalid">
-      Guardar
-    </ion-button>
-  </form>
+          <ion-item>
+            <ion-label class="input-label" position="stacked">Documento que acredita tutoría</ion-label>
+            <ion-input placeholder="Selecciona un archivo" [value]="nombreArchivo" readonly></ion-input>
+            <input type="file" hidden (change)="onFileSelected($event)" #fileInput />
+            <ion-button fill="outline" size="small" (click)="fileInput.click()">Subir archivo</ion-button>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-text color="medium" class="ion-padding-start">
+              <p>
+                Si eres madre o padre del menor, puedes subir el <strong>certificado de nacimiento</strong>.<br>
+                Si no lo eres, sube una <strong>resolución judicial de cuidado personal</strong>, <strong>medida del tribunal</strong> o <strong>escritura notarial</strong> que lo acredite.
+              </p>
+            </ion-text>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" type="submit" [disabled]="formulario.invalid" class="ion-margin-top">
+          Guardar
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

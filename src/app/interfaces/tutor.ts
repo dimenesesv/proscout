@@ -1,10 +1,12 @@
 export interface Tutor {
-    name?: string;    // Nombre del tutor
-    rut?: string;     // RUT del tutor
-    email?: string;   // Correo electrónico del tutor
-    phone?: string;    // Teléfono del tutor
-    address?: string;  // Dirección del tutor
-    city?: string;     // Ciudad del tutor
-    region?: string;   // Región del tutor
-    country?: string;  // País del tutor
+    nombre?: string;        // Nombre del tutor
+    rut?: string;           // RUT del tutor
+    correo?: string;        // Correo electrónico del tutor
+    telefono?: string;      // Teléfono del tutor
+    direccion?: string;     // Dirección del tutor
+    comuna?: string;        // Comuna del tutor
+    ciudad?: string;        // Ciudad del tutor
+    region?: string;        // Región del tutor
+    pais?: string;          // País del tutor
+    parentesco?: string;    // Parentesco del tutor
 }

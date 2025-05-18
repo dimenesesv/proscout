@@ -1,20 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>¿Cómo te identificas?</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title class="ion-text-center">
-        ¿Cómo te identificas?
-      </ion-card-title>
-    </ion-card-header>
+  <ion-card class="formulario-boton">
     <ion-card-content>
-      <div class="ion-padding">
-        <ion-button expand="block" color="primary" class="custom-button" (click)="setSexo('Niño')">
-          <ion-icon name="man-outline" slot="icon-only"></ion-icon>
-          <span>Niño</span>
-        </ion-button>
-        <ion-button expand="block" color="secondary" class="custom-button" (click)="setSexo('Niña')">
-          <ion-icon name="woman-outline" slot="icon-only"></ion-icon>
-          <span>Niña</span>
-        </ion-button>
+      <ion-label style="margin-bottom: 18px; display: block; font-size: 16px; font-weight: 600; text-align: center;">Selecciona una opción</ion-label>
+      <div style="display: flex; flex-direction: column; gap: 18px; align-items: center;">
+        <div style="display: flex; flex-direction: row; gap: 18px; justify-content: center; width: 100%;">
+          <ion-button expand="block" color="primary" class="custom-button" (click)="setSexo('Niño')">
+            <ion-icon name="man-outline" slot="icon-only"></ion-icon>
+            <span>Niño</span>
+          </ion-button>
+          <ion-button expand="block" color="secondary" class="custom-button" (click)="setSexo('Niña')">
+            <ion-icon name="woman-outline" slot="icon-only"></ion-icon>
+            <span>Niña</span>
+          </ion-button>
+        </div>
         <ion-button expand="block" color="tertiary" class="custom-button" (click)="setSexo('Prefiero no decirlo')">
           <ion-icon name="help-outline" slot="icon-only"></ion-icon>
           <span>Prefiero no decirlo</span>

@@ -10,53 +10,65 @@ export class RegistroService {
   constructor() {}
 
   // Setters
-  setNombre(name: string) {
-    this.usuario.name = name;
+  setNombre(nombre: string) {
+    this.usuario.nombre = nombre;
   }
   setRut(rut: string) {
     this.usuario.rut = rut;
   }
-  setEmail(email: string) {
-    this.usuario.email = email;
+  setCorreo(correo: string) {
+    this.usuario.correo = correo;
   }
-  setPassword(password: string) {
-    this.usuario.password = password;
+  setContrasena(contrasena: string) {
+    this.usuario.contrasena = contrasena;
   }
-  setPhone(phone: string) {
-    this.usuario.phone = phone;
+  setTelefono(telefono: string) {
+    this.usuario.telefono = telefono;
   }
-  setAddress(address: string) {
-    this.usuario.address = address;
+  setDireccion(direccion: string) {
+    this.usuario.direccion = direccion;
   }
-  setCity(city: string) {
-    this.usuario.city = city;
+  setCiudad(ciudad: string) {
+    this.usuario.ciudad = ciudad;
   }
   setRegion(region: string) {
     this.usuario.region = region;
   }
-  setCountry(country: string) {
-    this.usuario.country = country;
+  setPais(pais: string) {
+    this.usuario.pais = pais;
   }
-  setBirthDate(birthDate: string) {
-    this.usuario.birthDate = birthDate;
+  setFechaNacimiento(fechaNacimiento: string) {
+    this.usuario.fechaNacimiento = fechaNacimiento;
   }
-  setSex(sex: string) {
-    this.usuario.sex = sex;
+  setSexo(sexo: string) {
+    this.usuario.sexo = sexo;
   }
   setTutor(tutor: any) {
-    this.usuario.tutor = tutor;
+    // Asegura que los nombres de las propiedades estén en español y país sea 'Chile' por defecto
+    this.usuario.tutor = {
+      nombre: tutor.name || tutor.nombre || '',
+      rut: tutor.rut,
+      correo: tutor.email || tutor.correo || '',
+      telefono: tutor.phone || tutor.telefono || '',
+      direccion: tutor.address || tutor.direccion || '',
+      comuna: tutor.comuna,
+      ciudad: tutor.city || tutor.ciudad || '',
+      region: tutor.region,
+      pais: 'Chile',
+      parentesco: tutor.parentesco || ''
+    };
   }
-  setEmergencyContact(emergencyContact: string) {
-    this.usuario.emergencyContact = emergencyContact;
+  setContactoEmergencia(contactoEmergencia: string) {
+    this.usuario.contactoEmergencia = contactoEmergencia;
   }
-  setNacionality(nacionality: string) {
-    this.usuario.nacionality = nacionality;
+  setNacionalidad(nacionalidad: string) {
+    this.usuario.nacionalidad = nacionalidad;
   }
-  setIsPlayer(isplayer: boolean) {
-    this.usuario.isplayer = isplayer;
+  setEsJugador(esJugador: boolean) {
+    this.usuario.esJugador = esJugador;
   }
-  setIsScouter(isscouter: boolean) {
-    this.usuario.isscouter = isscouter;
+  setEsScouter(esScouter: boolean) {
+    this.usuario.esScouter = esScouter;
   }
   setUsuario(usuario: Usuario) {
     this.usuario = usuario;
@@ -64,52 +76,52 @@ export class RegistroService {
 
   // Getters
   getNombre() {
-    return this.usuario.name;
+    return this.usuario.nombre;
   }
   getRut() {
     return this.usuario.rut;
   }
-  getEmail() {
-    return this.usuario.email;
+  getCorreo() {
+    return this.usuario.correo;
   }
-  getPassword() {
-    return this.usuario.password;
+  getContrasena() {
+    return this.usuario.contrasena;
   }
-  getPhone() {
-    return this.usuario.phone;
+  getTelefono() {
+    return this.usuario.telefono;
   }
-  getAddress() {
-    return this.usuario.address;
+  getDireccion() {
+    return this.usuario.direccion;
   }
-  getCity() {
-    return this.usuario.city;
+  getCiudad() {
+    return this.usuario.ciudad;
   }
   getRegion() {
     return this.usuario.region;
   }
-  getCountry() {
-    return this.usuario.country;
+  getPais() {
+    return this.usuario.pais;
   }
-  getBirthDate() {
-    return this.usuario.birthDate;
+  getFechaNacimiento() {
+    return this.usuario.fechaNacimiento;
   }
-  getSex() {
-    return this.usuario.sex;
+  getSexo() {
+    return this.usuario.sexo;
   }
   getTutor() {
     return this.usuario.tutor;
   }
-  getEmergencyContact() {
-    return this.usuario.emergencyContact;
+  getContactoEmergencia() {
+    return this.usuario.contactoEmergencia;
   }
-  getNacionality() {
-    return this.usuario.nacionality;
+  getNacionalidad() {
+    return this.usuario.nacionalidad;
   }
-  getIsPlayer() {
-    return this.usuario.isplayer;
+  getEsJugador() {
+    return this.usuario.esJugador;
   }
-  getIsScouter() {
-    return this.usuario.isscouter;
+  getEsScouter() {
+    return this.usuario.esScouter;
   }
   getUsuario() {
     return this.usuario;

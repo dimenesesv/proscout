@@ -42,7 +42,7 @@ export class NacionalidadPage implements OnInit {
 
   guardarNacionalidad() {
     if (this.nacionalidad) {
-      this.registroService.setNacionality(this.nacionalidad); // Guarda la nacionalidad en el servicio
+      this.registroService.setNacionalidad(this.nacionalidad); // Guarda la nacionalidad en el servicio
       console.log('Nacionalidad guardada:', this.nacionalidad);
       this.router.navigate(['/registro/fecha-nacimiento']); // Navega a la siguiente página
     } else {

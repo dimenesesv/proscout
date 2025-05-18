@@ -4,25 +4,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Nacionalidad</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <form (ngSubmit)="guardarNacionalidad()">
-    <ion-item>
-      <ion-label>Nacionalidad</ion-label>
-      <ion-select [(ngModel)]="nacionalidad" name="nacionalidad" placeholder="Selecciona una">
-        <ion-select-option *ngFor="let pais of nacionalidades" [value]="pais">
-          {{ pais }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-button expand="full" type="submit" class="ion-margin-top">
-      Guardar
-    </ion-button>
-  </form>
+<ion-content [fullscreen]="true">
+  <ion-card class="formulario-boton">
+    <ion-card-content>
+      <form (ngSubmit)="guardarNacionalidad()">
+        <ion-label style="margin-bottom: 18px; display: block; font-size: 16px; font-weight: 600; text-align: center;">Selecciona tu nacionalidad</ion-label>
+        <ion-item lines="none">
+          <ion-select [(ngModel)]="nacionalidad" name="nacionalidad" placeholder="Selecciona una" interface="popover">
+            <ion-select-option *ngFor="let pais of nacionalidades" [value]="pais">
+              {{ pais }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="!nacionalidad">
+          Guardar
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -4,19 +4,23 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form [formGroup]="formulario" (ngSubmit)="continuar()">
-    <ion-item>
-      <ion-label position="floating">Fecha de nacimiento</ion-label>
-      <ion-datetime
-        formControlName="birthDate"
-        presentation="date"
-        [max]="hoy"
-      ></ion-datetime>
-    </ion-item>
-
-    <ion-button expand="full" type="submit" [disabled]="formulario.invalid">
-      Continuar
-    </ion-button>
-  </form>
+<ion-content [fullscreen]="true">
+  <ion-card class="formulario-boton">
+    <ion-card-content>
+      <form [formGroup]="formulario" (ngSubmit)="continuar()">
+        <ion-label style="margin-bottom: 18px; display: block; font-size: 16px; font-weight: 600; text-align: center;">Selecciona tu fecha de nacimiento</ion-label>
+        <ion-item lines="none">
+          <ion-datetime
+            formControlName="birthDate"
+            presentation="date"
+            [max]="hoy"
+            placeholder="Fecha de nacimiento"
+          ></ion-datetime>
+        </ion-item>
+        <ion-button expand="block" type="submit" [disabled]="formulario.invalid" class="ion-margin-top">
+          Continuar
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -21,7 +21,7 @@ export class VerificacionPage implements OnInit {
 
   ngOnInit() {
     // Obtener el correo del servicio de registro
-    this.email = this.registroService.getEmail() || '';
+    this.email = this.registroService.getCorreo() || '';
 
     // Iniciar la verificación periódica
     this.checkEmailVerification();
@@ -40,6 +40,9 @@ export class VerificacionPage implements OnInit {
   async checkEmailVerification() {
     this.isCheckingVerification = true;
     const interval = setInterval(async () => {
+      // Refrescar el usuario para obtener el estado actualizado del email
+      const auth = (await import('firebase/auth')).getAuth();
+      await auth.currentUser?.reload();
       const user = await this.authService.getCurrentUser();
       if (user?.emailVerified) {
         clearInterval(interval); // Detener la verificación periódica

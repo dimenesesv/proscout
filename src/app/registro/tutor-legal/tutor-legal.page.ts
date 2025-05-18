@@ -4,6 +4,10 @@ import { NavController } from '@ionic/angular';
 import { RegistroService } from 'src/app/services/registro.service';
 import { Tutor } from 'src/app/interfaces/tutor';
 import { Router } from '@angular/router';
+import { validarRut } from '../../utils/rut';
+
+// Validador de RUT basado en la lógica de rut.page.ts
+
 
 @Component({
   selector: 'app-tutor-legal',
@@ -14,22 +18,37 @@ import { Router } from '@angular/router';
 export class TutorLegalPage implements OnInit {
   formulario!: FormGroup;
 
+  nombreArchivo: string = '';
+  archivoSeleccionado: File | null = null;
+
+  // Google Maps Autocomplete
+  autocompleteService: any;
+  placeService: any;
+  suggestions: Array<any> = [];
+  showSuggestions: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private router : Router,
     private registroService: RegistroService
-  ) {}
+  ) {
+    // Inicialización de Google Autocomplete
+    if ((window as any).google && (window as any).google.maps) {
+      this.autocompleteService = new (window as any).google.maps.places.AutocompleteService();
+    }
+  }
 
   ngOnInit() {
     this.formulario = this.fb.group({
       name: ['', Validators.required],
-      rut: ['', Validators.required],
+      rut: ['', [Validators.required, validarRut]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
       address: ['', Validators.required],
+      comuna: ['', Validators.required],
       city: ['', Validators.required],
       region: ['', Validators.required],
-      country: ['', Validators.required],
+      parentesco: ['', Validators.required],
     });
   }
 
@@ -41,5 +60,60 @@ export class TutorLegalPage implements OnInit {
 
     console.log('Tutor registrado:', datosTutor);
     this.router.navigate(['/registro/correo']); // Ajusta esta ruta según tu flujo
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.archivoSeleccionado = input.files[0];
+      this.nombreArchivo = this.archivoSeleccionado.name;
+    }
+  }
+
+  onAddressInput(event: any) {
+    const value = event.target.value;
+    if (value && value.length > 2 && this.autocompleteService) {
+      this.autocompleteService.getPlacePredictions({
+        input: value,
+        componentRestrictions: { country: 'cl' },
+        types: ['address']
+      }, (predictions: any[], status: any) => {
+        if (status === (window as any).google.maps.places.PlacesServiceStatus.OK && predictions) {
+          this.suggestions = predictions;
+          this.showSuggestions = true;
+        } else {
+          this.suggestions = [];
+          this.showSuggestions = false;
+        }
+      });
+    } else {
+      this.suggestions = [];
+      this.showSuggestions = false;
+    }
+  }
+
+  selectSuggestion(suggestion: any) {
+    this.formulario.patchValue({ address: suggestion.description });
+    this.showSuggestions = false;
+    // Obtener detalles del lugar para autocompletar comuna, ciudad y región
+    if ((window as any).google && (window as any).google.maps) {
+      const map = document.createElement('div');
+      this.placeService = new (window as any).google.maps.places.PlacesService(map);
+      this.placeService.getDetails({ placeId: suggestion.place_id }, (place: any, status: any) => {
+        if (status === (window as any).google.maps.places.PlacesServiceStatus.OK && place) {
+          let comuna = '';
+          let city = '';
+          let region = '';
+          if (place.address_components) {
+            for (const comp of place.address_components) {
+              if (comp.types.includes('locality')) comuna = comp.long_name;
+              if (comp.types.includes('administrative_area_level_2')) city = comp.long_name;
+              if (comp.types.includes('administrative_area_level_1')) region = comp.long_name;
+            }
+          }
+          this.formulario.patchValue({ comuna, city, region });
+        }
+      });
+    }
   }
 }

@@ -45,3 +45,8 @@ body {
 html, body, ion-app, ion-content, ion-card, ion-label, ion-card-title, ion-title, ion-button, h1, h2, h3, h4, h5, h6, p, div {
   font-family: 'Bebas Neue', sans-serif !important;
 }
+ion-note {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+}

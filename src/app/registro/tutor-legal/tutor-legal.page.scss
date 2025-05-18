@@ -1,0 +1,95 @@
+.formulario-boton {
+  max-width: 420px;
+  margin: 32px auto;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.08);
+}
+
+.form-title {
+  margin-bottom: 18px;
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+ion-note {
+  font-family: var(--ion-font-family, inherit) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: var(--ion-color-danger, #eb445a) !important;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding-left: 0;
+  background: none;
+  box-shadow: none;
+  letter-spacing: normal;
+}
+
+.input-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ion-color-dark-shade, #000000);
+}
+
+ion-item {
+  border-radius: 10px;
+  margin-bottom: 10px;
+  --background: #f8f9fa;
+}
+
+ion-input, ion-select {
+  font-size: 15px;
+  color: var(--ion-color-medium-shade, #000000);
+}
+
+ion-button {
+  margin-top: 18px;
+}
+
+.autocomplete-list {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  background: #fff;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+  max-height: 180px;
+  overflow-y: auto;
+  left: 0;
+}
+.autocomplete-list ion-item {
+  --background: #fff;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+}
+.autocomplete-list ion-item:last-child {
+  border-bottom: none;
+}
+
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+.phone-prefix {
+  background: #f1f1f1;
+  border-radius: 8px 0 0 8px;
+  padding: 8px 10px;
+  font-size: 15px;
+  color: #444;
+  border-right: 1px solid #e0e0e0;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+.phone-input-wrapper ion-input {
+  flex: 1;
+  border-radius: 0 8px 8px 0;
+  margin-left: 0;
+}
+
+@media (max-width: 500px) {
+  .formulario-boton {
+    margin: 16px 4px;
+    max-width: 98vw;
+  }
+}

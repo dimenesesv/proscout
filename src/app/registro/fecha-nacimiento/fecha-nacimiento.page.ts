@@ -30,7 +30,7 @@ export class FechaNacimientoPage implements OnInit {
     const edad = this.calcularEdad(birthDate);
 
     // Guardar fecha en el RegistroService
-    this.registroService.setBirthDate(birthDate.toISOString());
+    this.registroService.setFechaNacimiento(birthDate.toISOString());
 
     if (edad < 18) {
       this.navCtrl.navigateForward('/registro/tutor-legal');

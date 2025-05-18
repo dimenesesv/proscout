@@ -17,13 +17,13 @@ export class RegistroPage implements OnInit {
   }
 
 isPlayer() {
-    this.registroService.setIsPlayer(true);
-    this.registroService.setIsScouter(false);
+    this.registroService.setEsJugador(true);
+    this.registroService.setEsScouter(false);
     this.router.navigate(['registro/nombre']);
   }
 isScouter() {
-    this.registroService.setIsScouter(true);
-    this.registroService.setIsPlayer(false);
+    this.registroService.setEsScouter(true);
+    this.registroService.setEsJugador(false);
     this.router.navigate(['registro/nombre']);
   }
 

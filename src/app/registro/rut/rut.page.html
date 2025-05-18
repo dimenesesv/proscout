@@ -1,33 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>¿Cuál es tu RUT?</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
-  <form [formGroup]="rutForm" (ngSubmit)="onSubmit()" class="formulario-boton">
-    <ion-item>
-      <ion-label position="floating">Ingresa tu RUT</ion-label>
-      <ion-input
-        type="text"
-        formControlName="rut"
-        class="input"
-        (ionBlur)="onRutBlur()"
-        (ionInput)="onRutInput($event)"
-      ></ion-input>
-    </ion-item>
-
-    <!-- Mensajes de error -->
-    <div *ngIf="rut?.invalid && (rut?.dirty || rut?.touched)" style="color: red; margin-top: 8px;">
-      <div *ngIf="rut?.errors?.['required']">El RUT es obligatorio.</div>
-      <div *ngIf="rut?.errors?.['pattern']">El RUT debe tener un formato válido (ej: 12345678-9).</div>
-    </div>
-    <div *ngIf="!isRutValid && rut?.valid" style="color: red; margin-top: 8px; font-weight: bold;">
-      ⚠️ El RUT ingresado no es válido. Por favor, verifica e intenta nuevamente.
-    </div>
-
-    <div style="margin-top: 16px; display: flex; justify-content: center;">
-      <button
-        type="submit"
-        [disabled]="rutForm.invalid || !isRutValid"
-        style="background-color: black; color: white; border: none; border-radius: 15px; padding: 10px 20px; display: flex; align-items: center;"
-      >
-        <ion-icon name="chevron-forward-outline" style="font-size: 20px; margin-left: 5px;"></ion-icon>
-      </button>
-    </div>
-  </form>
+  <ion-card class="formulario-boton">
+    <form [formGroup]="rutForm" (ngSubmit)="onSubmit()">
+      <ion-card-content>
+        <ion-label style="margin-bottom: 8px; display: block; font-size: 16px; font-weight: 600;">Ingresa tu RUT</ion-label>
+        <ion-item lines="none">
+          <ion-input
+            type="text"
+            formControlName="rut"
+            placeholder="Ej: 12345678-9"
+            (ionBlur)="onRutBlur()"
+            (ionInput)="onRutInput($event)"
+          ></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="rut?.invalid && (rut?.dirty || rut?.touched)" style="margin-top: 8px; display: block;">
+          <div *ngIf="rut?.errors?.['required']">El RUT es obligatorio.</div>
+          <div>El RUT ingresado no es válido.</div>
+        </ion-note>
+        <ion-note color="danger" *ngIf="!isRutValid && rut?.valid" style="margin-top: 8px; display: block;">
+          <div>El RUT ingresado no es válido.</div>
+        </ion-note>
+        <ion-note color="success" *ngIf="isRutValid && rut?.valid" style="margin-top: 8px; display: block;">
+          <div>El RUT ingresado es válido.</div>
+        </ion-note>
+        <ion-button expand="block" type="submit" [disabled]="rutForm.invalid || !isRutValid" style="margin-top: 18px;">
+          Continuar
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </ion-card-content>
+    </form>
+  </ion-card>
 </ion-content>

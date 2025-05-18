@@ -1,0 +1,10 @@
+.error-message {
+  color: var(--ion-color-danger);
+  padding: 8px 16px;
+  margin-top: 5px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: fadeIn 0.3s ease;
+}
