@@ -1,53 +1,51 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { StorageService } from '../../services/storage.service';
-import { LoadingController } from '@ionic/angular'; // Importar LoadingController
+import { LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { getAuth, signOut } from 'firebase/auth';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
-
+import { Usuario } from 'src/app/interfaces/usuario';
 
 @Component({
   selector: 'app-tab4',
   templateUrl: './tab4.page.html',
   styleUrls: ['./tab4.page.scss'],
-  
   standalone: false,
 })
 export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
-  userProfile: any;
-  galleryUrls: string[] = [];
-  uploadProgress: number | null = null; // Progreso de la subida
-  private profileSubscription: Subscription | undefined;
+  perfilUsuario!: Usuario;
+  urlsGaleria: string[] = [];
+  progresoSubida: number | null = null;
+  private suscripcionPerfil: Subscription | undefined;
 
-  activeTab: number = 0;
+  pestanaActiva: number = 0;
   swiper: Swiper | undefined;
 
   constructor(
-    private firebaseService: FirebaseService,
-    private storageService: StorageService,
-    private loadingController: LoadingController, // Inyectar LoadingController
-    private router: Router
+    private servicioFirebase: FirebaseService,
+    private servicioStorage: StorageService,
+    private controladorCarga: LoadingController,
+    private enrutador: Router
   ) {}
 
   ngOnInit() {
     const auth = getAuth();
-    const user = auth.currentUser;
+    const usuario = auth.currentUser;
 
-    if (!user) {
+    if (!usuario) {
       console.warn('No hay usuario autenticado.');
       return;
     }
 
-    const userId = user.uid;
-    const path = `usuarios/${userId}`;
+    const idUsuario = usuario.uid;
+    const ruta = `usuarios/${idUsuario}`;
 
-    // Obtener el perfil del usuario
-    this.firebaseService.getDocument(path)
-      .then((data) => {
-        this.userProfile = data;
-        this.galleryUrls = data?.gallery || [];
+    this.servicioFirebase.getDocument(ruta)
+      .then((datos) => {
+        this.perfilUsuario = datos;
+        this.urlsGaleria = datos?.galeria || [];
       })
       .catch((error) => {
         console.error('Error al obtener el perfil del usuario:', error);
@@ -61,93 +59,86 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.swiper.on('slideChange', () => {
-      this.activeTab = this.swiper?.activeIndex || 0;
+      this.pestanaActiva = this.swiper?.activeIndex || 0;
     });
   }
 
   ngOnDestroy() {
-    if (this.profileSubscription) {
-      this.profileSubscription.unsubscribe();
+    if (this.suscripcionPerfil) {
+      this.suscripcionPerfil.unsubscribe();
     }
   }
 
-  slideTo(index: number) {
-    this.activeTab = index;
-    this.swiper?.slideTo(index);
+  irASlide(indice: number) {
+    this.pestanaActiva = indice;
+    this.swiper?.slideTo(indice);
   }
 
-  logout() {
+  cerrarSesion() {
     const auth = getAuth();
     signOut(auth).then(() => {
-      console.log('Sesión cerrada correctamente');
-      this.router.navigate(['/login']);
+      console.log('Sesion cerrada correctamente');
+      this.enrutador.navigate(['/login']);
     }).catch((error) => {
-      console.error('Error al cerrar sesión:', error);
+      console.error('Error al cerrar sesion:', error);
     });
   }
 
-  // Método para seleccionar una imagen
-  async selectImage() {
+  async seleccionarImagen() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.onchange = async (event: any) => {
-      const file = event.target.files[0];
-      if (file) {
-        await this.uploadImage(file);
+    input.onchange = async (evento: any) => {
+      const archivo = evento.target.files[0];
+      if (archivo) {
+        await this.subirImagen(archivo);
       }
     };
     input.click();
   }
 
-  // Método para subir la imagen usando StorageService
-  async uploadImage(file: File) {
+  async subirImagen(archivo: File) {
     const auth = getAuth();
-    const user = auth.currentUser;
+    const usuario = auth.currentUser;
 
-    if (!user) {
+    if (!usuario) {
       console.warn('No hay usuario autenticado.');
       return;
     }
 
-    const userId = user.uid;
-    const filePath = `usuarios/${userId}/gallery/${Date.now()}_${file.name}`;
+    const idUsuario = usuario.uid;
+    const rutaArchivo = `usuarios/${idUsuario}/galeria/${Date.now()}_${archivo.name}`;
 
-    // Mostrar el overlay de carga
-    const loading = await this.loadingController.create({
+    const carga = await this.controladorCarga.create({
       message: 'Subiendo imagen...',
       spinner: 'crescent',
     });
-    await loading.present();
+    await carga.present();
 
     try {
-      // Subir la imagen y obtener el progreso
-      const task = this.storageService.uploadFileWithProgress(filePath, file);
+      const tarea = this.servicioStorage.uploadFileWithProgress(rutaArchivo, archivo);
 
-      // Escuchar el progreso de la subida usando el evento 'state_changed'
-      task.on('state_changed', (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.uploadProgress = progress / 100;
-        loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
+      tarea.on('state_changed', (snapshot) => {
+        const progreso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.progresoSubida = progreso / 100;
+        carga.message = `Subiendo imagen... ${Math.round(progreso)}%`;
       });
 
-      // Esperar a que la subida termine y obtener la URL
-      await task;
-      const downloadUrl = await this.storageService.getDownloadUrl(filePath);
+      await tarea;
+      const urlDescarga = await this.servicioStorage.getDownloadUrl(rutaArchivo);
 
-      this.galleryUrls.push(downloadUrl);
-      this.updateGalleryInFirestore(userId);
+      this.urlsGaleria.push(urlDescarga);
+      this.actualizarGaleriaEnFirestore(idUsuario);
     } catch (error) {
       console.error('Error al subir la imagen:', error);
     } finally {
-      await loading.dismiss();
-      this.uploadProgress = null;
+      await carga.dismiss();
+      this.progresoSubida = null;
     }
   }
 
-  // Método para actualizar la galería en Firestore
-  async updateGalleryInFirestore(userId: string) {
-    const path = `usuarios/${userId}`;
-    await this.firebaseService.updateDocument(path, { gallery: this.galleryUrls });
+  async actualizarGaleriaEnFirestore(idUsuario: string) {
+    const ruta = `usuarios/${idUsuario}`;
+    await this.servicioFirebase.updateDocument(ruta, { galeria: this.urlsGaleria });
   }
 }

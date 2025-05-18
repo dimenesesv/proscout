@@ -21,7 +21,7 @@ export class BienvenidaPage {
     const user = auth.currentUser;
 
     if (!user) {
-      this.router.navigate(['/tabs/tab1']); // fallback si no hay sesión
+      this.router.navigate(['/login']); // fallback si no hay sesión
       return;
     }
 

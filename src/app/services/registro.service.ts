@@ -126,4 +126,20 @@ export class RegistroService {
   getUsuario() {
     return this.usuario;
   }
+  getUbicacion() {
+    return this.usuario.ubicacion;
+  }
+  setUbicacion(latitud: number, longitud: number) {
+    this.usuario.ubicacion = { latitud, longitud };
+  }
+  getFotoPerfil() {
+    return this.usuario.fotoPerfil;
+  }
+  setFotoPerfil(fotoPerfil: string) {
+    this.usuario.fotoPerfil = fotoPerfil;
+  }
+  getGaleria() {
+    return this.usuario.galeria;
+  }
+
 }

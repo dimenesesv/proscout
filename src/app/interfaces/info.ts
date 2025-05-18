@@ -1,5 +1,4 @@
 export interface Info {
-    id?: string; // ID del jugador
     equipo?: string; // Nombre del equipo
     posicion?: string; // Posición del jugador
     segundaPosicion?: string; // Segunda posición del jugador

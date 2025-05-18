@@ -1,20 +1,19 @@
-
 <ion-header>
   <ion-toolbar>
-    <ion-title class="text-center">{{ userProfile?.name }}</ion-title>
-    <ion-button (click)="logout()">Cerrar sesión</ion-button>
+    <ion-title class="text-center">{{ perfilUsuario.nombre }}</ion-title>
+    <ion-button (click)="cerrarSesion()">Cerrar sesión</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="perfil-page">
-  <player-app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></player-app-tabs-header>
+  <player-app-tabs-header [activeTab]="pestanaActiva" (tabChange)="irASlide($event)"></player-app-tabs-header>
 
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <!-- Slide 1: Perfil -->
       <div class="swiper-slide">
        
-        <player-app-perfil-card [userProfile]="userProfile"></player-app-perfil-card>
+        <player-app-perfil-card [userProfile]="perfilUsuario"></player-app-perfil-card>
       </div>
 
       <!-- Slide 2: Estadísticas -->
@@ -31,26 +30,26 @@
                   [data]="[75, 50, 25, 25, 100]"
                 ></app-radar-chart>
 
-                <div class="stats-grid">
+                <div class="stats-grid" *ngIf="perfilUsuario && perfilUsuario.stats">
                   <div class="stat-item">
-                    <h3>Partidos jugados</h3>
-                    <p>{{ userProfile?.partidosJugados }}</p>
+                    <h3>Agilidad</h3>
+                    <p>{{ perfilUsuario.stats.agilidad }}</p>
                   </div>
                   <div class="stat-item">
-                    <h3>Goles</h3>
-                    <p>{{ userProfile?.goles }}</p>
+                    <h3>Cabeceo</h3>
+                    <p>{{ perfilUsuario.stats.cabeceo }}</p>
                   </div>
                   <div class="stat-item">
-                    <h3>Asistencias</h3>
-                    <p>{{ userProfile?.asistencias }}</p>
+                    <h3>Control</h3>
+                    <p>{{ perfilUsuario.stats.controlBalon }}</p>
                   </div>
                   <div class="stat-item">
-                    <h3>Tarjetas amarillas</h3>
-                    <p>{{ userProfile?.tarjetasAmarillas }}</p>
+                    <h3>Coordinación</h3>
+                    <p>{{ perfilUsuario.stats.coordinacion }}</p>
                   </div>
                   <div class="stat-item">
-                    <h3>Tarjetas rojas</h3>
-                    <p>{{ userProfile?.tarjetasRojas }}</p>
+                    <h3>Equilibrio</h3>
+                    <p>{{ perfilUsuario.stats.equilibrio }}</p>
                   </div>
                 </div>
               </ion-card-content>
@@ -66,13 +65,13 @@
             <ion-card-title>Galería</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <ion-button expand="block" (click)="selectImage()">Subir Imagen</ion-button>
+            <ion-button expand="block" (click)="seleccionarImagen()">Subir Imagen</ion-button>
 
-            <ion-progress-bar *ngIf="uploadProgress !== null" [value]="uploadProgress"></ion-progress-bar>
+            <ion-progress-bar *ngIf="progresoSubida !== null" [value]="progresoSubida"></ion-progress-bar>
 
             <ion-grid>
               <ion-row>
-                <ion-col size="6" *ngFor="let imageUrl of galleryUrls">
+                <ion-col size="6" *ngFor="let imageUrl of urlsGaleria">
                   <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
                 </ion-col>
               </ion-row>

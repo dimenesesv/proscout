@@ -1,5 +1,4 @@
 export interface Stats {
-    id?: string; // ID del jugador
     velocidad?: number; // Velocidad del jugador
     resistencia?: number; // Resistencia del jugador
     fuerza?: number; // Fuerza del jugador
