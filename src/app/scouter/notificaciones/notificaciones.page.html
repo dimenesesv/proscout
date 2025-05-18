@@ -1,13 +1,22 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>notificaciones</ion-title>
+    <ion-title>Notificaciones</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">notificaciones</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-list *ngIf="notifications.length > 0">
+    <ion-item *ngFor="let notif of notifications">
+      <ion-icon [name]="getIcon(notif.type)" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ notif.title }}</h2>
+        <p>{{ notif.message }}</p>
+        <small>{{ notif.timestamp | date:'short' }}</small>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="notifications.length === 0" class="empty-state">
+    <p>No tienes notificaciones por ahora.</p>
+  </div>
 </ion-content>

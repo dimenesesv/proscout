@@ -1,0 +1,17 @@
+.jugador-card {
+  margin-bottom: 1rem;
+}
+
+ion-avatar img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 64px;
+  height: 64px;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+  font-style: italic;
+}
