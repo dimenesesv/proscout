@@ -22,6 +22,11 @@ const routes: Routes = [
   canActivate: [AuthGuard],
 },
 {
+  path: 'editar-perfil',
+  loadChildren: () => import('./player/tab4/editar-perfil/editar-perfil.module').then(m => m.EditarPerfilPageModule),
+  canActivate: [AuthGuard],
+},
+{
   path: '',
   redirectTo: 'login',
   pathMatch: 'full',

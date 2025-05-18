@@ -1,0 +1,85 @@
+.formulario-editar-perfil {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 0 1rem 2rem 1rem;
+}
+
+ion-card {
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  border-radius: 18px;
+}
+
+ion-card-title {
+  font-size: 1.2rem;
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+ion-item {
+  --background: transparent;
+  border-radius: 12px;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+ion-input, ion-select, ion-datetime {
+  font-size: 1rem;
+}
+
+ion-button[type="submit"] {
+  margin-top: 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.spinner-center {
+  display: block;
+  margin: 3rem auto 0 auto;
+}
+
+.error-center {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.foto-perfil-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.foto-perfil-preview {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.foto-perfil-img {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--ion-color-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.foto-perfil-placeholder {
+  font-size: 110px;
+  color: var(--ion-color-medium);
+}
+
+@media (max-width: 600px) {
+  .formulario-editar-perfil {
+    max-width: 100vw;
+    padding: 0 0.5rem 2rem 0.5rem;
+  }
+  ion-card {
+    margin-bottom: 1rem;
+  }
+}

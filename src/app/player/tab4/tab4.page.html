@@ -2,6 +2,7 @@
   <ion-toolbar>
     <ion-title class="text-center">{{ perfilUsuario ? perfilUsuario.nombre : '-' }}</ion-title>
     <ion-button (click)="cerrarSesion()">Cerrar sesión</ion-button>
+    <ion-button slot="end" color="primary" (click)="irAEditarPerfil()">Editar perfil</ion-button>
   </ion-toolbar>
 </ion-header>
 

@@ -59,14 +59,21 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.swiper = new Swiper('.swiper-container', {
-      slidesPerView: 1,
-      spaceBetween: 10,
-    });
-
-    this.swiper.on('slideChange', () => {
-      this.pestanaActiva = this.swiper?.activeIndex || 0;
-    });
+    // Espera a que el perfil esté cargado antes de inicializar Swiper
+    const checkAndInitSwiper = () => {
+      if (!this.cargandoPerfil && this.perfilUsuario) {
+        this.swiper = new Swiper('.swiper-container', {
+          slidesPerView: 1,
+          spaceBetween: 10,
+        });
+        this.swiper.on('slideChange', () => {
+          this.pestanaActiva = this.swiper?.activeIndex || 0;
+        });
+      } else {
+        setTimeout(checkAndInitSwiper, 100);
+      }
+    };
+    checkAndInitSwiper();
   }
 
   ngOnDestroy() {
@@ -88,6 +95,10 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     }).catch((error) => {
       console.error('Error al cerrar sesion:', error);
     });
+  }
+
+  irAEditarPerfil() {
+    this.enrutador.navigate(['/editar-perfil']);
   }
 
   async seleccionarImagen() {

@@ -1,0 +1,176 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Editar Perfil</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/player/tab4"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form *ngIf="perfilUsuario" [formGroup]="formularioPerfil" (ngSubmit)="guardarCambios()" class="formulario-editar-perfil">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Datos Personales</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input formControlName="nombre" required></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Foto de Perfil</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="foto-perfil-card-content">
+        <div class="foto-perfil-preview">
+          <img *ngIf="perfilUsuario?.fotoPerfil" [src]="perfilUsuario.fotoPerfil" alt="Foto de perfil" class="foto-perfil-img" />
+          <ion-icon *ngIf="!perfilUsuario?.fotoPerfil" name="person-circle-outline" class="foto-perfil-placeholder"></ion-icon>
+        </div>
+        <ion-button expand="block" color="primary" (click)="seleccionarFotoPerfil()">Cambiar Foto</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Contacto de Emergencia</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Contacto de Emergencia</ion-label>
+          <ion-input formControlName="contactoEmergencia"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="perfilUsuario?.tutor">
+      <ion-card-header>
+        <ion-card-title>Tutor Legal</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Nombre Tutor</ion-label>
+          <ion-input formControlName="tutorNombre"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">RUT Tutor</ion-label>
+          <ion-input formControlName="tutorRut"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Correo Tutor</ion-label>
+          <ion-input formControlName="tutorCorreo" type="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Teléfono Tutor</ion-label>
+          <ion-input formControlName="tutorTelefono" type="tel"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Dirección Tutor</ion-label>
+          <ion-input formControlName="tutorDireccion"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Comuna Tutor</ion-label>
+          <ion-input formControlName="tutorComuna"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Ciudad Tutor</ion-label>
+          <ion-input formControlName="tutorCiudad"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Región Tutor</ion-label>
+          <ion-input formControlName="tutorRegion"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">País Tutor</ion-label>
+          <ion-input formControlName="tutorPais"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Parentesco</ion-label>
+          <ion-input formControlName="tutorParentesco"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Información Deportiva</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Equipo</ion-label>
+          <ion-input formControlName="equipo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Posición</ion-label>
+          <ion-select formControlName="posicion">
+            <ion-select-option value="Portero">Portero</ion-select-option>
+            <ion-select-option value="Defensa Central">Defensa Central</ion-select-option>
+            <ion-select-option value="Lateral Derecho">Lateral Derecho</ion-select-option>
+            <ion-select-option value="Lateral Izquierdo">Lateral Izquierdo</ion-select-option>
+            <ion-select-option value="Volante Defensivo">Volante Defensivo</ion-select-option>
+            <ion-select-option value="Volante Central">Volante Central</ion-select-option>
+            <ion-select-option value="Volante Ofensivo">Volante Ofensivo</ion-select-option>
+            <ion-select-option value="Extremo Derecho">Extremo Derecho</ion-select-option>
+            <ion-select-option value="Extremo Izquierdo">Extremo Izquierdo</ion-select-option>
+            <ion-select-option value="Delantero Centro">Delantero Centro</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Segunda Posición</ion-label>
+          <ion-select formControlName="segundaPosicion">
+            <ion-select-option value="Portero">Portero</ion-select-option>
+            <ion-select-option value="Defensa Central">Defensa Central</ion-select-option>
+            <ion-select-option value="Lateral Derecho">Lateral Derecho</ion-select-option>
+            <ion-select-option value="Lateral Izquierdo">Lateral Izquierdo</ion-select-option>
+            <ion-select-option value="Volante Defensivo">Volante Defensivo</ion-select-option>
+            <ion-select-option value="Volante Central">Volante Central</ion-select-option>
+            <ion-select-option value="Volante Ofensivo">Volante Ofensivo</ion-select-option>
+            <ion-select-option value="Extremo Derecho">Extremo Derecho</ion-select-option>
+            <ion-select-option value="Extremo Izquierdo">Extremo Izquierdo</ion-select-option>
+            <ion-select-option value="Delantero Centro">Delantero Centro</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Pie</ion-label>
+          <ion-select formControlName="pie">
+            <ion-select-option value="Derecho">Derecho</ion-select-option>
+            <ion-select-option value="Izquierdo">Izquierdo</ion-select-option>
+            <ion-select-option value="Ambidiestro">Ambidiestro</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Edad</ion-label>
+          <ion-input formControlName="edad" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Altura (cm)</ion-label>
+          <ion-input formControlName="altura" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Peso (kg)</ion-label>
+          <ion-input formControlName="peso" type="number"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="false">
+      <ion-card-header>
+        <ion-card-title>Estadísticas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let stat of statsKeys">
+          <ion-label position="floating">{{ stat.label }}</ion-label>
+          <ion-input [formControlName]="stat.key" type="number"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" type="submit" [disabled]="formularioPerfil.invalid">Guardar Cambios</ion-button>
+  </form>
+
+  <ion-spinner *ngIf="cargandoPerfil" name="crescent" class="spinner-center"></ion-spinner>
+  <ion-note *ngIf="errorPerfil" color="danger" class="error-center">{{ errorPerfil }}</ion-note>
+</ion-content>

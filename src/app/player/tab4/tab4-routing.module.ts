@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: Tab4Page
+  },
+  {
+    path: 'editar-perfil',
+    loadChildren: () => import('./editar-perfil/editar-perfil.module').then( m => m.EditarPerfilPageModule)
   }
 ];
 
