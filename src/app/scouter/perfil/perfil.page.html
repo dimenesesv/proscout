@@ -1,7 +1,7 @@
 
 <ion-header>
   <ion-toolbar>
-    <ion-title class="text-center">{{ userProfile?.name }}</ion-title>
+    <ion-title class="text-center">{{ perfilUsuario?.name }}</ion-title>
     <ion-button (click)="logout()">Cerrar sesión</ion-button>
   </ion-toolbar>
 </ion-header>
@@ -14,7 +14,7 @@
       <!-- Slide 1: Perfil -->
       <div class="swiper-slide">
        
-        <app-perfil-card [userProfile]="userProfile"></app-perfil-card>
+        <app-perfil-card [perfilUsuario]="perfilUsuario"></app-perfil-card>
       </div>
 
       <!-- Slide 2: Estadísticas -->
@@ -34,23 +34,23 @@
                 <div class="stats-grid">
                   <div class="stat-item">
                     <h3>Partidos jugados</h3>
-                    <p>{{ userProfile?.partidosJugados }}</p>
+                    <p>{{ perfilUsuario?.partidosJugados }}</p>
                   </div>
                   <div class="stat-item">
                     <h3>Goles</h3>
-                    <p>{{ userProfile?.goles }}</p>
+                    <p>{{ perfilUsuario?.goles }}</p>
                   </div>
                   <div class="stat-item">
                     <h3>Asistencias</h3>
-                    <p>{{ userProfile?.asistencias }}</p>
+                    <p>{{ perfilUsuario?.asistencias }}</p>
                   </div>
                   <div class="stat-item">
                     <h3>Tarjetas amarillas</h3>
-                    <p>{{ userProfile?.tarjetasAmarillas }}</p>
+                    <p>{{ perfilUsuario?.tarjetasAmarillas }}</p>
                   </div>
                   <div class="stat-item">
                     <h3>Tarjetas rojas</h3>
-                    <p>{{ userProfile?.tarjetasRojas }}</p>
+                    <p>{{ perfilUsuario?.tarjetasRojas }}</p>
                   </div>
                 </div>
               </ion-card-content>

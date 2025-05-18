@@ -34,10 +34,10 @@ export class LoginPage {
       console.log('[DEBUG] Datos del usuario:', userData);
 
       if (userData) {
-        if (userData.isplayer) {
+        if (userData.esJugador) {
           console.log('[DEBUG] Usuario es jugador');
           this.router.navigate(['/player/player/tab1']);
-        } else if (userData.isscouter) {
+        } else if (userData.esScouter) {
           console.log('[DEBUG] Usuario es visor');
           this.router.navigate(['/scouter/scouter/mapa']);
         } else {

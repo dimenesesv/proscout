@@ -8,5 +8,5 @@ import { IonicModule } from '@ionic/angular';
   standalone: false
 })
 export class PerfilCardComponent {
-  @Input() userProfile: any;
+  @Input() perfilUsuario: any;
 }

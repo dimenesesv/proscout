@@ -4,47 +4,47 @@
       <div class="info">
         <div class="info-group">
           <label>Edad</label>
-          <div>{{ userProfile?.age }}</div>
+          <div>{{ perfilUsuario?.age }}</div>
         </div>
         <div class="info-group">
           <label>Posición</label>
-          <div>{{ userProfile?.position }}</div>
+          <div>{{ perfilUsuario?.position }}</div>
         </div>
         <div class="info-group">
           <label>Altura</label>
-          <div>{{ userProfile?.height }}</div>
+          <div>{{ perfilUsuario?.height }}</div>
         </div>
         <div class="info-group">
           <label>Peso</label>
-          <div>{{ userProfile?.weight }}</div>
+          <div>{{ perfilUsuario?.weight }}</div>
         </div>
       </div>
-      <img [src]="userProfile?.fotoUrl || 'https://placehold.co/185x185'" class="player-photo" />
+      <img [src]="perfilUsuario?.fotoUrl || 'https://placehold.co/185x185'" class="player-photo" />
     </ion-card>
 
     <ion-card class="detalles-card">
       <ion-item lines="none">
         <ion-label>
           <p class="label">Posición secundaria</p>
-          <h2>{{ userProfile?.secundaria }}</h2>
+          <h2>{{ perfilUsuario?.secundaria }}</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="none">
         <ion-label>
           <p class="label">Pierna hábil</p>
-          <h2>{{ userProfile?.piernaHabil }}</h2>
+          <h2>{{ perfilUsuario?.piernaHabil }}</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="none">
         <ion-label>
           <p class="label">Equipo actual</p>
-          <h2>{{ userProfile?.equipo }}</h2>
+          <h2>{{ perfilUsuario?.equipo }}</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="none">
         <ion-label>
           <p class="label">Disponibilidad de fichaje</p>
-          <h2>{{ userProfile?.fichaje }}</h2>
+          <h2>{{ perfilUsuario?.fichaje }}</h2>
         </ion-label>
       </ion-item>
     </ion-card>
@@ -52,16 +52,16 @@
     <div class="extra-info">
       <div class="info-box">
         <p class="mini-label">Nacionalidad</p>
-        <h3>{{ userProfile?.nacionalidad }}</h3>
+        <h3>{{ perfilUsuario?.nacionalidad }}</h3>
       </div>
       <div class="info-box">
         <p class="mini-label">Fecha de nacimiento</p>
-        <h3>{{ userProfile?.nacimiento }}</h3>
+        <h3>{{ perfilUsuario?.nacimiento }}</h3>
       </div>
       <div class="info-box">
         <p class="mini-label">Tutor</p>
-        <h3>{{ userProfile?.tutor }}</h3>
-        <p class="mini-label">Parentesco: {{ userProfile?.parentesco }}</p>
+        <h3>{{ perfilUsuario?.tutor }}</h3>
+        <p class="mini-label">Parentesco: {{ perfilUsuario?.parentesco }}</p>
       </div>
     </div>
 

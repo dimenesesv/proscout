@@ -14,7 +14,7 @@ import Swiper from 'swiper';
   standalone: false,
 })
 export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
-  userProfile: any;
+  perfilUsuario: any;
   galleryUrls: string[] = [];
   uploadProgress: number | null = null;
   private profileSubscription: Subscription | undefined;
@@ -43,7 +43,7 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
 
     this.firebaseService.getDocument(path)
       .then((data) => {
-        this.userProfile = data;
+        this.perfilUsuario = data;
         this.galleryUrls = data?.gallery || [];
       })
       .catch((error) => {

@@ -15,9 +15,10 @@ import { Usuario } from 'src/app/interfaces/usuario';
   standalone: false,
 })
 export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
-  perfilUsuario!: Usuario;
+  perfilUsuario: Usuario | null = null;
   urlsGaleria: string[] = [];
   progresoSubida: number | null = null;
+  cargandoPerfil: boolean = false;
   private suscripcionPerfil: Subscription | undefined;
 
   pestanaActiva: number = 0;
@@ -31,11 +32,13 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    this.cargandoPerfil = true;
     const auth = getAuth();
     const usuario = auth.currentUser;
 
     if (!usuario) {
       console.warn('No hay usuario autenticado.');
+      this.cargandoPerfil = false;
       return;
     }
 
@@ -49,6 +52,9 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
       })
       .catch((error) => {
         console.error('Error al obtener el perfil del usuario:', error);
+      })
+      .finally(() => {
+        this.cargandoPerfil = false;
       });
   }
 

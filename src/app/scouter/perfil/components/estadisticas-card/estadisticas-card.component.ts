@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
   standalone: false
 })
 export class EstadisticasCardComponent {
-  @Input() userProfile: any;
+  @Input() perfilUsuario: any;
 }

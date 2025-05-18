@@ -30,10 +30,10 @@ export class BienvenidaPage {
 
     this.firebaseService.getDocument(path)
       .then((data) => {
-        if (data?.isscouter) {
-          this.router.navigate(['/scouter/scouter/tabs/tab1']);
-        } else if (data?.isplayer) {
-          this.router.navigate(['/player/player/tabs/tab1']);
+        if (data?.esScouter) {
+          this.router.navigate(['/scouter/scouter/mapa']);
+        } else if (data?.esJugador) {
+          this.router.navigate(['/player/player/tab1']);
         } else {
           this.router.navigate(['/tabs/tab1']);
         }

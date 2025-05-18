@@ -16,12 +16,12 @@ export class RegistroPage implements OnInit {
   ngOnInit() {
   }
 
-isPlayer() {
+esJugador() {
     this.registroService.setEsJugador(true);
     this.registroService.setEsScouter(false);
     this.router.navigate(['registro/nombre']);
   }
-isScouter() {
+esScouter() {
     this.registroService.setEsScouter(true);
     this.registroService.setEsJugador(false);
     this.router.navigate(['registro/nombre']);
