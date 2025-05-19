@@ -1,0 +1,71 @@
+.perfil-page {
+  .swiper-container {
+    width: 100%;
+    height: 100%;
+    margin-top: 1rem;
+  }
+  .swiper-wrapper {
+    display: flex;
+    height: 100%;
+  }
+  .swiper-slide {
+    flex: 1 0 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 350px;
+    padding-bottom: 2rem;
+  }
+  .spinner-center {
+    display: block;
+    margin: 2rem auto;
+  }
+}
+
+.player-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem auto;
+  display: block;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.info-group, .info-box {
+  margin-bottom: 1rem;
+}
+
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.stat-item {
+  flex: 1 1 40%;
+  min-width: 120px;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  text-align: center;
+}
+
+.galeria-card ion-img {
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .perfil-page .swiper-slide {
+    min-height: 250px;
+    padding-bottom: 1rem;
+  }
+  .player-photo {
+    width: 90px;
+    height: 90px;
+  }
+}

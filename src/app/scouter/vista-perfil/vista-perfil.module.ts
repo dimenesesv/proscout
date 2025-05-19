@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Tab4PageRoutingModule } from './tab4-routing.module';
-import { Tab4Page } from './tab4.page';
-import { FirebaseService } from '../../services/firebase.service';
+import { VistaPerfilPageRoutingModule } from './vista-perfil-routing.module';
+import { VistaPerfilPage } from './vista-perfil.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
@@ -12,12 +11,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    Tab4PageRoutingModule,
-    SharedModule,
+    VistaPerfilPageRoutingModule,
+    SharedModule
   ],
   declarations: [
-    Tab4Page
-  ],
-  providers: [FirebaseService]
+    VistaPerfilPage,
+  ]
 })
-export class Tab4PageModule {}
+export class VistaPerfilPageModule {}

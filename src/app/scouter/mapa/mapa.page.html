@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-list *ngIf="users.length > 0" class="jugadores-list">
-    <ion-card *ngFor="let user of users" class="jugador-card">
+    <ion-card *ngFor="let user of users" class="jugador-card" (click)="verPerfil(user)">
       <ion-item lines="none">
         <ion-avatar slot="start">
           <img [src]="user.avatar" alt="Foto de {{user.name}}" />

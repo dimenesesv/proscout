@@ -2,8 +2,10 @@ import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core'
 import { ModalController, IonContent } from '@ionic/angular';
 import { AfterViewInit } from '@angular/core';
 import { calcularDistancia } from 'src/app/utils/distancia';
+import { Geolocation } from '@capacitor/geolocation';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { GeoPoint } from 'firebase/firestore';
+import { Router } from '@angular/router';
 declare var google: any;
 
 interface User {
@@ -31,7 +33,7 @@ export class MapaPage implements OnInit, AfterViewInit {
   markers: any[] = [];
   locationLabel: string = 'Mi ubicación';
 
-  constructor(private ngZone: NgZone, private modalCtrl: ModalController, private firebaseService: FirebaseService) {}
+  constructor(private ngZone: NgZone, private modalCtrl: ModalController, private firebaseService: FirebaseService, private router: Router) {}
 
   ngOnInit() {
     this.guardarUbicacionSiEsPosible();
@@ -44,23 +46,20 @@ export class MapaPage implements OnInit, AfterViewInit {
   }
 
   async getCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.ngZone.run(() => {
-            this.currentLocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            };
-            this.locationLabel = 'Mi ubicación';
-            this.loadMap();
-            this.updateUserDistances(); // Actualiza la distancia de los usuarios con la nueva ubicación
-          });
-        },
-        (err) => {
-          // Si falla la ubicación, se usa la ubicación predeterminada (CDMX)
-        }
-      );
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      this.ngZone.run(() => {
+        this.currentLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        this.locationLabel = 'Mi ubicación';
+        this.loadMap();
+        this.updateUserDistances(); // Actualiza la distancia de los usuarios con la nueva ubicación
+      });
+    } catch (err) {
+      console.warn('[MapaPage] ❌ Error al obtener ubicación:', err);
+      // Si falla la ubicación, usa la ubicación predeterminada (CDMX)
     }
   }
 
@@ -151,19 +150,6 @@ export class MapaPage implements OnInit, AfterViewInit {
     this.addUserMarkers();
   }
 
-  getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371; // Radio de la Tierra en km
-    const dLat = this.deg2rad(lat2 - lat1);
-    const dLon = this.deg2rad(lat2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(lat1)) *
-        Math.cos(this.deg2rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distancia en km
-  }
-
   deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
   }
@@ -194,5 +180,9 @@ export class MapaPage implements OnInit, AfterViewInit {
       this.map.panTo({ lat: user.lat, lng: user.lng });
       this.map.setZoom(15);
     }
+  }
+
+  verPerfil(user: any) {
+    this.router.navigate(['/vista-perfil', user.id]);
   }
 }

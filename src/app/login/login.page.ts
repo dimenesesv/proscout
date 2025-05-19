@@ -17,6 +17,7 @@ export class LoginPage {
   password: string = '';
   showError: boolean = false;
   errorMessage: string = '';
+  debugInfo: string = '';
 
   constructor(
     private authService: AuthService,
@@ -26,29 +27,12 @@ export class LoginPage {
   ) {}
 
   async login() {
-    this.showError = false;
     try {
-      const userCredential = await this.authService.login(this.email, this.password);
-
-      const uid = userCredential.user?.uid;
-      if (!uid) throw new Error('No se pudo obtener el UID del usuario.');
-
-      const path = `usuarios/${uid}`;
-      const userData = await this.firebaseService.getDocument(path);
-
-      if (userData) {
-        if (userData.esJugador) {
-          this.router.navigate(['/player/player/tab1']);
-        } else if (userData.esScouter) {
-          this.router.navigate(['/scouter/scouter/mapa']);
-        } else {
-          this.router.navigate(['/error']);
-        }
-      } else {
-        this.router.navigate(['/error']);
-      }
+      await this.authService.loginAndRedirect(this.email, this.password, this.firebaseService);
     } catch (error: any) {
       this.showError = true;
+      this.debugInfo = 'Error en login: ' + (error?.message || error);
+      console.error('[LoginPage] Error en login:', error);
       if (error.code === 'auth/invalid-credential') {
         this.errorMessage = 'Email o contraseña incorrectos';
       } else if (error.code === 'auth/invalid-email') {
@@ -62,8 +46,7 @@ export class LoginPage {
       }
     }
   }
-
   goToRegister() {
-    this.router.navigate(['/registro']); // Redirige a la página de registro
+    this.router.navigate(['/scouter/scouter/mapa']); // Redirige a la página de registro
   }
 }

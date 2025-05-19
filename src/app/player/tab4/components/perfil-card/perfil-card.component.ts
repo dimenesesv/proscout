@@ -6,7 +6,7 @@ import { Usuario } from 'src/app/interfaces/usuario';
   selector: 'player-app-perfil-card',
   templateUrl: './perfil-card.component.html',
   styleUrls: ['./perfil-card.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class PlayerPerfilCardComponent {
   @Input() perfilUsuario!: Usuario;

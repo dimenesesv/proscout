@@ -1,41 +1,47 @@
-import { Injectable } from '@angular/core';
-import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, sendEmailVerification, Auth } from 'firebase/auth';
+import { Injectable, NgZone } from '@angular/core';
+import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, sendEmailVerification, Auth, UserCredential, setPersistence, browserLocalPersistence, signInWithCustomToken } from 'firebase/auth';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { environment } from '../../environments/environment';
+import { Capacitor } from '@capacitor/core';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private get auth(): Auth {
-    return getAuth();
-  }
+  private auth = getAuth(getApps().length ? getApp() : initializeApp(environment.firebaseConfig));
+
+  constructor(private ngZone: NgZone, private router: Router) {}
 
   async login(email: string, password: string) {
     try {
-      return await signInWithEmailAndPassword(this.auth, email, password);
+      if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+        console.log('[AuthService] Usando plugin nativo de Firebase');
+        const result = await FirebaseAuthentication.signInWithEmailAndPassword({ email, password });
+        console.log('Login nativo exitoso:', result);
+        return { user: { uid: result.user?.uid } };
+      } else {
+        console.log('[AuthService] Usando Firebase Web SDK');
+        await setPersistence(this.auth, browserLocalPersistence);
+        const result = await signInWithEmailAndPassword(this.auth, email, password);
+        console.log('Login web exitoso:', result);
+        return result;
+      }
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+      console.error('Error en login:', error);
       throw error;
     }
   }
 
   async logout() {
-    try {
-      return await signOut(this.auth);
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-      throw error;
-    }
+    return signOut(this.auth);
   }
 
   async register(email: string, password: string) {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-      await this.sendEmailVerification();
-      return userCredential;
-    } catch (error) {
-      console.error('Error al registrar usuario:', error);
-      throw error;
-    }
+    const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+    await this.sendEmailVerification();
+    return userCredential;
   }
 
   async sendEmailVerification() {
@@ -49,5 +55,72 @@ export class AuthService {
 
   async getCurrentUser() {
     return this.auth.currentUser;
+  }
+
+  /**
+   * Realiza login, obtiene datos de usuario en Firestore y redirige según rol.
+   * Devuelve true si redirige correctamente, lanza error si falla.
+   * Usa el SDK web puro para login.
+   */
+  async loginAndRedirect(email: string, password: string, firebaseService: any): Promise<boolean> {
+    console.log('[AuthService] loginAndRedirect() llamado con:', email);
+    try {
+      const result = await this.login(email, password);
+      console.log('[AuthService] Resultado de login:', result);
+      let uid: string | undefined;
+      if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+        uid = result.user?.uid || result.user?.uid;
+      } else {
+        uid = result.user?.uid;
+      }
+      console.log('[AuthService] UID obtenido:', uid);
+      if (!uid) throw new Error('No se pudo obtener el UID del usuario.');
+      const path = `usuarios/${uid}`;
+      const userData = await firebaseService.getDocument(path);
+      console.log('[AuthService] Resultado de getDocument:', userData);
+      if (userData) {
+        console.log('[AuthService] userData.esJugador:', userData.esJugador, 'userData.esScouter:', userData.esScouter);
+        if (userData.esJugador) {
+          this.ngZone.run(() => {
+            console.log('[AuthService] Redirigiendo a /player/player/tab1');
+            setTimeout(() => {
+              this.router.navigate(['/player/player/tab1']).catch((err: any) => {
+                console.error('[AuthService] Error en router.navigate:', err);
+              });
+            }, 300);
+          });
+          return true;
+        } else if (userData.esScouter) {
+          this.ngZone.run(() => {
+            console.log('[AuthService] Redirigiendo a /scouter/scouter/mapa');
+            setTimeout(() => {
+              this.router.navigate(['/scouter/scouter/mapa']).catch((err: any) => {
+                console.error('[AuthService] Error en router.navigate:', err);
+              });
+            }, 300);
+          });
+          return true;
+        } else {
+          this.ngZone.run(() => {
+            console.warn('[AuthService] Rol de usuario no reconocido, redirigiendo a /error');
+            setTimeout(() => {
+              this.router.navigate(['/error']);
+            }, 300);
+          });
+          throw new Error('Rol de usuario no reconocido.');
+        }
+      } else {
+        this.ngZone.run(() => {
+          console.warn('[AuthService] userData null, redirigiendo a /error');
+          setTimeout(() => {
+            this.router.navigate(['/error']);
+          }, 300);
+        });
+        throw new Error('No se encontraron datos de usuario en Firestore.');
+      }
+    } catch (error) {
+      console.error('[AuthService] Error en loginAndRedirect:', error);
+      throw error;
+    }
   }
 }

@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="text-center">{{ userData ? userData.nombre : '-' }}</ion-title>
+    <ion-button *ngIf="userData" (click)="goBack()">Volver</ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="perfil-page">
+  <ion-spinner *ngIf="!userData" name="crescent" class="spinner-center"></ion-spinner>
+  <ng-container *ngIf="userData">
+    <div class="swiper-container">
+      <player-app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></player-app-tabs-header>
+      <div class="swiper-wrapper">
+        <!-- Slide 1: Perfil -->
+        <div class="swiper-slide">
+          <player-app-perfil-card [perfilUsuario]="userData"></player-app-perfil-card>
+        </div>
+
+        <!-- Slide 2: Estadísticas -->
+        <div class="swiper-slide">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Estadísticas</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <app-radar-chart
+                [labels]="['Ataque', 'pepito', 'Habilidad', 'Táctica', 'Creatividad']"
+                [data]="[userData.stats?.ataque || 0, userData.stats?.pepito || 0, userData.stats?.habilidad || 0, userData.stats?.tactica || 0, userData.stats?.creatividad || 0]"
+              ></app-radar-chart>
+              <div class="stats-grid" *ngIf="userData && userData.stats">
+                <div class="stat-item">
+                  <h3>Agilidad</h3>
+                  <p>{{ userData.stats.agilidad }}</p>
+                </div>
+                <div class="stat-item">
+                  <h3>Cabeceo</h3>
+                  <p>{{ userData.stats.cabeceo }}</p>
+                </div>
+                <div class="stat-item">
+                  <h3>Control</h3>
+                  <p>{{ userData.stats.controlBalon }}</p>
+                </div>
+                <div class="stat-item">
+                  <h3>Coordinación</h3>
+                  <p>{{ userData.stats.coordinacion }}</p>
+                </div>
+                <div class="stat-item">
+                  <h3>Equilibrio</h3>
+                  <p>{{ userData.stats.equilibrio }}</p>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <!-- Slide 3: Galería -->
+        <div class="swiper-slide">
+          <ion-card class="galeria-card">
+            <ion-card-header>
+              <ion-card-title>Galería</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="6" *ngFor="let imageUrl of userData.galeria">
+                    <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>

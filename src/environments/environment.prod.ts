@@ -1,12 +1,12 @@
 export const environment = {
   production: true,
   firebaseConfig : {
-    apiKey: "AIzaSyDCYUpI_JV9-p90GV5Sv2YQHu2moFJe4S8",
-    authDomain: "proscout-df5af.firebaseapp.com",
-    projectId: "proscout-df5af",
-    storageBucket: "proscout-df5af.firebasestorage.app",
-    messagingSenderId: "355577323223",
-    appId: "1:355577323223:web:7c80b11418c5a9ad649a92",
-    measurementId: "G-0QDTFTV601"
+    apiKey: "AIzaSyA-v2FKaZry8O8h-cCBmGE46zFZ4DdMVcg",
+    authDomain: "proscout-dd0b6.firebaseapp.com",
+    projectId: "proscout-dd0b6",
+    storageBucket: "proscout-dd0b6.appspot.com",
+    messagingSenderId: "691198717627",
+    appId: "1:691198717627:web:2ed6f5da305114e93c039e",
+    measurementId: "G-HRC91ZX55Q"
   }
 };

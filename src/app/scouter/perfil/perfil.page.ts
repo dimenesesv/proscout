@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { getAuth, signOut } from 'firebase/auth';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
+import { Capacitor } from '@capacitor/core';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 @Component({
   selector: 'app-perfil',
@@ -29,16 +31,23 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  async ngOnInit() {
+    let userId: string | undefined;
 
-    if (!user) {
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      const { user } = await FirebaseAuthentication.getCurrentUser();
+      userId = user?.uid;
+    } else {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      userId = user?.uid;
+    }
+
+    if (!userId) {
       console.warn('No hay usuario autenticado.');
       return;
     }
 
-    const userId = user.uid;
     const path = `usuarios/${userId}`;
 
     this.firebaseService.getDocument(path)

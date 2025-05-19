@@ -22,6 +22,12 @@
       {{ errorMessage }}
     </div>
 
+    <!-- Mensaje de debug - solo visible si debugInfo tiene contenido -->
+    <div *ngIf="debugInfo" class="debug-info" style="color: var(--ion-color-primary); font-size: 0.9em; margin-top: 8px; word-break: break-all;">
+      <ion-icon name="information-circle-outline" color="primary" style="margin-right: 8px;"></ion-icon>
+      {{ debugInfo }}
+    </div>
+
     <ion-button expand="full" type="submit" class="ion-margin-top">
       Iniciar Sesión
     </ion-button>

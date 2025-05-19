@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { EditarPerfilPageRoutingModule } from './editar-perfil-routing.module';
 
 import { EditarPerfilPage } from './editar-perfil.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { EditarPerfilPage } from './editar-perfil.page';
     FormsModule,
     IonicModule,
     EditarPerfilPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [EditarPerfilPage]
 })

@@ -34,6 +34,10 @@ const routes: Routes = [
   {
     path: 'error',
     loadChildren: () => import('./error/error.module').then( m => m.ErrorPageModule)
+  },
+  {
+    path: 'vista-perfil/:id',
+    loadChildren: () => import('./scouter/vista-perfil/vista-perfil.module').then( m => m.VistaPerfilPageModule)
   }
 ];
 
