@@ -103,7 +103,7 @@ export class MapaPage implements OnInit, AfterViewInit {
           u.ubicacion &&
           typeof u.ubicacion.latitude === 'number' &&
           typeof u.ubicacion.longitude === 'number' &&
-          u.esPlayer === true && // Solo jugadores
+          u.esJugador === true && // Solo jugadores
           (!currentUser || u.id !== currentUser.uid)
         )
         .map((u: any) => ({
