@@ -3,6 +3,8 @@ import { AuthService } from '../services/auth.service'; // Asegúrate que el pat
 import { Router } from '@angular/router'; // Para redirigir después de login
 import { RegistroService } from 'src/app/services/registro.service';
 import { FirebaseService } from 'src/app/services/firebase.service'; // Asegúrate que el path sea correcto
+import { Platform } from '@ionic/angular';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -15,41 +17,58 @@ export class LoginPage {
   showError: boolean = false;
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router, private firebaseService: FirebaseService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private firebaseService: FirebaseService,
+    private platform: Platform
+  ) {
+    this.platform.ready().then(() => {
+      this.guardarUbicacionSiEsPosible();
+    });
+  }
+
+  async guardarUbicacionSiEsPosible() {
+    const auth = await import('firebase/auth');
+    const user = auth.getAuth().currentUser;
+    if (!user) return;
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const ubicacion = {
+        latitud: position.coords.latitude,
+        longitud: position.coords.longitude
+      };
+      try {
+        await this.firebaseService.updateDocument(`usuarios/${user.uid}`, { ubicacion });
+      } catch (e) {
+        // Silenciar error, no es crítico
+      }
+    });
+  }
 
   async login() {
     this.showError = false;
     try {
-      console.log('[DEBUG] Iniciando login con:', this.email);
       const userCredential = await this.authService.login(this.email, this.password);
-      console.log('[DEBUG] Credencial:', userCredential);
 
       const uid = userCredential.user?.uid;
       if (!uid) throw new Error('No se pudo obtener el UID del usuario.');
-      console.log('[DEBUG] UID:', uid);
 
       const path = `usuarios/${uid}`;
-      console.log('[DEBUG] Path usado:', path);
       const userData = await this.firebaseService.getDocument(path);
-      console.log('[DEBUG] Datos del usuario:', userData);
 
       if (userData) {
         if (userData.esJugador) {
-          console.log('[DEBUG] Usuario es jugador');
           this.router.navigate(['/player/player/tab1']);
         } else if (userData.esScouter) {
-          console.log('[DEBUG] Usuario es visor');
           this.router.navigate(['/scouter/scouter/mapa']);
         } else {
-          console.warn('[DEBUG] Usuario sin rol definido');
           this.router.navigate(['/error']);
         }
       } else {
-        console.warn('[DEBUG] No se encontraron datos del usuario');
         this.router.navigate(['/error']);
       }
     } catch (error: any) {
-      console.error('Error completo:', error);
       this.showError = true;
       if (error.code === 'auth/invalid-credential') {
         this.errorMessage = 'Email o contraseña incorrectos';

@@ -1,9 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Mapa de Jugadores</ion-title>
+    <ion-title>Jugadores Cercanos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div id="map" style="height: 100%;"></div>
+  <ion-list *ngIf="users.length > 0" class="jugadores-list">
+    <ion-card *ngFor="let user of users" class="jugador-card">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <img [src]="user.avatar" alt="Foto de {{user.name}}" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ user.name }}</h2>
+          <p *ngIf="user.distance !== undefined">A {{ user.distance | number:'1.1-2' }} km</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+  <ion-note *ngIf="users.length === 0" color="medium" class="ion-text-center" style="margin-top:2rem;">No hay jugadores cercanos.</ion-note>
 </ion-content>

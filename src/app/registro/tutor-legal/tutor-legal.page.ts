@@ -5,6 +5,7 @@ import { RegistroService } from 'src/app/services/registro.service';
 import { Tutor } from 'src/app/interfaces/tutor';
 import { Router } from '@angular/router';
 import { validarRut } from '../../utils/rut';
+import { autocompletarDireccion, obtenerDetallesDireccion, AutocompleteResult } from 'src/app/utils/autocompletar';
 
 // Validador de RUT basado en la lógica de rut.page.ts
 
@@ -24,7 +25,7 @@ export class TutorLegalPage implements OnInit {
   // Google Maps Autocomplete
   autocompleteService: any;
   placeService: any;
-  suggestions: Array<any> = [];
+  suggestions: AutocompleteResult[] = [];
   showSuggestions: boolean = false;
 
   constructor(
@@ -72,48 +73,17 @@ export class TutorLegalPage implements OnInit {
 
   onAddressInput(event: any) {
     const value = event.target.value;
-    if (value && value.length > 2 && this.autocompleteService) {
-      this.autocompleteService.getPlacePredictions({
-        input: value,
-        componentRestrictions: { country: 'cl' },
-        types: ['address']
-      }, (predictions: any[], status: any) => {
-        if (status === (window as any).google.maps.places.PlacesServiceStatus.OK && predictions) {
-          this.suggestions = predictions;
-          this.showSuggestions = true;
-        } else {
-          this.suggestions = [];
-          this.showSuggestions = false;
-        }
-      });
-    } else {
-      this.suggestions = [];
-      this.showSuggestions = false;
-    }
+    autocompletarDireccion(value, (results) => {
+      this.suggestions = results;
+      this.showSuggestions = results.length > 0;
+    });
   }
 
-  selectSuggestion(suggestion: any) {
+  selectSuggestion(suggestion: AutocompleteResult) {
     this.formulario.patchValue({ address: suggestion.description });
     this.showSuggestions = false;
-    // Obtener detalles del lugar para autocompletar comuna, ciudad y región
-    if ((window as any).google && (window as any).google.maps) {
-      const map = document.createElement('div');
-      this.placeService = new (window as any).google.maps.places.PlacesService(map);
-      this.placeService.getDetails({ placeId: suggestion.place_id }, (place: any, status: any) => {
-        if (status === (window as any).google.maps.places.PlacesServiceStatus.OK && place) {
-          let comuna = '';
-          let city = '';
-          let region = '';
-          if (place.address_components) {
-            for (const comp of place.address_components) {
-              if (comp.types.includes('locality')) comuna = comp.long_name;
-              if (comp.types.includes('administrative_area_level_2')) city = comp.long_name;
-              if (comp.types.includes('administrative_area_level_1')) region = comp.long_name;
-            }
-          }
-          this.formulario.patchValue({ comuna, city, region });
-        }
-      });
-    }
+    obtenerDetallesDireccion(suggestion.place_id, ({ comuna, city, region }) => {
+      this.formulario.patchValue({ comuna, city, region });
+    });
   }
 }

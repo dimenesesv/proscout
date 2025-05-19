@@ -1,6 +1,8 @@
 import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { ModalController, IonContent } from '@ionic/angular';
 import { AfterViewInit } from '@angular/core';
+import { calcularDistancia } from 'src/app/utils/distancia';
+import { FirebaseService } from 'src/app/services/firebase.service';
 declare var google: any;
 
 interface User {
@@ -28,7 +30,7 @@ export class MapaPage implements OnInit, AfterViewInit {
   markers: any[] = [];
   locationLabel: string = 'Mi ubicación';
 
-  constructor(private ngZone: NgZone, private modalCtrl: ModalController) {}
+  constructor(private ngZone: NgZone, private modalCtrl: ModalController, private firebaseService: FirebaseService) {}
 
   ngOnInit() {
     this.loadUsers(); // Simulando usuarios
@@ -84,51 +86,52 @@ export class MapaPage implements OnInit, AfterViewInit {
     });
   }
 
-  loadUsers() {
-    // Aquí podrías hacer una llamada real a tu API de usuarios, pero por ahora usamos datos estáticos
-    this.users = [
-      {
-        id: '1',
-        name: 'Ana',
-        avatar: 'https://randomuser.me/api/portraits/women/1.jpg',
-        lat: 19.4327,
-        lng: -99.1331,
-      },
-      {
-        id: '2',
-        name: 'Luis',
-        avatar: 'https://randomuser.me/api/portraits/men/2.jpg',
-        lat: 19.435,
-        lng: -99.14,
-      },
-      {
-        id: '3',
-        name: 'Sofía',
-        avatar: 'https://randomuser.me/api/portraits/women/3.jpg',
-        lat: 19.43,
-        lng: -99.12,
-      },
-    ];
-    this.updateUserDistances();
+  async loadUsers() {
+    try {
+      // Obtener todos los usuarios reales de Firestore
+      const { collection, getDocs } = await import('@angular/fire/firestore');
+      const firestore = (this.firebaseService as any).firestore;
+      const usuariosCol = collection(firestore, 'usuarios');
+      const snapshot = await getDocs(usuariosCol);
+      const auth = await import('firebase/auth');
+      const currentUser = auth.getAuth().currentUser;
+      this.users = snapshot.docs
+        .map((doc: any) => ({ id: doc.id, ...doc.data() }))
+        .filter((u: any) => u.ubicacion && u.ubicacion.latitud && u.ubicacion.longitud && (!currentUser || u.id !== currentUser.uid))
+        .map((u: any) => ({
+          id: u.id,
+          name: u.nombre || u.correo || 'Usuario',
+          avatar: u.fotoPerfil || 'https://randomuser.me/api/portraits/lego/1.jpg',
+          lat: u.ubicacion.latitud,
+          lng: u.ubicacion.longitud,
+        }));
+      this.updateUserDistances();
+    } catch (e) {
+      // Si falla, no mostrar usuarios
+      this.users = [];
+      this.updateUserDistances();
+    }
   }
 
   updateUserDistances() {
-    this.users = this.users.map((user) => ({
-      ...user,
-      distance: this.getDistanceFromLatLonInKm(
-        this.currentLocation.lat,
-        this.currentLocation.lng,
-        user.lat,
-        user.lng
-      ),
-    }));
+    this.users = this.users
+      .map((user) => ({
+        ...user,
+        distance: calcularDistancia(
+          this.currentLocation.lat,
+          this.currentLocation.lng,
+          user.lat,
+          user.lng
+        ),
+      }))
+      .filter((user) => user.distance <= 50); // Solo usuarios a 50km o menos
     this.addUserMarkers();
   }
 
   getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const R = 6371; // Radio de la Tierra en km
     const dLat = this.deg2rad(lat2 - lat1);
-    const dLon = this.deg2rad(lon2 - lon1);
+    const dLon = this.deg2rad(lat2 - lon1);
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(this.deg2rad(lat1)) *
