@@ -3,6 +3,7 @@ import { ModalController, IonContent } from '@ionic/angular';
 import { AfterViewInit } from '@angular/core';
 import { calcularDistancia } from 'src/app/utils/distancia';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { GeoPoint } from 'firebase/firestore';
 declare var google: any;
 
 interface User {
@@ -33,6 +34,7 @@ export class MapaPage implements OnInit, AfterViewInit {
   constructor(private ngZone: NgZone, private modalCtrl: ModalController, private firebaseService: FirebaseService) {}
 
   ngOnInit() {
+    this.guardarUbicacionSiEsPosible();
     this.loadUsers(); // Simulando usuarios
     this.getCurrentLocation();
   }
@@ -97,13 +99,13 @@ export class MapaPage implements OnInit, AfterViewInit {
       const currentUser = auth.getAuth().currentUser;
       this.users = snapshot.docs
         .map((doc: any) => ({ id: doc.id, ...doc.data() }))
-        .filter((u: any) => u.ubicacion && u.ubicacion.latitud && u.ubicacion.longitud && (!currentUser || u.id !== currentUser.uid))
+        .filter((u: any) => u.ubicacion && typeof u.ubicacion.latitude === 'number' && typeof u.ubicacion.longitude === 'number' && (!currentUser || u.id !== currentUser.uid))
         .map((u: any) => ({
           id: u.id,
           name: u.nombre || u.correo || 'Usuario',
           avatar: u.fotoPerfil || 'https://randomuser.me/api/portraits/lego/1.jpg',
-          lat: u.ubicacion.latitud,
-          lng: u.ubicacion.longitud,
+          lat: u.ubicacion.latitude,
+          lng: u.ubicacion.longitude,
         }));
       this.updateUserDistances();
     } catch (e) {
@@ -111,6 +113,21 @@ export class MapaPage implements OnInit, AfterViewInit {
       this.users = [];
       this.updateUserDistances();
     }
+  }
+
+  async guardarUbicacionSiEsPosible() {
+    const auth = await import('firebase/auth');
+    const user = auth.getAuth().currentUser;
+    if (!user) return;
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const ubicacion = new GeoPoint(position.coords.latitude, position.coords.longitude);
+      try {
+        await this.firebaseService.updateDocument(`usuarios/${user.uid}`, { ubicacion });
+      } catch (e) {
+        // Silenciar error, no es crítico
+      }
+    });
   }
 
   updateUserDistances() {

@@ -23,27 +23,7 @@ export class LoginPage {
     private router: Router,
     private firebaseService: FirebaseService,
     private platform: Platform
-  ) {
-    this.platform.ready().then(() => {
-      this.guardarUbicacionSiEsPosible();
-    });
-  }
-
-  async guardarUbicacionSiEsPosible() {
-    const auth = await import('firebase/auth');
-    const user = auth.getAuth().currentUser;
-    if (!user) return;
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      alert(`Latitud: ${position.coords.latitude}\nLongitud: ${position.coords.longitude}`);
-      const ubicacion = new GeoPoint(position.coords.latitude, position.coords.longitude);
-      try {
-        await this.firebaseService.updateDocument(`usuarios/${user.uid}`, { ubicacion });
-      } catch (e) {
-        // Silenciar error, no es crítico
-      }
-    });
-  }
+  ) {}
 
   async login() {
     this.showError = false;
