@@ -99,7 +99,13 @@ export class MapaPage implements OnInit, AfterViewInit {
       const currentUser = auth.getAuth().currentUser;
       this.users = snapshot.docs
         .map((doc: any) => ({ id: doc.id, ...doc.data() }))
-        .filter((u: any) => u.ubicacion && typeof u.ubicacion.latitude === 'number' && typeof u.ubicacion.longitude === 'number' && (!currentUser || u.id !== currentUser.uid))
+        .filter((u: any) =>
+          u.ubicacion &&
+          typeof u.ubicacion.latitude === 'number' &&
+          typeof u.ubicacion.longitude === 'number' &&
+          u.esPlayer === true && // Solo jugadores
+          (!currentUser || u.id !== currentUser.uid)
+        )
         .map((u: any) => ({
           id: u.id,
           name: u.nombre || u.correo || 'Usuario',
