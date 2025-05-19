@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../interfaces/usuario';
+import { GeoPoint } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -130,7 +131,8 @@ export class RegistroService {
     return this.usuario.ubicacion;
   }
   setUbicacion(latitud: number, longitud: number) {
-    this.usuario.ubicacion = { latitud, longitud };
+    // Guarda la ubicación como un objeto GeoPoint de Firestore
+    this.usuario.ubicacion = new GeoPoint(latitud, longitud);
   }
   getFotoPerfil() {
     return this.usuario.fotoPerfil;

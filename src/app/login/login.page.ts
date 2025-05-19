@@ -4,6 +4,7 @@ import { Router } from '@angular/router'; // Para redirigir después de login
 import { RegistroService } from 'src/app/services/registro.service';
 import { FirebaseService } from 'src/app/services/firebase.service'; // Asegúrate que el path sea correcto
 import { Platform } from '@ionic/angular';
+import { GeoPoint } from 'firebase/firestore';
 
 @Component({
   selector: 'app-login',
@@ -34,10 +35,8 @@ export class LoginPage {
     if (!user) return;
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(async (position) => {
-      const ubicacion = {
-        latitud: position.coords.latitude,
-        longitud: position.coords.longitude
-      };
+      alert(`Latitud: ${position.coords.latitude}\nLongitud: ${position.coords.longitude}`);
+      const ubicacion = new GeoPoint(position.coords.latitude, position.coords.longitude);
       try {
         await this.firebaseService.updateDocument(`usuarios/${user.uid}`, { ubicacion });
       } catch (e) {

@@ -1,6 +1,7 @@
 import { Info } from "./info";
 import { Stats } from "./stats";
 import { Tutor } from "./tutor";
+import { GeoPoint } from 'firebase/firestore';
 
 export interface Usuario {
     nombre?: string;           // Nombre del usuario
@@ -19,10 +20,7 @@ export interface Usuario {
     nacionalidad?: string;     // Nacionalidad del usuario
     esJugador?: boolean;       // Indica si el usuario es jugador
     esScouter?: boolean;  // Indica si el usuario es cazatalentos
-    ubicacion?: {
-        latitud: number;       // Latitud de la ubicación
-        longitud: number;      // Longitud de la ubicación
-    };
+    ubicacion?: GeoPoint; // Ubicación georreferenciada en Firestore
     fotoPerfil?: string;      // URL de la foto de perfil del usuario
     galeria?: string[];      // Galería de fotos del usuario
     info?: Info;          // Información adicional del usuario
