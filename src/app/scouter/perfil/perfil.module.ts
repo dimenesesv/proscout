@@ -14,7 +14,7 @@ import { PerfilCardComponent } from './components/perfil-card/perfil-card.compon
     FormsModule,
     IonicModule,
     PerfilPageRoutingModule,
-    SharedModule
+    SharedModule // Asegura que EstadisticasCardComponent esté disponible
   ],
   declarations: [
     PerfilPage,
