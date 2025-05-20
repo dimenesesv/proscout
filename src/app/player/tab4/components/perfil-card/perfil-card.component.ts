@@ -9,7 +9,9 @@ import { Usuario } from 'src/app/interfaces/usuario';
   standalone: false,
 })
 export class PlayerPerfilCardComponent {
-  @Input() perfilUsuario!: Usuario;
+  @Input() perfilUsuario!: any; // Accept any type to allow flexible binding from mapa.page
+  @Input() comuna: string = '';
+  @Input() ciudad: string = '';
 
   calcularEdad(fechaNacimiento?: string): string {
     if (!fechaNacimiento) return '-';

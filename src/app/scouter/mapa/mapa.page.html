@@ -1,22 +1,28 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Jugadores Cercanos</ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="light" *ngIf="comuna || ciudad">
+    <ion-label class="ubicacion-label">
+      <ion-icon name="location-outline" style="margin-right:6px;"></ion-icon>
+      {{ comuna ? comuna + ',' : '' }} {{ ciudad }}
+    </ion-label>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="users.length > 0" class="jugadores-list">
-    <ion-card *ngFor="let user of users" class="jugador-card" (click)="verPerfil(user)">
-      <ion-item lines="none">
-        <ion-avatar slot="start">
-          <img [src]="user.avatar" alt="Foto de {{user.name}}" />
-        </ion-avatar>
-        <ion-label>
-          <h2>{{ user.name }}</h2>
-          <p *ngIf="user.distance !== undefined">A {{ user.distance | number:'1.1-2' }} km</p>
-        </ion-label>
-      </ion-item>
-    </ion-card>
-  </ion-list>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
+  </ion-refresher>
+  <div class="jugadores-grid" *ngIf="users.length > 0">
+    <player-app-perfil-card
+      *ngFor="let user of users"
+      [perfilUsuario]="user"
+      [comuna]="comuna"
+      [ciudad]="ciudad"
+      (click)="verPerfil(user)"
+      class="jugador-card"
+    ></player-app-perfil-card>
+  </div>
   <ion-note *ngIf="users.length === 0" color="medium" class="ion-text-center" style="margin-top:2rem;">No hay jugadores cercanos.</ion-note>
 </ion-content>

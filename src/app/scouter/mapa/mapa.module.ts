@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { MapaPageRoutingModule } from './mapa-routing.module';
 
 import { MapaPage } from './mapa.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MapaPageRoutingModule
+    MapaPageRoutingModule,
+    SharedModule
   ],
   declarations: [MapaPage]
 })

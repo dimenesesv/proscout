@@ -54,6 +54,21 @@ export class FirebaseService {
     }
   }
 
+  async getCollection(collectionPath: string): Promise<any[]> {
+    try {
+      console.log('[FirebaseService] getCollection INICIO', collectionPath);
+      const { collection, getDocs } = await import('@angular/fire/firestore');
+      const col = collection(this.firestore, collectionPath);
+      const snapshot = await getDocs(col);
+      const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+      console.log('[FirebaseService] getCollection OK', docs);
+      return docs;
+    } catch (error: any) {
+      console.error('[FirebaseService] getCollection ERROR', error);
+      return [];
+    }
+  }
+
   async updateDocument(path: string, data: any): Promise<void> {
     try {
       console.log('[FirebaseService] updateDocument path:', path, 'data:', data);

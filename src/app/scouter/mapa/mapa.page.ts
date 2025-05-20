@@ -6,6 +6,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { GeoPoint } from 'firebase/firestore';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 declare var google: any;
 
 interface User {
@@ -15,6 +16,13 @@ interface User {
   lat: number;
   lng: number;
   distance?: number;
+  // Add the following to match Usuario interface for perfil-card
+  correo?: string;
+  fechaNacimiento?: string;
+  fotoPerfil?: string;
+  nacionalidad?: string;
+  info?: any;
+  tutor?: any;
 }
 
 @Component({
@@ -23,39 +31,37 @@ interface User {
   styleUrls: ['./mapa.page.scss'],
   standalone: false,
 })
-export class MapaPage implements OnInit, AfterViewInit {
-  @ViewChild('map', { static: false }) mapElement!: ElementRef;
+export class MapaPage implements OnInit {
   @ViewChild(IonContent, { static: false }) content!: IonContent;
 
-  map: any;
   currentLocation: { lat: number; lng: number } = { lat: 19.4326, lng: -99.1332 }; // Default: CDMX
   users: User[] = [];
-  markers: any[] = [];
   locationLabel: string = 'Mi ubicación';
+  comuna: string = '';
+  ciudad: string = '';
 
   constructor(private ngZone: NgZone, private modalCtrl: ModalController, private firebaseService: FirebaseService, private router: Router) {}
 
   ngOnInit() {
+    console.log('[MapaPage] ngOnInit');
     this.guardarUbicacionSiEsPosible();
-    this.loadUsers(); // Simulando usuarios
+    this.loadUsers();
     this.getCurrentLocation();
   }
 
-  ngAfterViewInit() {
-    this.loadMap(); // Llamar para inicializar el mapa una vez se haya cargado la vista
-  }
-
   async getCurrentLocation() {
+    console.log('[MapaPage] getCurrentLocation INICIO');
     try {
       const position = await Geolocation.getCurrentPosition();
-      this.ngZone.run(() => {
+      this.ngZone.run(async () => {
         this.currentLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
         this.locationLabel = 'Mi ubicación';
-        this.loadMap();
-        this.updateUserDistances(); // Actualiza la distancia de los usuarios con la nueva ubicación
+        await this.obtenerComunaCiudad(this.currentLocation.lat, this.currentLocation.lng);
+        this.updateUserDistances();
+        console.log('[MapaPage] getCurrentLocation OK', this.currentLocation);
       });
     } catch (err) {
       console.warn('[MapaPage] ❌ Error al obtener ubicación:', err);
@@ -63,79 +69,50 @@ export class MapaPage implements OnInit, AfterViewInit {
     }
   }
 
-  loadMap() {
-    if (typeof google === 'undefined' || !google.maps) return;
-    const mapEl = document.getElementById('map');
-    if (!mapEl) return;
-    this.map = new google.maps.Map(mapEl, {
-      center: this.currentLocation,
-      zoom: 13,
-      disableDefaultUI: true,
-    });
-    this.addCurrentLocationMarker(); // Marca la ubicación actual
-  }
-
-  addCurrentLocationMarker() {
-    if (!this.map) return;
-    new google.maps.Marker({
-      position: this.currentLocation,
-      map: this.map,
-      icon: {
-        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-      },
-      title: 'Tu ubicación',
-    });
-  }
-
   async loadUsers() {
+    console.log('[MapaPage] loadUsers INICIO');
     try {
-      // Obtener todos los usuarios reales de Firestore
-      const { collection, getDocs } = await import('@angular/fire/firestore');
-      const firestore = (this.firebaseService as any).firestore;
-      const usuariosCol = collection(firestore, 'usuarios');
-      const snapshot = await getDocs(usuariosCol);
-      const auth = await import('firebase/auth');
-      const currentUser = auth.getAuth().currentUser;
-      this.users = snapshot.docs
-        .map((doc: any) => ({ id: doc.id, ...doc.data() }))
-        .filter((u: any) =>
-          u.ubicacion &&
-          typeof u.ubicacion.latitude === 'number' &&
-          typeof u.ubicacion.longitude === 'number' &&
-          u.esJugador === true && // Solo jugadores
-          (!currentUser || u.id !== currentUser.uid)
-        )
-        .map((u: any) => ({
-          id: u.id,
-          name: u.nombre || u.correo || 'Usuario',
-          avatar: u.fotoPerfil || 'https://randomuser.me/api/portraits/lego/1.jpg',
-          lat: u.ubicacion.latitude,
-          lng: u.ubicacion.longitude,
-        }));
+      const allUsers = await this.firebaseService.getCollection('usuarios');
+      // Filtra usuarios con ubicación válida (lat/lng numéricos)
+      this.users = allUsers.filter((u: any) =>
+        u.ubicacion &&
+        typeof u.ubicacion.latitude === 'number' &&
+        typeof u.ubicacion.longitude === 'number'
+      );
+      console.log('[MapaPage] loadUsers OK', this.users);
       this.updateUserDistances();
     } catch (e) {
-      // Si falla, no mostrar usuarios
       this.users = [];
       this.updateUserDistances();
+      console.error('[MapaPage] loadUsers ERROR', e);
     }
   }
 
   async guardarUbicacionSiEsPosible() {
+    console.log('[MapaPage] guardarUbicacionSiEsPosible INICIO');
     const auth = await import('firebase/auth');
     const user = auth.getAuth().currentUser;
-    if (!user) return;
-    if (!navigator.geolocation) return;
+    if (!user) {
+      console.warn('[MapaPage] guardarUbicacionSiEsPosible: No user');
+      return;
+    }
+    if (!navigator.geolocation) {
+      console.warn('[MapaPage] guardarUbicacionSiEsPosible: No geolocation');
+      return;
+    }
     navigator.geolocation.getCurrentPosition(async (position) => {
       const ubicacion = new GeoPoint(position.coords.latitude, position.coords.longitude);
       try {
         await this.firebaseService.updateDocument(`usuarios/${user.uid}`, { ubicacion });
+        console.log('[MapaPage] guardarUbicacionSiEsPosible OK');
       } catch (e) {
-        // Silenciar error, no es crítico
+        console.warn('[MapaPage] guardarUbicacionSiEsPosible ERROR', e);
       }
     });
   }
 
   updateUserDistances() {
+    console.log('[MapaPage] updateUserDistances INICIO', this.currentLocation, this.users);
     this.users = this.users
       .map((user) => ({
         ...user,
@@ -146,43 +123,69 @@ export class MapaPage implements OnInit, AfterViewInit {
           user.lng
         ),
       }))
-      .filter((user) => user.distance <= 50); // Solo usuarios a 50km o menos
-    this.addUserMarkers();
+      .filter((user) => user.distance <= 500);
+    console.log('[MapaPage] updateUserDistances OK', this.users);
   }
 
   deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
   }
 
-  addUserMarkers() {
-    if (!this.map) return;
-    this.markers.forEach((m) => m.setMap(null));
-    this.markers = [];
-    this.users.forEach((user) => {
-      const marker = new google.maps.Marker({
-        position: { lat: user.lat, lng: user.lng },
-        map: this.map,
-        title: user.name,
-        icon: {
-          url: user.avatar,
-          scaledSize: new google.maps.Size(40, 40),
-        },
-      });
-      marker.addListener('click', () => {
-        this.focusUser(user);
-      });
-      this.markers.push(marker);
-    });
+  verPerfil(user: any) {
+    console.log('[MapaPage] verPerfil', user);
+    this.router.navigate(['/vista-perfil', user.id]);
   }
 
-  focusUser(user: User) {
-    if (this.map) {
-      this.map.panTo({ lat: user.lat, lng: user.lng });
-      this.map.setZoom(15);
+  async doRefresh(event: any) {
+    console.log('[MapaPage] doRefresh iniciado');
+    let timeoutId: any;
+    try {
+      timeoutId = setTimeout(() => {
+        console.warn('[MapaPage] doRefresh: Timeout alcanzado, forzando complete');
+        event.target.complete();
+      }, 7000);
+      await this.getCurrentLocation();
+      console.log('[MapaPage] getCurrentLocation completado');
+      await this.loadUsers();
+      console.log('[MapaPage] loadUsers completado');
+      event.target.complete();
+      console.log('[MapaPage] event.target.complete() ejecutado');
+    } catch (err) {
+      console.error('[MapaPage] Error en doRefresh:', err);
+      event.target.complete();
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId);
+      console.log('[MapaPage] doRefresh finalizado');
     }
   }
 
-  verPerfil(user: any) {
-    this.router.navigate(['/vista-perfil', user.id]);
+  async obtenerComunaCiudad(lat: number, lng: number) {
+    console.log('[MapaPage] obtenerComunaCiudad INICIO', { lat, lng });
+    try {
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${environment.googleApiKey}&language=es`;
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log('[MapaPage] obtenerComunaCiudad respuesta', data);
+      if (data.status === 'OK') {
+        let comuna = '';
+        let ciudad = '';
+        const components = data.results[0]?.address_components || [];
+        for (const comp of components) {
+          if (comp.types.includes('locality')) ciudad = comp.long_name;
+          if (comp.types.includes('administrative_area_level_3')) comuna = comp.long_name;
+        }
+        this.comuna = comuna;
+        this.ciudad = ciudad;
+        console.log('[MapaPage] obtenerComunaCiudad OK', { comuna, ciudad });
+      } else {
+        this.comuna = '';
+        this.ciudad = '';
+        console.warn('[MapaPage] obtenerComunaCiudad: No se pudo obtener comuna/ciudad', data.status);
+      }
+    } catch (e) {
+      this.comuna = '';
+      this.ciudad = '';
+      console.error('[MapaPage] obtenerComunaCiudad ERROR', e);
+    }
   }
 }
