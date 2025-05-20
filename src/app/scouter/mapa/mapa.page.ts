@@ -73,12 +73,18 @@ export class MapaPage implements OnInit {
     console.log('[MapaPage] loadUsers INICIO');
     try {
       const allUsers = await this.firebaseService.getCollection('usuarios');
-      // Filtra usuarios con ubicación válida (lat/lng numéricos)
-      this.users = allUsers.filter((u: any) =>
-        u.ubicacion &&
-        typeof u.ubicacion.latitude === 'number' &&
-        typeof u.ubicacion.longitude === 'number'
-      );
+      // Filtra usuarios con ubicación válida (lat/lng numéricos) y agrega campos lat/lng
+      this.users = allUsers
+        .filter((u: any) =>
+          u.ubicacion &&
+          typeof u.ubicacion.latitude === 'number' &&
+          typeof u.ubicacion.longitude === 'number'
+        )
+        .map((u: any) => ({
+          ...u,
+          lat: u.ubicacion.latitude,
+          lng: u.ubicacion.longitude,
+        }));
       console.log('[MapaPage] loadUsers OK', this.users);
       this.updateUserDistances();
     } catch (e) {
@@ -123,7 +129,8 @@ export class MapaPage implements OnInit {
           user.lng
         ),
       }))
-      .filter((user) => user.distance <= 500);
+      .filter((user) => user.distance <= 500)
+      .sort((a, b) => a.distance - b.distance);
     console.log('[MapaPage] updateUserDistances OK', this.users);
   }
 
