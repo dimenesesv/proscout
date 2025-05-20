@@ -1,13 +1,27 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>favoritos</ion-title>
+    <ion-title>Jugadores Favoritos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">favoritos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-list *ngIf="favoritos.length > 0">
+    <ion-card *ngFor="let jugador of favoritos" class="jugador-card">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <img [src]="jugador.fotoUrl || 'https://placehold.co/64x64'" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ jugador.name }}</h2>
+          <p>Edad: {{ jugador.age }}</p>
+          <p>Ciudad: {{ jugador.city }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+
+  <div *ngIf="favoritos.length === 0" class="empty-state">
+    <p>No has agregado jugadores a favoritos aún.</p>
+  </div>
 </ion-content>
+

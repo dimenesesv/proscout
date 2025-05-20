@@ -19,18 +19,18 @@
 
       <!-- Slide 2: Estadísticas -->
       <div class="swiper-slide">
-        <ion-card>
-          <ion-card-content>
             <ion-card>
-              <ion-card-header>
-                <ion-card-title>Estadísticas</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <app-radar-chart
-                  [labels]="['Ataque', 'pepito', 'Habilidad', 'Táctica', 'Creatividad']"
-                  [data]="[75, 50, 25, 25, 100]"
-                ></app-radar-chart>
+        <ion-card-header>
+          <ion-card-title>Perfil Profesional del Scouter</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="info-group">
+            <label>Clubes en los que ha trabajado:</label>
+            <p>{{ userProfile?.clubes }}</p>
+            <ion-button size="small" (click)="uploadFile('clubes')">Subir documento</ion-button>
+          </div>
 
+<<<<<<< HEAD
                 <div class="stats-grid">
                   <div class="stat-item">
                     <h3>Partidos jugados</h3>
@@ -57,6 +57,41 @@
             </ion-card>
           </ion-card-content>
         </ion-card>
+=======
+          <div class="info-group">
+            <label>Años de experiencia:</label>
+            <p>{{ userProfile?.aniosExperiencia }}</p>
+          </div>
+
+          <div class="info-group">
+            <label>Niveles cubiertos:</label>
+            <p>{{ userProfile?.niveles }}</p>
+          </div>
+
+          <div class="info-group">
+            <label>Regiones o zonas que cubre:</label>
+            <p>{{ userProfile?.zonas }}</p>
+          </div>
+
+          <div class="info-group">
+            <label>Especialización (posiciones):</label>
+            <p>{{ userProfile?.especializacion }}</p>
+          </div>
+
+          <div class="info-group">
+            <label>Licencias de scouting:</label>
+            <p>{{ userProfile?.licencias }}</p>
+            <ion-button size="small" (click)="uploadFile('licencias')">Subir certificado</ion-button>
+          </div>
+
+          <div class="info-group">
+            <label>Formación / Cursos realizados:</label>
+            <p>{{ userProfile?.formacion }}</p>
+            <ion-button size="small" (click)="uploadFile('formacion')">Subir respaldo</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+>>>>>>> 2a396883bbe392c642a4bb241fc478fe327578b7
       </div>
 
       <!-- Slide 3: Galería -->

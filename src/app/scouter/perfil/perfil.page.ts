@@ -151,4 +151,62 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     const path = `usuarios/${userId}`;
     await this.firebaseService.updateDocument(path, { gallery: this.galleryUrls });
   }
+
+  async uploadFile(tipo: string) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '*/*'; // permite cualquier tipo de archivo
+  input.onchange = async (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      await this.uploadFileWithPath(file, tipo);
+    }
+  };
+  input.click();
+}
+
+async uploadFileWithPath(file: File, tipo: string) {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.warn('No hay usuario autenticado.');
+    return;
+  }
+
+  const userId = user.uid;
+  const filePath = `usuarios/${userId}/${tipo}/${Date.now()}_${file.name}`;
+
+  const loading = await this.loadingController.create({
+    message: `Subiendo ${tipo}...`,
+    spinner: 'crescent',
+  });
+  await loading.present();
+
+  try {
+    const task = this.storageService.uploadFileWithProgress(filePath, file);
+
+    task.on('state_changed', (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      this.uploadProgress = progress / 100;
+      loading.message = `Subiendo ${tipo}... ${Math.round(progress)}%`;
+    });
+
+    await task;
+    const downloadUrl = await this.storageService.getDownloadUrl(filePath);
+
+    // Guardar la URL del documento en el campo correspondiente en Firestore
+    const path = `usuarios/${userId}`;
+    const field = `${tipo}Url`; // ejemplo: 'clubesUrl'
+    await this.firebaseService.updateDocument(path, { [field]: downloadUrl });
+
+    console.log(`Documento de ${tipo} subido:`, downloadUrl);
+  } catch (error) {
+    console.error(`Error al subir el archivo de ${tipo}:`, error);
+  } finally {
+    await loading.dismiss();
+    this.uploadProgress = null;
+  }
+}
+
 }
