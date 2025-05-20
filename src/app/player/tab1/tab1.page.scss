@@ -1,0 +1,11 @@
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.jugador-card {
+  min-width: 200px;
+  flex: 0 0 auto;
+}
