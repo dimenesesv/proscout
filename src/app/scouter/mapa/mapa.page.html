@@ -14,7 +14,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
   </ion-refresher>
-  <div class="jugadores-grid" *ngIf="users.length > 0">
+  <div class="jugadores-grid grid-3-cols" *ngIf="users.length > 0">
     <player-app-perfil-card
       *ngFor="let user of users"
       [perfilUsuario]="user"
