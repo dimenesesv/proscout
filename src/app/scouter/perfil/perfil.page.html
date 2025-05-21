@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-toolbar>
     <ion-title class="text-center">{{ perfilUsuario?.name }}</ion-title>
@@ -14,71 +13,25 @@
       <!-- Slide 1: Perfil -->
       <div class="swiper-slide">
        
-        <app-perfil-card [perfilUsuario]="perfilUsuario"></app-perfil-card>
+        <app-perfil-card [perfilUsuario]="perfilUsuario" [comuna]="perfilUsuario?.comuna" [ciudad]="perfilUsuario?.ciudad"></app-perfil-card>
       </div>
 
       <!-- Slide 2: Estadísticas -->
       <div class="swiper-slide">
         <ion-card>
           <ion-card-content>
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>Estadísticas</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <app-radar-chart
-                  [labels]="['Ataque', 'pepito', 'Habilidad', 'Táctica', 'Creatividad']"
-                  [data]="[75, 50, 25, 25, 100]"
-                ></app-radar-chart>
-
-                <div class="stats-grid">
-                  <div class="stat-item">
-                    <h3>Partidos jugados</h3>
-                    <p>{{ perfilUsuario?.partidosJugados }}</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3>Goles</h3>
-                    <p>{{ perfilUsuario?.goles }}</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3>Asistencias</h3>
-                    <p>{{ perfilUsuario?.asistencias }}</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3>Tarjetas amarillas</h3>
-                    <p>{{ perfilUsuario?.tarjetasAmarillas }}</p>
-                  </div>
-                  <div class="stat-item">
-                    <h3>Tarjetas rojas</h3>
-                    <p>{{ perfilUsuario?.tarjetasRojas }}</p>
-                  </div>
-                </div>
-              </ion-card-content>
-            </ion-card>
+            <app-estadisticas-card [perfilUsuario]="perfilUsuario"></app-estadisticas-card>
           </ion-card-content>
         </ion-card>
       </div>
 
       <!-- Slide 3: Galería -->
       <div class="swiper-slide">
-        <ion-card class="galeria-card">
-          <ion-card-header>
-            <ion-card-title>Galería</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-button expand="block" (click)="selectImage()">Subir Imagen</ion-button>
-
-            <ion-progress-bar *ngIf="uploadProgress !== null" [value]="uploadProgress"></ion-progress-bar>
-
-            <ion-grid>
-              <ion-row>
-                <ion-col size="6" *ngFor="let imageUrl of galleryUrls">
-                  <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
+        <app-galeria-card
+          [galleryUrls]="galleryUrls"
+          [uploadProgress]="uploadProgress"
+          [selectImage]="selectImage.bind(this)"
+        ></app-galeria-card>
       </div>
     </div>
   </div>

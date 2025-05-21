@@ -18,9 +18,11 @@ export class AuthService {
     try {
       if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
         console.log('[AuthService] Usando plugin nativo de Firebase');
+        // La persistencia en móviles ya es gestionada automáticamente por el SDK nativo
         const result = await FirebaseAuthentication.signInWithEmailAndPassword({ email, password });
         console.log('Login nativo exitoso:', result);
-        return { user: { uid: result.user?.uid } };
+        return { user: { uid: result.user?.uid }
+}
       } else {
         console.log('[AuthService] Usando Firebase Web SDK');
         await setPersistence(this.auth, browserLocalPersistence);
@@ -35,26 +37,63 @@ export class AuthService {
   }
 
   async logout() {
-    return signOut(this.auth);
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      try {
+        await FirebaseAuthentication.signOut();
+        console.log('[AuthService] Logout nativo exitoso');
+      } catch (error) {
+        console.error('[AuthService] Error en logout nativo:', error);
+        throw error;
+      }
+    } else {
+      return signOut(this.auth);
+    }
   }
 
   async register(email: string, password: string) {
-    const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-    await this.sendEmailVerification();
-    return userCredential;
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      try {
+        const result = await FirebaseAuthentication.createUserWithEmailAndPassword({ email, password });
+        console.log('[AuthService] Registro nativo exitoso:', result);
+        return { user: { uid: result.user?.uid } };
+      } catch (error) {
+        console.error('[AuthService] Error en registro nativo:', error);
+        throw error;
+      }
+    } else {
+      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      await this.sendEmailVerification();
+      return userCredential;
+    }
   }
 
   async sendEmailVerification() {
-    const user = this.auth.currentUser;
-    if (user) {
-      return sendEmailVerification(user);
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      // No soportado por el plugin nativo actualmente
+      console.warn('[AuthService] sendEmailVerification no soportado en móvil nativo');
+      return;
     } else {
-      throw new Error('No hay un usuario autenticado para enviar el correo de verificación.');
+      const user = this.auth.currentUser;
+      if (user) {
+        return sendEmailVerification(user);
+      } else {
+        throw new Error('No hay un usuario autenticado para enviar el correo de verificación.');
+      }
     }
   }
 
   async getCurrentUser() {
-    return this.auth.currentUser;
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      try {
+        const result = await FirebaseAuthentication.getCurrentUser();
+        return result.user;
+      } catch (error) {
+        console.error('[AuthService] Error en getCurrentUser nativo:', error);
+        return null;
+      }
+    } else {
+      return this.auth.currentUser;
+    }
   }
 
   /**

@@ -1,67 +1,66 @@
-<ion-card>
+<ion-card *ngIf="perfilUsuario">
   <ion-card-content>
     <ion-card class="perfil-card">
       <div class="info">
         <div class="info-group">
           <label>Edad</label>
-          <div>{{ perfilUsuario?.age }}</div>
+          <div>{{ perfilUsuario && perfilUsuario.fechaNacimiento ? calcularEdad(perfilUsuario.fechaNacimiento) : '-' }}</div>
         </div>
         <div class="info-group">
           <label>Posición</label>
-          <div>{{ perfilUsuario?.position }}</div>
+          <div>{{ perfilUsuario.info?.posicion || '-' }}</div>
         </div>
         <div class="info-group">
           <label>Altura</label>
-          <div>{{ perfilUsuario?.height }}</div>
+          <div>{{ perfilUsuario.info?.altura || '-' }}</div>
         </div>
         <div class="info-group">
           <label>Peso</label>
-          <div>{{ perfilUsuario?.weight }}</div>
+          <div>{{ perfilUsuario.info?.peso || '-' }}</div>
         </div>
       </div>
-      <img [src]="perfilUsuario?.fotoUrl || 'https://placehold.co/185x185'" class="player-photo" />
+      <img [src]="perfilUsuario.fotoPerfil || 'https://placehold.co/185x185'" class="player-photo" />
     </ion-card>
 
     <ion-card class="detalles-card">
       <ion-item lines="none">
         <ion-label>
           <p class="label">Posición secundaria</p>
-          <h2>{{ perfilUsuario?.secundaria }}</h2>
+          <h2>{{ perfilUsuario.info?.segundaPosicion || '-' }}</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="none">
         <ion-label>
           <p class="label">Pierna hábil</p>
-          <h2>{{ perfilUsuario?.piernaHabil }}</h2>
+          <h2>{{ perfilUsuario.info?.pie || '-' }}</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="none">
         <ion-label>
           <p class="label">Equipo actual</p>
-          <h2>{{ perfilUsuario?.equipo }}</h2>
-        </ion-label>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-label>
-          <p class="label">Disponibilidad de fichaje</p>
-          <h2>{{ perfilUsuario?.fichaje }}</h2>
+          <h2>{{ perfilUsuario.info?.equipo || '-' }}</h2>
         </ion-label>
       </ion-item>
     </ion-card>
 
-    <div class="extra-info">
+    <div class="extra-info" *ngIf="perfilUsuario">
       <div class="info-box">
         <p class="mini-label">Nacionalidad</p>
-        <h3>{{ perfilUsuario?.nacionalidad }}</h3>
+        <h3>{{ perfilUsuario.nacionalidad || '-' }}</h3>
       </div>
       <div class="info-box">
         <p class="mini-label">Fecha de nacimiento</p>
-        <h3>{{ perfilUsuario?.nacimiento }}</h3>
+        <h3>{{ perfilUsuario.fechaNacimiento || '-' }}</h3>
       </div>
       <div class="info-box">
         <p class="mini-label">Tutor</p>
-        <h3>{{ perfilUsuario?.tutor }}</h3>
-        <p class="mini-label">Parentesco: {{ perfilUsuario?.parentesco }}</p>
+        <h3>{{ perfilUsuario.tutor?.nombre || '-' }}</h3>
+        <p class="mini-label">Parentesco: {{ perfilUsuario.tutor?.parentesco || '-' }}</p>
+      </div>
+      <div class="info-box">
+        <p class="mini-label">Comuna</p>
+        <h3>{{ comuna || '-' }}</h3>
+        <p class="mini-label">Ciudad: {{ ciudad || '-' }}</p>
       </div>
     </div>
 

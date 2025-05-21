@@ -15,14 +15,19 @@
     <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
   </ion-refresher>
   <div class="jugadores-grid grid-3-cols" *ngIf="users.length > 0">
-    <player-app-perfil-card
-      *ngFor="let user of users"
-      [perfilUsuario]="user"
-      [comuna]="comuna"
-      [ciudad]="ciudad"
-      (click)="verPerfil(user)"
-      class="jugador-card"
-    ></player-app-perfil-card>
+    <ng-container *ngFor="let row of getRows(users); let rowIndex = index">
+      <div class="jugadores-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
+        <ng-container *ngFor="let user of row">
+          <app-perfil-card
+            [perfilUsuario]="user"
+            [comuna]="comuna"
+            [ciudad]="ciudad"
+            (click)="verPerfil(user)"
+            class="jugador-card"
+          ></app-perfil-card>>
+        </ng-container>
+      </div>
+    </ng-container>
   </div>
   <ion-note *ngIf="users.length === 0" color="medium" class="ion-text-center" style="margin-top:2rem;">No hay jugadores cercanos.</ion-note>
 </ion-content>

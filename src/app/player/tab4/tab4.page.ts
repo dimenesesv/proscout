@@ -7,6 +7,8 @@ import { getAuth, signOut } from 'firebase/auth';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
 import { Usuario } from 'src/app/interfaces/usuario';
+import { Capacitor } from '@capacitor/core';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 @Component({
   selector: 'app-tab4',
@@ -15,147 +17,142 @@ import { Usuario } from 'src/app/interfaces/usuario';
   standalone: false,
 })
 export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
-  perfilUsuario: Usuario | null = null;
-  urlsGaleria: string[] = [];
-  progresoSubida: number | null = null;
-  cargandoPerfil: boolean = false;
-  private suscripcionPerfil: Subscription | undefined;
+  perfilUsuario: any;
+  galleryUrls: string[] = [];
+  uploadProgress: number | null = null;
+  private profileSubscription: Subscription | undefined;
 
-  pestanaActiva: number = 0;
+  activeTab: number = 0;
   swiper: Swiper | undefined;
+  cargando: boolean = true;
 
   constructor(
-    private servicioFirebase: FirebaseService,
-    private servicioStorage: StorageService,
-    private controladorCarga: LoadingController,
-    private enrutador: Router
+    private firebaseService: FirebaseService,
+    private storageService: StorageService,
+    private loadingController: LoadingController,
+    private router: Router
   ) {}
 
-  ngOnInit() {
-    this.cargandoPerfil = true;
-    const auth = getAuth();
-    const usuario = auth.currentUser;
+  async ngOnInit() {
+    let userId: string | undefined;
 
-    if (!usuario) {
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      const { user } = await FirebaseAuthentication.getCurrentUser();
+      userId = user?.uid;
+    } else {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      userId = user?.uid;
+    }
+
+    if (!userId) {
       console.warn('No hay usuario autenticado.');
-      this.cargandoPerfil = false;
       return;
     }
 
-    const idUsuario = usuario.uid;
-    const ruta = `usuarios/${idUsuario}`;
+    const path = `usuarios/${userId}`;
+    let cargando = true;
 
-    this.servicioFirebase.getDocument(ruta)
-      .then((datos) => {
-        this.perfilUsuario = datos;
-        this.urlsGaleria = datos?.galeria || [];
+    this.firebaseService.getDocument(path)
+      .then((data) => {
+        this.perfilUsuario = data;
+        this.galleryUrls = data?.gallery || [];
+        this.cargando = false;
       })
       .catch((error) => {
         console.error('Error al obtener el perfil del usuario:', error);
-      })
-      .finally(() => {
-        this.cargandoPerfil = false;
+        this.cargando = false;
       });
   }
 
   ngAfterViewInit() {
-    // Espera a que el perfil esté cargado antes de inicializar Swiper
-    const checkAndInitSwiper = () => {
-      if (!this.cargandoPerfil && this.perfilUsuario) {
-        this.swiper = new Swiper('.swiper-container', {
-          slidesPerView: 1,
-          spaceBetween: 10,
-        });
-        this.swiper.on('slideChange', () => {
-          this.pestanaActiva = this.swiper?.activeIndex || 0;
-        });
-      } else {
-        setTimeout(checkAndInitSwiper, 100);
-      }
-    };
-    checkAndInitSwiper();
-  }
+    this.swiper = new Swiper('.swiper-container', {
+      slidesPerView: 1,
+      spaceBetween: 10,
+    });
 
-  ngOnDestroy() {
-    if (this.suscripcionPerfil) {
-      this.suscripcionPerfil.unsubscribe();
-    }
-  }
-
-  irASlide(indice: number) {
-    this.pestanaActiva = indice;
-    this.swiper?.slideTo(indice);
-  }
-
-  cerrarSesion() {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-      console.log('Sesion cerrada correctamente');
-      this.enrutador.navigate(['/login']);
-    }).catch((error) => {
-      console.error('Error al cerrar sesion:', error);
+    this.swiper.on('slideChange', () => {
+      this.activeTab = this.swiper?.activeIndex || 0;
     });
   }
 
-  irAEditarPerfil() {
-    this.enrutador.navigate(['/editar-perfil']);
+  ngOnDestroy() {
+    if (this.profileSubscription) {
+      this.profileSubscription.unsubscribe();
+    }
   }
 
-  async seleccionarImagen() {
+  slideTo(index: number) {
+    this.activeTab = index;
+    this.swiper?.slideTo(index);
+  }
+
+  logout() {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      console.log('Sesión cerrada correctamente');
+      this.router.navigate(['/login']);
+    }).catch((error) => {
+      console.error('Error al cerrar sesión:', error);
+    });
+  }
+
+  async selectImage() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.onchange = async (evento: any) => {
-      const archivo = evento.target.files[0];
-      if (archivo) {
-        await this.subirImagen(archivo);
+    input.onchange = async (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        await this.uploadImage(file);
       }
     };
     input.click();
   }
 
-  async subirImagen(archivo: File) {
-    const auth = getAuth();
-    const usuario = auth.currentUser;
-
-    if (!usuario) {
+  async uploadImage(file: File) {
+    let userId: string | undefined;
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      const { user } = await FirebaseAuthentication.getCurrentUser();
+      userId = user?.uid;
+    } else {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      userId = user?.uid;
+    }
+    if (!userId) {
       console.warn('No hay usuario autenticado.');
       return;
     }
-
-    const idUsuario = usuario.uid;
-    const rutaArchivo = `usuarios/${idUsuario}/galeria/${Date.now()}_${archivo.name}`;
-
-    const carga = await this.controladorCarga.create({
+    const filePath = `usuarios/${userId}/gallery/${Date.now()}_${file.name}`;
+    const loading = await this.loadingController.create({
       message: 'Subiendo imagen...',
       spinner: 'crescent',
     });
-    await carga.present();
-
+    await loading.present();
     try {
-      const tarea = this.servicioStorage.uploadFileWithProgress(rutaArchivo, archivo);
-
-      tarea.on('state_changed', (snapshot) => {
-        const progreso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.progresoSubida = progreso / 100;
-        carga.message = `Subiendo imagen... ${Math.round(progreso)}%`;
+      const task = this.storageService.uploadFileWithProgress(filePath, file);
+      // Escuchar el progreso de la subida usando el evento 'state_changed'
+      task.on('state_changed', (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.uploadProgress = progress / 100;
+        loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
       });
-
-      await tarea;
-      const urlDescarga = await this.servicioStorage.getDownloadUrl(rutaArchivo);
-
-      this.urlsGaleria.push(urlDescarga);
-      this.actualizarGaleriaEnFirestore(idUsuario);
+      // Esperar a que la subida termine y obtener la URL
+      await task;
+      const downloadUrl = await this.storageService.getDownloadUrl(filePath);
+      this.galleryUrls.push(downloadUrl);
+      this.updateGalleryInFirestore(userId);
     } catch (error) {
       console.error('Error al subir la imagen:', error);
     } finally {
-      await carga.dismiss();
-      this.progresoSubida = null;
+      await loading.dismiss();
+      this.uploadProgress = null;
     }
   }
 
-  async actualizarGaleriaEnFirestore(idUsuario: string) {
-    const ruta = `usuarios/${idUsuario}`;
-    await this.servicioFirebase.updateDocument(ruta, { galeria: this.urlsGaleria });
+  async updateGalleryInFirestore(userId: string) {
+    const path = `usuarios/${userId}`;
+    await this.firebaseService.updateDocument(path, { gallery: this.galleryUrls });
   }
 }

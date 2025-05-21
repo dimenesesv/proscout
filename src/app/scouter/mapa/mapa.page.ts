@@ -195,4 +195,12 @@ export class MapaPage implements OnInit {
       console.error('[MapaPage] obtenerComunaCiudad ERROR', e);
     }
   }
+
+  getRows(arr: any[]): any[][] {
+    const rows = [];
+    for (let i = 0; i < arr.length; i += 3) {
+      rows.push(arr.slice(i, i + 3));
+    }
+    return rows;
+  }
 }

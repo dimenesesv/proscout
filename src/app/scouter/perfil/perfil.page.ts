@@ -8,6 +8,11 @@ import { Router } from '@angular/router';
 import Swiper from 'swiper';
 import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { GaleriaCardComponent } from 'src/app/shared/components/galeria-card.component';
+import { PerfilCardComponent } from 'src/app/shared/components/perfil-card.component';
+import { EstadisticasCardComponent } from 'src/app/shared/components/estadisticas-card.component';
+import { TabsHeaderComponent } from 'src/app/shared/components/tabs-header.component';
+import { IonHeader, IonTitle, IonToolbar, IonButton, IonContent } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-perfil',
@@ -106,37 +111,36 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async uploadImage(file: File) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
+    let userId: string | undefined;
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      const { user } = await FirebaseAuthentication.getCurrentUser();
+      userId = user?.uid;
+    } else {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      userId = user?.uid;
+    }
+    if (!userId) {
       console.warn('No hay usuario autenticado.');
       return;
     }
-
-    const userId = user.uid;
     const filePath = `usuarios/${userId}/gallery/${Date.now()}_${file.name}`;
-
     const loading = await this.loadingController.create({
       message: 'Subiendo imagen...',
       spinner: 'crescent',
     });
     await loading.present();
-
     try {
       const task = this.storageService.uploadFileWithProgress(filePath, file);
-
       // Escuchar el progreso de la subida usando el evento 'state_changed'
       task.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         this.uploadProgress = progress / 100;
         loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
       });
-
       // Esperar a que la subida termine y obtener la URL
       await task;
       const downloadUrl = await this.storageService.getDownloadUrl(filePath);
-
       this.galleryUrls.push(downloadUrl);
       this.updateGalleryInFirestore(userId);
     } catch (error) {

@@ -1,0 +1,19 @@
+.tabs-header {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.tabs-header button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.tabs-header button.active {
+  background: #3880ff;
+  color: #fff;
+}
