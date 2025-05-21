@@ -18,9 +18,11 @@ export class AuthService {
     try {
       if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
         console.log('[AuthService] Usando plugin nativo de Firebase');
+        // La persistencia en móviles ya es gestionada automáticamente por el SDK nativo
         const result = await FirebaseAuthentication.signInWithEmailAndPassword({ email, password });
         console.log('Login nativo exitoso:', result);
-        return { user: { uid: result.user?.uid } };
+        return { user: { uid: result.user?.uid }
+}
       } else {
         console.log('[AuthService] Usando Firebase Web SDK');
         await setPersistence(this.auth, browserLocalPersistence);

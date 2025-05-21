@@ -18,13 +18,13 @@
     <ng-container *ngFor="let row of getRows(users); let rowIndex = index">
       <div class="jugadores-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
         <ng-container *ngFor="let user of row">
-          <player-app-perfil-card
+          <app-perfil-card
             [perfilUsuario]="user"
             [comuna]="comuna"
             [ciudad]="ciudad"
             (click)="verPerfil(user)"
             class="jugador-card"
-          ></player-app-perfil-card>
+          ></app-perfil-card>>
         </ng-container>
       </div>
     </ng-container>

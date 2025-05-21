@@ -1,24 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RadarChartComponent } from '../radar-chart/radar-chart.component';
-import { PlayerPerfilCardComponent } from '../player/tab4/components/perfil-card/perfil-card.component';
-import { EstadisticasCardComponent } from '../player/tab4/components/estadisticas-card/estadisticas-card.component';
-import { PlayerTabsHeaderComponent } from '../player/tab4/components/tabs-header/tabs-header.component';
+import { PerfilCardComponent } from './components/perfil-card.component';
+import { EstadisticasCardComponent } from './components/estadisticas-card.component';
+import { GaleriaCardComponent } from './components/galeria-card.component';
+import { TabsHeaderComponent } from './components/tabs-header.component';
 
 @NgModule({
-  declarations: [
-    RadarChartComponent,
-    PlayerPerfilCardComponent,
+  imports: [
+    CommonModule,
+    IonicModule,
+    PerfilCardComponent,
     EstadisticasCardComponent,
-    PlayerTabsHeaderComponent
+    GaleriaCardComponent,
+    TabsHeaderComponent
   ],
-  imports: [CommonModule, IonicModule],
   exports: [
-    RadarChartComponent,
-    PlayerPerfilCardComponent,
+    PerfilCardComponent,
     EstadisticasCardComponent,
-    PlayerTabsHeaderComponent
-  ],
+    GaleriaCardComponent,
+    TabsHeaderComponent
+  ]
 })
 export class SharedModule {}

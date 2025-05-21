@@ -8,6 +8,11 @@ import { Router } from '@angular/router';
 import Swiper from 'swiper';
 import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { GaleriaCardComponent } from 'src/app/shared/components/galeria-card.component';
+import { PerfilCardComponent } from 'src/app/shared/components/perfil-card.component';
+import { EstadisticasCardComponent } from 'src/app/shared/components/estadisticas-card.component';
+import { TabsHeaderComponent } from 'src/app/shared/components/tabs-header.component';
+import { IonHeader, IonTitle, IonToolbar, IonButton, IonContent } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-perfil',

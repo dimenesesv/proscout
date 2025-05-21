@@ -13,7 +13,7 @@
       <!-- Slide 1: Perfil -->
       <div class="swiper-slide">
        
-        <app-perfil-card [perfilUsuario]="perfilUsuario"></app-perfil-card>
+        <app-perfil-card [perfilUsuario]="perfilUsuario" [comuna]="perfilUsuario?.comuna" [ciudad]="perfilUsuario?.ciudad"></app-perfil-card>
       </div>
 
       <!-- Slide 2: Estadísticas -->
@@ -27,24 +27,11 @@
 
       <!-- Slide 3: Galería -->
       <div class="swiper-slide">
-        <ion-card class="galeria-card">
-          <ion-card-header>
-            <ion-card-title>Galería</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-button expand="block" (click)="selectImage()">Subir Imagen</ion-button>
-
-            <ion-progress-bar *ngIf="uploadProgress !== null" [value]="uploadProgress"></ion-progress-bar>
-
-            <ion-grid>
-              <ion-row>
-                <ion-col size="6" *ngFor="let imageUrl of galleryUrls">
-                  <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
+        <app-galeria-card
+          [galleryUrls]="galleryUrls"
+          [uploadProgress]="uploadProgress"
+          [selectImage]="selectImage.bind(this)"
+        ></app-galeria-card>
       </div>
     </div>
   </div>

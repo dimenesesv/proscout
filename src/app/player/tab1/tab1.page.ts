@@ -3,6 +3,7 @@ import { GeoPoint } from 'firebase/firestore';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { getAuth } from 'firebase/auth';
+import { GaleriaCardComponent } from 'src/app/shared/components/galeria-card.component';
 
 @Component({
   selector: 'app-tab1',
@@ -31,6 +32,9 @@ export class Tab1Page {
   };
 
   tipDelDia = 'Recuerda calentar antes de cada prueba para evitar lesiones y rendir al máximo.';
+
+  galleryUrls: string[] = [];
+  uploadProgress: number | null = null;
 
   constructor(private firebaseService: FirebaseService) {}
 
@@ -69,5 +73,10 @@ export class Tab1Page {
         // Silenciar error, no es crítico
       }
     });
+  }
+
+  selectImage() {
+    // Implementa aquí la lógica de subida de imagen para el player si lo deseas
+    alert('Función de subir imagen aún no implementada en player.');
   }
 }

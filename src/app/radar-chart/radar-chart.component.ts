@@ -5,9 +5,9 @@ Chart.register(...registerables);
 
 @Component({
   selector: 'app-radar-chart',
-  standalone: false,
   templateUrl: './radar-chart.component.html',
   styleUrls: ['./radar-chart.component.scss'],
+  standalone: true
 })
 export class RadarChartComponent implements AfterViewInit {
   @ViewChild('radarCanvas') radarCanvas!: ElementRef<HTMLCanvasElement>;

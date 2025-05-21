@@ -1,87 +1,38 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="text-center">{{ perfilUsuario ? perfilUsuario.nombre : '-' }}</ion-title>
-    <ion-button (click)="cerrarSesion()">Cerrar sesión</ion-button>
-    <ion-button slot="end" color="primary" (click)="irAEditarPerfil()">Editar perfil</ion-button>
+    <ion-title class="text-center">{{ perfilUsuario?.name }}</ion-title>
+    <ion-button (click)="logout()">Cerrar sesión</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="perfil-page">
-  <ion-spinner *ngIf="cargandoPerfil" name="crescent" class="spinner-center"></ion-spinner>
-  <ng-container *ngIf="!cargandoPerfil && perfilUsuario">
-    <player-app-tabs-header [activeTab]="pestanaActiva" (tabChange)="irASlide($event)"></player-app-tabs-header>
+  <app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></app-tabs-header>
 
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <!-- Slide 1: Perfil -->
-        <div class="swiper-slide">
-          <player-app-perfil-card [perfilUsuario]="perfilUsuario"></player-app-perfil-card>
-        </div>
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <!-- Slide 1: Perfil -->
+      <div class="swiper-slide">
+       
+        <app-perfil-card [perfilUsuario]="perfilUsuario" [comuna]="perfilUsuario?.comuna" [ciudad]="perfilUsuario?.ciudad"></app-perfil-card>
+      </div>
 
-        <!-- Slide 2: Estadísticas -->
-        <div class="swiper-slide">
-          <ion-card>
-            <ion-card-content>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>Estadísticas</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <app-radar-chart
-                    [labels]="['Ataque', 'pepito', 'Habilidad', 'Táctica', 'Creatividad']"
-                    [data]="[75, 50, 25, 25, 100]"
-                  ></app-radar-chart>
+      <!-- Slide 2: Estadísticas -->
+      <div class="swiper-slide">
+        <ion-card>
+          <ion-card-content>
+            <app-estadisticas-card [perfilUsuario]="perfilUsuario"></app-estadisticas-card>
+          </ion-card-content>
+        </ion-card>
+      </div>
 
-                  <div class="stats-grid" *ngIf="perfilUsuario && perfilUsuario.stats">
-                    <div class="stat-item">
-                      <h3>Agilidad</h3>
-                      <p>{{ perfilUsuario.stats.agilidad }}</p>
-                    </div>
-                    <div class="stat-item">
-                      <h3>Cabeceo</h3>
-                      <p>{{ perfilUsuario.stats.cabeceo }}</p>
-                    </div>
-                    <div class="stat-item">
-                      <h3>Control</h3>
-                      <p>{{ perfilUsuario.stats.controlBalon }}</p>
-                    </div>
-                    <div class="stat-item">
-                      <h3>Coordinación</h3>
-                      <p>{{ perfilUsuario.stats.coordinacion }}</p>
-                    </div>
-                    <div class="stat-item">
-                      <h3>Equilibrio</h3>
-                      <p>{{ perfilUsuario.stats.equilibrio }}</p>
-                    </div>
-                  </div>
-                </ion-card-content>
-              </ion-card>
-            </ion-card-content>
-          </ion-card>
-        </div>
-
-        <!-- Slide 3: Galería -->
-        <div class="swiper-slide">
-          <ion-card class="galeria-card">
-            <ion-card-header>
-              <ion-card-title>Galería</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-button expand="block" (click)="seleccionarImagen()">Subir Imagen</ion-button>
-
-              <ion-progress-bar *ngIf="progresoSubida !== null" [value]="progresoSubida"></ion-progress-bar>
-
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="6" *ngFor="let imageUrl of urlsGaleria">
-                    <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-content>
-          </ion-card>
-        </div>
+      <!-- Slide 3: Galería -->
+      <div class="swiper-slide">
+        <app-galeria-card
+          [galleryUrls]="galleryUrls"
+          [uploadProgress]="uploadProgress"
+          [selectImage]="selectImage.bind(this)"
+        ></app-galeria-card>
       </div>
     </div>
-  </ng-container>
+  </div>
 </ion-content>
