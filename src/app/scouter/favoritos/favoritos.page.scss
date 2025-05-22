@@ -1,0 +1,26 @@
+ion-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  ion-img {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  ion-card-header {
+    text-align: center;
+  }
+}
+
+.mensaje-vacio {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 1rem;
+}
