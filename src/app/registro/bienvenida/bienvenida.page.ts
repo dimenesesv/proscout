@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { getAuth } from 'firebase/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-bienvenida',
@@ -13,13 +13,12 @@ export class BienvenidaPage {
 
   constructor(
     private firebaseService: FirebaseService,
-    private router: Router
+    private router: Router,
+    private afAuth: AngularFireAuth
   ) {}
 
-  irAHOME() {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
+  async irAHOME() {
+    const user = await this.afAuth.currentUser;
     if (!user) {
       this.router.navigate(['/login']); // fallback si no hay sesión
       return;

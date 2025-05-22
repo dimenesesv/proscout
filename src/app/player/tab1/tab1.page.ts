@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { GeoPoint } from 'firebase/firestore';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Usuario } from 'src/app/interfaces/usuario';
-import { getAuth } from 'firebase/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GaleriaCardComponent } from 'src/app/shared/components/galeria-card.component';
 
 @Component({
@@ -36,7 +36,7 @@ export class Tab1Page {
   galleryUrls: string[] = [];
   uploadProgress: number | null = null;
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private firebaseService: FirebaseService, private afAuth: AngularFireAuth) {}
 
   ngOnInit() {
     this.obtenerUserData();
@@ -44,8 +44,7 @@ export class Tab1Page {
   }
 
   async obtenerUserData() {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const user = await this.afAuth.currentUser;
     if (!user) return;
 
     this.uid = user.uid;
@@ -61,8 +60,7 @@ export class Tab1Page {
   }
 
   async guardarUbicacionSiEsPosible() {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const user = await this.afAuth.currentUser;
     if (!user || !navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(async (position) => {

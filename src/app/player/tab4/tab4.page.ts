@@ -3,12 +3,12 @@ import { FirebaseService } from '../../services/firebase.service';
 import { StorageService } from '../../services/storage.service';
 import { LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { getAuth, signOut } from 'firebase/auth';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-tab4',
@@ -30,7 +30,8 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     private firebaseService: FirebaseService,
     private storageService: StorageService,
     private loadingController: LoadingController,
-    private router: Router
+    private router: Router,
+    private afAuth: AngularFireAuth
   ) {}
 
   async ngOnInit() {
@@ -40,8 +41,7 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
       const { user } = await FirebaseAuthentication.getCurrentUser();
       userId = user?.uid;
     } else {
-      const auth = getAuth();
-      const user = auth.currentUser;
+      const user = await this.afAuth.currentUser;
       userId = user?.uid;
     }
 
@@ -88,13 +88,21 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   }
 
   logout() {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-      console.log('Sesión cerrada correctamente');
-      this.router.navigate(['/login']);
-    }).catch((error) => {
-      console.error('Error al cerrar sesión:', error);
-    });
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      FirebaseAuthentication.signOut().then(() => {
+        console.log('Sesión cerrada correctamente');
+        this.router.navigate(['/login']);
+      }).catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+    } else {
+      this.afAuth.signOut().then(() => {
+        console.log('Sesión cerrada correctamente');
+        this.router.navigate(['/login']);
+      }).catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+    }
   }
 
   async selectImage() {
@@ -116,8 +124,7 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
       const { user } = await FirebaseAuthentication.getCurrentUser();
       userId = user?.uid;
     } else {
-      const auth = getAuth();
-      const user = auth.currentUser;
+      const user = await this.afAuth.currentUser;
       userId = user?.uid;
     }
     if (!userId) {

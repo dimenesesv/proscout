@@ -3,16 +3,11 @@ import { FirebaseService } from '../../services/firebase.service';
 import { StorageService } from '../../services/storage.service';
 import { LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { getAuth, signOut } from 'firebase/auth';
 import { Router } from '@angular/router';
 import Swiper from 'swiper';
 import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
-import { GaleriaCardComponent } from 'src/app/shared/components/galeria-card.component';
-import { PerfilCardComponent } from 'src/app/shared/components/perfil-card.component';
-import { EstadisticasCardComponent } from 'src/app/shared/components/estadisticas-card.component';
-import { TabsHeaderComponent } from 'src/app/shared/components/tabs-header.component';
-import { IonHeader, IonTitle, IonToolbar, IonButton, IonContent } from "@ionic/angular/standalone";
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-perfil',
@@ -33,7 +28,8 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     private firebaseService: FirebaseService,
     private storageService: StorageService,
     private loadingController: LoadingController,
-    private router: Router
+    private router: Router,
+    private afAuth: AngularFireAuth
   ) {}
 
   async ngOnInit() {
@@ -43,8 +39,7 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
       const { user } = await FirebaseAuthentication.getCurrentUser();
       userId = user?.uid;
     } else {
-      const auth = getAuth();
-      const user = auth.currentUser;
+      const user = await this.afAuth.currentUser;
       userId = user?.uid;
     }
 
@@ -88,13 +83,21 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   logout() {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-      console.log('Sesión cerrada correctamente');
-      this.router.navigate(['/login']);
-    }).catch((error) => {
-      console.error('Error al cerrar sesión:', error);
-    });
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      FirebaseAuthentication.signOut().then(() => {
+        console.log('Sesión cerrada correctamente');
+        this.router.navigate(['/login']);
+      }).catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+    } else {
+      this.afAuth.signOut().then(() => {
+        console.log('Sesión cerrada correctamente');
+        this.router.navigate(['/login']);
+      }).catch((error) => {
+        console.error('Error al cerrar sesión:', error);
+      });
+    }
   }
 
   async selectImage() {
@@ -115,39 +118,42 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
       const { user } = await FirebaseAuthentication.getCurrentUser();
       userId = user?.uid;
+      console.log('[uploadImage] Plataforma móvil, userId:', userId);
     } else {
-      const auth = getAuth();
-      const user = auth.currentUser;
+      const user = await this.afAuth.currentUser;
       userId = user?.uid;
+      console.log('[uploadImage] Plataforma web, userId:', userId);
     }
     if (!userId) {
-      console.warn('No hay usuario autenticado.');
+      console.warn('[uploadImage] No hay usuario autenticado.');
       return;
     }
-    const filePath = `usuarios/${userId}/gallery/${Date.now()}_${file.name}`;
     const loading = await this.loadingController.create({
       message: 'Subiendo imagen...',
       spinner: 'crescent',
     });
     await loading.present();
     try {
-      const task = this.storageService.uploadFileWithProgress(filePath, file);
-      // Escuchar el progreso de la subida usando el evento 'state_changed'
-      task.on('state_changed', (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.uploadProgress = progress / 100;
-        loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
-      });
-      // Esperar a que la subida termine y obtener la URL
-      await task;
-      const downloadUrl = await this.storageService.getDownloadUrl(filePath);
-      this.galleryUrls.push(downloadUrl);
-      this.updateGalleryInFirestore(userId);
+      console.log('[uploadImage] Llamando a uploadUserGalleryImage con userId:', userId, 'file:', file);
+      this.galleryUrls = await this.storageService.uploadUserGalleryImage(
+        userId,
+        file,
+        this.firebaseService,
+        (progress) => {
+          this.uploadProgress = progress / 100;
+          loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
+          if (progress % 10 === 0) {
+            console.log(`[uploadImage] Progreso: ${progress}%`);
+          }
+        }
+      );
+      console.log('[uploadImage] Galería actualizada:', this.galleryUrls);
     } catch (error) {
-      console.error('Error al subir la imagen:', error);
+      console.error('[uploadImage] Error al subir la imagen:', error);
     } finally {
       await loading.dismiss();
       this.uploadProgress = null;
+      console.log('[uploadImage] Proceso de subida finalizado');
     }
   }
 

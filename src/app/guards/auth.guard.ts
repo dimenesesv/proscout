@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { getAuth } from 'firebase/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { Capacitor } from '@capacitor/core';
 
@@ -8,7 +8,7 @@ import { Capacitor } from '@capacitor/core';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private afAuth: AngularFireAuth) {}
 
   canActivate(): Promise<boolean> {
     return new Promise(async (resolve) => {
@@ -28,10 +28,9 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/login']);
         return resolve(false);
       } else {
-        console.log('[AuthGuard] Plataforma web detectada. Usando getAuth().onAuthStateChanged...');
-        const auth = getAuth();
-        const unsub = auth.onAuthStateChanged(user => {
-          unsub();
+        console.log('[AuthGuard] Plataforma web detectada. Usando AngularFireAuth.authState...');
+        const sub = this.afAuth.authState.subscribe(user => {
+          sub.unsubscribe();
           console.log('[AuthGuard] Usuario detectado en web:', user);
           if (user) {
             resolve(true);

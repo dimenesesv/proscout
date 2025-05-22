@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { getAuth } from 'firebase/auth';
 import { Router } from '@angular/router';
 import { validarRut } from 'src/app/utils/rut';
 import { StorageService } from 'src/app/services/storage.service';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -37,7 +37,8 @@ export class EditarPerfilPage implements OnInit {
     private fb: FormBuilder,
     private firebaseService: FirebaseService,
     private router: Router,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private afAuth: AngularFireAuth
   ) {
     this.formularioPerfil = this.fb.group({
       nombre: ['', Validators.required],
@@ -91,8 +92,7 @@ export class EditarPerfilPage implements OnInit {
   async cargarPerfil() {
     this.cargandoPerfil = true;
     this.errorPerfil = null;
-    const auth = getAuth();
-    const usuario = auth.currentUser;
+    const usuario = await this.afAuth.currentUser;
     if (!usuario) {
       this.errorPerfil = 'No hay usuario autenticado.';
       this.cargandoPerfil = false;
@@ -144,8 +144,7 @@ export class EditarPerfilPage implements OnInit {
     if (this.formularioPerfil.invalid) return;
     this.cargandoPerfil = true;
     this.errorPerfil = null;
-    const auth = getAuth();
-    const usuario = auth.currentUser;
+    const usuario = await this.afAuth.currentUser;
     if (!usuario) {
       this.errorPerfil = 'No hay usuario autenticado.';
       this.cargandoPerfil = false;
@@ -229,8 +228,7 @@ export class EditarPerfilPage implements OnInit {
   async subirFotoPerfil(archivo: File) {
     this.cargandoPerfil = true;
     this.errorPerfil = null;
-    const auth = getAuth();
-    const usuario = auth.currentUser;
+    const usuario = await this.afAuth.currentUser;
     if (!usuario) {
       this.errorPerfil = 'No hay usuario autenticado.';
       this.cargandoPerfil = false;
