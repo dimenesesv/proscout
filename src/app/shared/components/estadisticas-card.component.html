@@ -1,4 +1,4 @@
-<ion-card>
+<ion-card *ngIf="perfilUsuario && perfilUsuario?.esJugador">
   <ion-card-header>
     <ion-card-title>Estadísticas</ion-card-title>
   </ion-card-header>
@@ -28,6 +28,74 @@
         <h3>Tarjetas rojas</h3>
         <p>{{ perfilUsuario?.stats?.tarjetasRojas || '-' }}</p>
       </div>
+    </div>
+  </ion-card-content>
+</ion-card>
+<!--  aca empieza trayectoria  del perfil de scouter html -->
+<ion-card *ngIf="perfilUsuario && perfilUsuario?.esScouter">
+  <ion-card-header>
+    <ion-card-title>Trayectoria</ion-card-title>
+  </ion-card-header>
+    <ion-card-content>
+    <!-- 🔹 Biografía -->
+    <div class="section">
+      <ion-label class="section-title">Biografía</ion-label>
+      <ion-textarea
+        auto-grow="true"
+        placeholder="Escribe una breve biografía..."
+        [(ngModel)]="perfilScouter.biografia"
+      ></ion-textarea>
+    </div>
+
+    <!-- 🔹 Historial de equipos -->
+    <div class="section">
+      <ion-label class="section-title">Historial de Equipos</ion-label>
+      <ion-list>
+        <ion-item *ngFor="let equipo of perfilScouter?.equiposHistorial">
+          <ion-label>{{ equipo }}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-input
+        [(ngModel)]="nuevoEquipo"
+        placeholder="Agregar nuevo equipo"
+      ></ion-input>
+      <ion-button expand="block" (click)="agregarEquipo()">Agregar equipo</ion-button>
+    </div>
+
+    <!-- 🔹 Certificación / Título -->
+    <div class="section">
+      <ion-label class="section-title">Título Profesional o Certificación</ion-label>
+
+      <ion-item>
+        <ion-label>Archivo actual:</ion-label>
+        <ion-text *ngIf="perfilUsuario && perfilUsuario?.esScouter; else noArchivo">
+          <a [href]="perfilScouter?.tituloUrl" target="_blank">Ver documento</a>
+        </ion-text>
+        <ng-template #noArchivo>
+          <ion-text color="medium">No se ha subido un archivo.</ion-text>
+        </ng-template>
+      </ion-item>
+
+      <input
+        type="file"
+        (change)="subirArchivoCertificacion($event)"
+        accept=".pdf,.jpg,.png,.doc,.docx"
+      />
+    </div>
+
+    <!-- 🔹 Logros importantes -->
+    <div class="section">
+      <ion-label class="section-title">Logros Importantes</ion-label>
+      <ion-list>
+        <ion-item *ngFor="let logro of perfilScouter?.logros ">
+          <ion-label>{{ logro }}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-input
+        [(ngModel)]="nuevoLogro"
+        placeholder="Agregar nuevo logro"
+      ></ion-input>
+      <ion-button expand="block" (click)="agregarLogro()">Agregar logro</ion-button>
     </div>
   </ion-card-content>
 </ion-card>

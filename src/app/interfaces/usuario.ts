@@ -1,6 +1,7 @@
 import { Info } from "./info";
 import { Stats } from "./stats";
 import { Tutor } from "./tutor";
+import { Scouter } from "./scouter";
 import { GeoPoint } from 'firebase/firestore';
 
 export interface Usuario {
@@ -25,4 +26,5 @@ export interface Usuario {
     galeria?: string[];      // Galería de fotos del usuario
     info?: Info;          // Información adicional del usuario
     stats?: Stats | undefined;         // Estadísticas del usuario
+    scouter?: Scouter | undefined;         // Información del usuario como cazatalentos
 }

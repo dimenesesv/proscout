@@ -17,7 +17,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   standalone: false,
 })
 export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
-  perfilUsuario: any;
+  perfilUsuario: any; 
   galleryUrls: string[] = [];
   uploadProgress: number | null = null;
   private profileSubscription: Subscription | undefined;

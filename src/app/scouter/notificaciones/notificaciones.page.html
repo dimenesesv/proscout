@@ -1,13 +1,33 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>notificaciones</ion-title>
+    <ion-title>Notificaciones</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">notificaciones</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-list *ngIf="notificaciones.length > 0; else noNotificaciones">
+    <ion-item-sliding *ngFor="let notificacion of notificaciones">
+      <ion-item lines="none" class="notificacion-item">
+        <ion-avatar slot="start">
+          <img [src]="notificacion.imagen || 'https://placehold.co/64x64'" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ notificacion.titulo }}</h2>
+          <p>{{ notificacion.mensaje }}</p>
+          <ion-text color="medium">
+            <small>{{ notificacion.fecha | date: 'short' }}</small>
+          </ion-text>
+        </ion-label>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ng-template #noNotificaciones>
+    <div class="mensaje-vacio">
+      <ion-text color="medium">
+        <p>No tienes notificaciones nuevas.</p>
+      </ion-text>
+    </div>
+  </ng-template>
 </ion-content>
+
