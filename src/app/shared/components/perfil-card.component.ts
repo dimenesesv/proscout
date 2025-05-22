@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { Usuario } from 'src/app/interfaces/usuario';
 
 @Component({
   selector: 'app-perfil-card',
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common';
   imports: [IonicModule, CommonModule]
 })
 export class PerfilCardComponent {
-  @Input() perfilUsuario: any;
+  @Input() perfilUsuario!: Usuario;
   @Input() comuna: string = '';
   @Input() ciudad: string = '';
 

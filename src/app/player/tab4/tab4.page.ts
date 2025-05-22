@@ -17,7 +17,7 @@ import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
   standalone: false,
 })
 export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
-  perfilUsuario: any;
+  perfilUsuario: any; 
   galleryUrls: string[] = [];
   uploadProgress: number | null = null;
   private profileSubscription: Subscription | undefined;
