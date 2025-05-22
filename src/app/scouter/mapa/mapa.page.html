@@ -18,13 +18,15 @@
     <ng-container *ngFor="let row of getRows(users); let rowIndex = index">
       <div class="jugadores-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
         <ng-container *ngFor="let user of row">
-          <app-perfil-card
-            [perfilUsuario]="user"
-            [comuna]="comuna"
-            [ciudad]="ciudad"
-            (click)="verPerfil(user)"
-            class="jugador-card"
-          ></app-perfil-card>>
+          <ion-item button (click)="verPerfil(user)" class="jugador-card perfil-cuadro">
+            <div class="perfil-img-wrapper">
+              <img [src]="user.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" class="perfil-img" />
+              <div class="perfil-overlay">
+                <div class="perfil-nombre">{{ user.nombre }}</div>
+                <div class="perfil-comuna">{{ user.comuna || comuna }}</div>
+              </div>
+            </div>
+          </ion-item>
         </ng-container>
       </div>
     </ng-container>

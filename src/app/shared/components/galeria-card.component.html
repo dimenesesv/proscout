@@ -8,7 +8,10 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6" *ngFor="let imageUrl of galleryUrls">
-          <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
+          <div class="galeria-img-wrapper">
+            <ion-spinner *ngIf="!loadedImages[imageUrl]" name="crescent" class="galeria-img-spinner"></ion-spinner>
+            <ion-img [src]="imageUrl" alt="Imagen subida" (ionImgWillLoad)="onImgWillLoad(imageUrl)" (ionImgDidLoad)="onImgDidLoad(imageUrl)"></ion-img>
+          </div>
         </ion-col>
       </ion-row>
     </ion-grid>

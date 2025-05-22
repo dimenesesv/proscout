@@ -11,5 +11,5 @@ export interface Scouter {
     ratingPromedio?: number;       // Calificación promedio que recibe de jugadores u otros
     modoTrabajo?: 'Presencial' | 'Remoto' | 'Ambos';
     estadoActual?: 'Disponible' | 'Viendo jugadores' | 'Ocupado';
-    favoritos?: [];
+    favoritos?: string[];
 }

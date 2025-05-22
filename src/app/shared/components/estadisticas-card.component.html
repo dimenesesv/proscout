@@ -5,28 +5,34 @@
   <ion-card-content>
     <app-radar-chart
       [labels]="['Ataque', 'Defensa', 'Habilidad', 'Táctica', 'Creatividad']"
-      [data]="[perfilUsuario?.stats?.ataque || 0, perfilUsuario?.stats?.defensa || 0, perfilUsuario?.stats?.habilidad || 0, perfilUsuario?.stats?.tactica || 0, perfilUsuario?.stats?.creatividad || 0]"
+      [data]="[
+        perfilUsuario?.stats?.ataque || 0,
+        perfilUsuario?.stats?.defensa || 0,
+        perfilUsuario?.stats?.habilidad || 0,
+        perfilUsuario?.stats?.tactica || 0,
+        perfilUsuario?.stats?.creatividad || 0
+      ]"
     ></app-radar-chart>
     <div class="stats-grid">
       <div class="stat-item">
         <h3>Partidos jugados</h3>
-        <p>{{ perfilUsuario?.stats?.partidosJugados || '-' }}</p>
+        <p>{{ perfilUsuario?.stats?.partidosJugados ?? '-' }}</p>
       </div>
       <div class="stat-item">
         <h3>Goles</h3>
-        <p>{{ perfilUsuario?.stats?.goles || '-' }}</p>
+        <p>{{ perfilUsuario?.stats?.goles ?? '-' }}</p>
       </div>
       <div class="stat-item">
         <h3>Asistencias</h3>
-        <p>{{ perfilUsuario?.stats?.asistencias || '-' }}</p>
+        <p>{{ perfilUsuario?.stats?.asistencias ?? '-' }}</p>
       </div>
       <div class="stat-item">
         <h3>Tarjetas amarillas</h3>
-        <p>{{ perfilUsuario?.stats?.tarjetasAmarillas || '-' }}</p>
+        <p>{{ perfilUsuario?.stats?.tarjetasAmarillas ?? '-' }}</p>
       </div>
       <div class="stat-item">
         <h3>Tarjetas rojas</h3>
-        <p>{{ perfilUsuario?.stats?.tarjetasRojas || '-' }}</p>
+        <p>{{ perfilUsuario?.stats?.tarjetasRojas ?? '-' }}</p>
       </div>
     </div>
   </ion-card-content>
@@ -36,22 +42,22 @@
   <ion-card-header>
     <ion-card-title>Trayectoria</ion-card-title>
   </ion-card-header>
-    <ion-card-content>
+  <ion-card-content>
     <!-- 🔹 Biografía -->
     <div class="section">
       <ion-label class="section-title">Biografía</ion-label>
       <ion-textarea
         auto-grow="true"
         placeholder="Escribe una breve biografía..."
-        [(ngModel)]="perfilScouter.biografia"
+        [(ngModel)]="biografia"
       ></ion-textarea>
     </div>
 
     <!-- 🔹 Historial de equipos -->
     <div class="section">
       <ion-label class="section-title">Historial de Equipos</ion-label>
-      <ion-list>
-        <ion-item *ngFor="let equipo of perfilScouter?.equiposHistorial">
+      <ion-list *ngIf="perfilScouter?.equiposHistorial">
+        <ion-item *ngFor="let equipo of perfilScouter.equiposHistorial">
           <ion-label>{{ equipo }}</ion-label>
         </ion-item>
       </ion-list>
@@ -68,7 +74,7 @@
 
       <ion-item>
         <ion-label>Archivo actual:</ion-label>
-        <ion-text *ngIf="perfilUsuario && perfilUsuario?.esScouter; else noArchivo">
+        <ion-text *ngIf="perfilScouter?.tituloUrl; else noArchivo">
           <a [href]="perfilScouter?.tituloUrl" target="_blank">Ver documento</a>
         </ion-text>
         <ng-template #noArchivo>
@@ -86,8 +92,8 @@
     <!-- 🔹 Logros importantes -->
     <div class="section">
       <ion-label class="section-title">Logros Importantes</ion-label>
-      <ion-list>
-        <ion-item *ngFor="let logro of perfilScouter?.logros ">
+      <ion-list *ngIf="perfilScouter?.logros">
+        <ion-item *ngFor="let logro of perfilScouter.logros">
           <ion-label>{{ logro }}</ion-label>
         </ion-item>
       </ion-list>

@@ -13,6 +13,65 @@
   text-align: center;
 }
 
+.perfil-cuadro {
+  width: 120px;
+  height: 120px;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  position: relative;
+  --background: transparent;
+  --ion-item-background: transparent;
+  margin: 0 auto;
+}
+
+.perfil-img-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.perfil-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.perfil-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(0deg, rgba(0,0,0,0.7) 70%, rgba(0,0,0,0.1) 100%);
+  color: #fff;
+  padding: 8px 4px 4px 4px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.perfil-nombre {
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1.1;
+  margin-bottom: 2px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.perfil-comuna {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.jugadores-row {
+  justify-content: flex-start;
+}
+
 @media (max-width: 900px) {
   .jugadores-grid {
     grid-template-columns: repeat(2, 1fr);

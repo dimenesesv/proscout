@@ -7,23 +7,9 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { GeoPoint } from 'firebase/firestore';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Usuario } from 'src/app/interfaces/usuario';
 declare var google: any;
-
-interface User {
-  id: string;
-  name: string;
-  avatar: string;
-  lat: number;
-  lng: number;
-  distance?: number;
-  // Add the following to match Usuario interface for perfil-card
-  correo?: string;
-  fechaNacimiento?: string;
-  fotoPerfil?: string;
-  nacionalidad?: string;
-  info?: any;
-  tutor?: any;
-}
 
 @Component({
   selector: 'app-mapa',
@@ -35,15 +21,26 @@ export class MapaPage implements OnInit {
   @ViewChild(IonContent, { static: false }) content!: IonContent;
 
   currentLocation: { lat: number; lng: number } = { lat: 19.4326, lng: -99.1332 }; // Default: CDMX
-  users: User[] = [];
+  users: Usuario[] = [];
   locationLabel: string = 'Mi ubicación';
   comuna: string = '';
   ciudad: string = '';
 
-  constructor(private ngZone: NgZone, private modalCtrl: ModalController, private firebaseService: FirebaseService, private router: Router) {}
+  constructor(
+    private ngZone: NgZone,
+    private modalCtrl: ModalController,
+    private firebaseService: FirebaseService,
+    private router: Router,
+    private afAuth: AngularFireAuth // <--- agregado
+  ) {}
 
   ngOnInit() {
     console.log('[MapaPage] ngOnInit');
+    // Solo inicializaciones básicas aquí si es necesario
+  }
+
+  ionViewWillEnter() {
+    console.log('[MapaPage] ionViewWillEnter');
     this.guardarUbicacionSiEsPosible();
     this.loadUsers();
     this.getCurrentLocation();
@@ -96,8 +93,7 @@ export class MapaPage implements OnInit {
 
   async guardarUbicacionSiEsPosible() {
     console.log('[MapaPage] guardarUbicacionSiEsPosible INICIO');
-    const auth = await import('firebase/auth');
-    const user = auth.getAuth().currentUser;
+    const user = await this.afAuth.currentUser;
     if (!user) {
       console.warn('[MapaPage] guardarUbicacionSiEsPosible: No user');
       return;
@@ -122,12 +118,14 @@ export class MapaPage implements OnInit {
     this.users = this.users
       .map((user) => ({
         ...user,
-        distance: calcularDistancia(
-          this.currentLocation.lat,
-          this.currentLocation.lng,
-          user.lat,
-          user.lng
-        ),
+        distance: user.ubicacion && typeof user.ubicacion.latitude === 'number' && typeof user.ubicacion.longitude === 'number'
+          ? calcularDistancia(
+              this.currentLocation.lat,
+              this.currentLocation.lng,
+              user.ubicacion.latitude,
+              user.ubicacion.longitude
+            )
+          : Infinity,
       }))
       .filter((user) => user.distance <= 500)
       .sort((a, b) => a.distance - b.distance);

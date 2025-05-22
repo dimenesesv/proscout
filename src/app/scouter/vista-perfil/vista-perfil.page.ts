@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Location } from '@angular/common';
 import Swiper from 'swiper';
@@ -16,7 +16,7 @@ export class VistaPerfilPage implements OnInit {
   activeTab: number = 0;
   swiper: Swiper | undefined;
 
-  constructor(private route: ActivatedRoute, private firebaseService: FirebaseService, private location: Location) { }
+  constructor(private route: ActivatedRoute, private firebaseService: FirebaseService, private location: Location, private router: Router) { }
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id');
@@ -50,8 +50,11 @@ export class VistaPerfilPage implements OnInit {
     }
   }
 
-  goBack() {
-    this.location.back();
-  }
+goBack() {
+  console.log('Intentando navegar a /scouter/scouter/mapa');
+  this.router.navigate(['/scouter/scouter/mapa']).then(ok => {
+    console.log('Navegación completada:', ok);
+  });
+}
 
 }

@@ -18,6 +18,15 @@ export class EstadisticasCardComponent {
   nuevoEquipo: string = '';
   nuevoLogro: string = '';
 
+  get biografia(): string {
+    return this.perfilScouter?.biografia || '';
+  }
+  set biografia(val: string) {
+    if (this.perfilScouter) {
+      this.perfilScouter.biografia = val;
+    }
+  }
+
   agregarEquipo() {
     if (!this.perfilScouter.equiposHistorial) {
       this.perfilScouter.equiposHistorial = [];

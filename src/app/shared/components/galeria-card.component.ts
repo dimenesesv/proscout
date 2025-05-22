@@ -13,4 +13,14 @@ export class GaleriaCardComponent {
   @Input() galleryUrls: string[] = [];
   @Input() uploadProgress: number | null = null;
   @Input() selectImage!: () => void;
+
+  loadedImages: { [url: string]: boolean } = {};
+
+  onImgWillLoad(url: string) {
+    this.loadedImages[url] = false;
+  }
+
+  onImgDidLoad(url: string) {
+    this.loadedImages[url] = true;
+  }
 }
