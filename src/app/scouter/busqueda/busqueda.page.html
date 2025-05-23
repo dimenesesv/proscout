@@ -1,0 +1,70 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>busqueda</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Búsqueda avanzada</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <form #filtrosForm="ngForm" (ngSubmit)="buscarPorProximidad(filtrosForm.value)">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Filtros físicos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Altura (cm)</ion-label>
+          <ion-input type="number" name="altura" ngModel></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Peso (kg)</ion-label>
+          <ion-input type="number" name="peso" ngModel></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Edad</ion-label>
+          <ion-input type="number" name="edad" ngModel></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Filtros deportivos (Stats)</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let stat of ['velocidad','resistencia','fuerza','agilidad','equilibrio','coordinacion','salto','controlBalon','regate','pase','tiro','cabeceo']">
+          <ion-label position="floating">{{ stat | titlecase }}</ion-label>
+          <ion-input type="number" [name]="stat" ngModel></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" type="submit" color="primary">Buscar</ion-button>
+  </form>
+
+  <ion-card *ngIf="resultados.length > 0">
+    <ion-card-header>
+      <ion-card-title>Resultados</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let r of resultados">
+          <ion-avatar slot="start">
+            <img [src]="r.usuario.fotoPerfil || 'assets/default-profile.png'" />
+          </ion-avatar>
+          <ion-label>
+            <h2>{{ r.usuario.nombre }}</h2>
+            <p>Puntaje: {{ r.puntaje }}</p>
+            <p *ngIf="r.usuario.info">Altura: {{ r.usuario.info.altura }} | Peso: {{ r.usuario.info.peso }} | Edad: {{ r.usuario.info.edad }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-note *ngIf="resultados.length === 0">No hay resultados para los filtros seleccionados.</ion-note>
+</ion-content>

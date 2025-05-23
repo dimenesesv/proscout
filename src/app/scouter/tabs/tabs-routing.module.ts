@@ -27,6 +27,10 @@ const routes: Routes = [
         loadChildren: () => import('../perfil/perfil.module').then( m => m.PerfilPageModule)
       },
       {
+        path: 'busqueda',
+        loadChildren: () => import('../busqueda/busqueda.module').then(m => m.BusquedaPageModule)
+      },
+      {
         path: '',
         redirectTo: 'mapa',
         pathMatch: 'full'

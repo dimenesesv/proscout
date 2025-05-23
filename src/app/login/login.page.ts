@@ -47,6 +47,6 @@ export class LoginPage {
     }
   }
   goToRegister() {
-    this.router.navigate(['/scouter/scouter/mapa']); // Redirige a la página de registro
+    this.router.navigate(['/registro']); // Redirige a la página de registro
   }
 }
