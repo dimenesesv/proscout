@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { NotificacionesService } from 'src/app/services/notificaciones.service';
 
 @Component({
   selector: 'app-notificaciones',
@@ -12,25 +11,9 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 export class NotificacionesPage implements OnInit {
   notificaciones: any[] = [];
 
-  constructor() {}
+  constructor(private notificacionesService: NotificacionesService) {}
 
   async ngOnInit() {
-    await this.cargarNotificaciones();
-  }
-
-  async cargarNotificaciones() {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user) return;
-
-    const db = getFirestore();
-    const notificacionesRef = collection(db, 'notificaciones');
-    const q = query(notificacionesRef, where('uidScouter', '==', user.uid));
-
-    const snapshot = await getDocs(q);
-    this.notificaciones = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    this.notificaciones = await this.notificacionesService.getNotificacionesScouter();
   }
 }
