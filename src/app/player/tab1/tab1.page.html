@@ -13,6 +13,16 @@
     </ion-card-header>
   </ion-card>
 
+    <!-- Consejo del día -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Consejo del día</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ tipdeldia }}</p>
+    </ion-card-content>
+  </ion-card>
+
 
   <!-- Pruebas pendientes -->
   <ion-card>
@@ -34,14 +44,21 @@
   <ion-card-header>
     <ion-card-title>Jugadores destacados</ion-card-title>
   </ion-card-header>
-
-  <!-- Scroll horizontal con div personalizado -->
   <div class="horizontal-scroll">
     <ion-card *ngFor="let destacado of jugadoresDestacados" class="jugador-card">
-      <img [src]="destacado.fotoUrl" />
       <ion-card-content>
         <h3>{{ destacado.nombre }}</h3>
-        <p>{{ destacado.club }}</p>
+        <p *ngIf="destacado.info && destacado.info.posicion">Posición: {{ destacado.info.posicion }}</p>
+        <p *ngIf="destacado.info && destacado.info.altura">Altura: {{ destacado.info.altura }} cm</p>
+        <p *ngIf="destacado.info && destacado.info.peso">Peso: {{ destacado.info.peso }} kg</p>
+        <p *ngIf="destacado.fechaNacimiento">Edad: {{ calcularEdad(destacado.fechaNacimiento) }}</p>
+        <ng-container *ngIf="destacado.stats">
+          <p *ngIf="destacado.stats.velocidad !== undefined">Velocidad: {{ destacado.stats.velocidad }}</p>
+          <p *ngIf="destacado.stats.resistencia !== undefined">Resistencia: {{ destacado.stats.resistencia }}</p>
+          <p *ngIf="destacado.stats.fuerza !== undefined">Fuerza: {{ destacado.stats.fuerza }}</p>
+          <p *ngIf="destacado.stats.agilidad !== undefined">Agilidad: {{ destacado.stats.agilidad }}</p>
+          <p *ngIf="destacado.stats.pase !== undefined">Pase: {{ destacado.stats.pase }}</p>
+        </ng-container>
       </ion-card-content>
     </ion-card>
   </div>
@@ -56,16 +73,6 @@
     <ion-card-content>
       <p>Pruebas completadas: {{ stats.pruebasCompletadas }}</p>
       <p>Progreso de perfil: {{ stats.porcentajePerfil }}%</p>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Consejo del día -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Consejo del día</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>{{ tipDelDia }}</p>
     </ion-card-content>
   </ion-card>
 </ion-content>
