@@ -51,7 +51,7 @@ export class PerfilCardComponent {
     // Obtiene el usuario actual (scouter)
     const scouter = await this.afAuth.currentUser;
     // Usa 'id' en vez de 'uid' para el jugador
-    const jugadorId = (this.perfilUsuario as any).id;
+    const jugadorId = (this.perfilUsuario as any).id || (this.perfilUsuario as any).uid;
     if (!scouter || !jugadorId) return;
     const scouterId = scouter.uid;
     const path = `favoritos/${scouterId}`;

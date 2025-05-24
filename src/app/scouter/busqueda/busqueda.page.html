@@ -11,42 +11,75 @@
     </ion-toolbar>
   </ion-header>
 
-  <form #filtrosForm="ngForm" (ngSubmit)="buscarPorProximidad(filtrosForm.value)">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Filtros físicos</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item>
-          <ion-label position="floating">Altura (cm)</ion-label>
-          <ion-input type="number" name="altura" ngModel></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Peso (kg)</ion-label>
-          <ion-input type="number" name="peso" ngModel></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Edad</ion-label>
-          <ion-input type="number" name="edad" ngModel></ion-input>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
+  <!-- Spinner de carga -->
+  <div *ngIf="cargandoUsuarios" class="spinner-container">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <div class="spinner-text">Cargando jugadores...</div>
+  </div>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Filtros deportivos (Stats)</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item *ngFor="let stat of ['velocidad','resistencia','fuerza','agilidad','equilibrio','coordinacion','salto','controlBalon','regate','pase','tiro','cabeceo']">
-          <ion-label position="floating">{{ stat | titlecase }}</ion-label>
-          <ion-input type="number" [name]="stat" ngModel></ion-input>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
+  <!-- Barra de filtros activos -->
+  <ion-toolbar color="light" *ngIf="filtrosActivos && filtrosActivos.length > 0">
+    <ion-chip *ngFor="let filtro of filtrosActivos">
+      <ion-label>{{ filtro.label }}: {{ filtro.value }}</ion-label>
+      <ion-icon name="close-circle" (click)="borrarFiltro(filtro.key)"></ion-icon>
+    </ion-chip>
+    <ion-button fill="clear" slot="end" (click)="abrirModalFiltros()">
+      <ion-icon name="options-outline"></ion-icon>
+      Filtros
+    </ion-button>
+  </ion-toolbar>
+  <ion-toolbar color="light" *ngIf="!filtrosActivos || filtrosActivos.length === 0">
+    <ion-button expand="block" (click)="abrirModalFiltros()">
+      <ion-icon name="options-outline"></ion-icon>
+      Filtros
+    </ion-button>
+  </ion-toolbar>
 
-    <ion-button expand="block" type="submit" color="primary">Buscar</ion-button>
-  </form>
+  <!-- Modal de filtros -->
+  <ion-modal #modalFiltros>
+    <ng-template>
+      <ion-content>
+        <form #filtrosForm="ngForm" (ngSubmit)="aplicarFiltros(filtrosForm.value, modalFiltros)" autocomplete="off">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Filtros físicos</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label position="floating">Altura (cm)</ion-label>
+                <ion-input type="number" name="altura" ngModel min="100" max="250" pattern="^[0-9]*$"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Peso (kg)</ion-label>
+                <ion-input type="number" name="peso" ngModel min="30" max="200" pattern="^[0-9]*$"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Edad</ion-label>
+                <ion-input type="number" name="edad" ngModel min="10" max="60" pattern="^[0-9]*$"></ion-input>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
 
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Filtros deportivos (Stats)</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item *ngFor="let stat of ['velocidad','resistencia','fuerza','agilidad','equilibrio','coordinacion','salto','controlBalon','regate','pase','tiro','cabeceo']">
+                <ion-label position="floating">{{ stat | titlecase }}</ion-label>
+                <ion-input type="number" [name]="stat" ngModel min="1" max="100" pattern="^[0-9]*$"></ion-input>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-button expand="block" type="submit" color="primary">Aplicar filtros</ion-button>
+          <ion-button expand="block" fill="clear" color="medium" (click)="modalFiltros.dismiss()">Cancelar</ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Resultados -->
   <ion-card *ngIf="resultados.length > 0">
     <ion-card-header>
       <ion-card-title>Resultados</ion-card-title>
@@ -59,8 +92,12 @@
           </ion-avatar>
           <ion-label>
             <h2>{{ r.usuario.nombre }}</h2>
-            <p>Puntaje: {{ r.puntaje }}</p>
-            <p *ngIf="r.usuario.info">Altura: {{ r.usuario.info.altura }} | Peso: {{ r.usuario.info.peso }} | Edad: {{ r.usuario.info.edad }}</p>
+            <p>Coincidencia: <b>{{ r.porcentaje }}%</b></p>
+            <p *ngIf="r.usuario.info">
+              Altura: {{ r.usuario.info && r.usuario.info.altura != null ? (r.usuario.info.altura < 3 ? (r.usuario.info.altura * 100) : r.usuario.info.altura) + ' cm' : 'N/A' }} |
+              Peso: {{ r.usuario.info && r.usuario.info.peso != null ? r.usuario.info.peso + ' kg' : 'N/A' }} |
+              Edad: {{ r.edadCalculada != null ? r.edadCalculada : 'N/A' }}
+            </p>
           </ion-label>
         </ion-item>
       </ion-list>

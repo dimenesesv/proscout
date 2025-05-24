@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NotificationService, Notification } from '../../services/notification.service';
+import { NotificacionesService } from '../../services/notificaciones.service';
 
 @Component({
   selector: 'app-tab3',
@@ -9,18 +9,16 @@ import { NotificationService, Notification } from '../../services/notification.s
 })
 export class Tab3Page {
 
-   notifications: Notification[] = [];
+  notifications: any[] = [];
 
-  constructor( private notificationService: NotificationService ) {}
+  constructor(private notificacionesService: NotificacionesService) {}
 
-  ngOnInit() {
-    this.loadNotifications();
+  async ngOnInit() {
+    await this.loadNotifications();
   }
 
-  loadNotifications() {
-    this.notificationService.getNotifications().subscribe(data => {
-      this.notifications = data;
-    });
+  async loadNotifications() {
+    this.notifications = await this.notificacionesService.getNotificacionesScouter();
   }
 
   getIcon(type: string): string {

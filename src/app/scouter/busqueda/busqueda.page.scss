@@ -1,0 +1,133 @@
+ion-card-title {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+}
+
+ion-list {
+  padding: 0;
+}
+
+ion-item {
+  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(var(--ion-text-color-rgb, 0,0,0), 0.06);
+  transition: box-shadow 0.2s;
+}
+
+ion-item:hover {
+  box-shadow: 0 4px 16px rgba(var(--ion-text-color-rgb, 0,0,0), 0.12);
+}
+
+ion-avatar img {
+  border-radius: 50%;
+  border: 2px solid var(--ion-color-primary);
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  background: var(--ion-item-background, var(--ion-background-color, #f4f4f4));
+}
+
+ion-label h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: var(--ion-text-color, #222);
+}
+
+ion-label p {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--ion-text-color, #444);
+}
+
+ion-label b {
+  color: var(--ion-color-success);
+}
+
+ion-note {
+  display: block;
+  text-align: center;
+  margin: 2rem 0 1rem 0;
+  color: var(--ion-color-medium);
+  font-size: 1.1rem;
+}
+
+ion-toolbar {
+  transition: box-shadow 0.3s, background 0.3s;
+  box-shadow: 0 2px 8px rgba(var(--ion-text-color-rgb, 0,0,0), 0.04);
+}
+
+ion-chip {
+  margin-right: 6px;
+  margin-bottom: 6px;
+  background: var(--ion-color-light-shade, #f4f4f4);
+  color: var(--ion-text-color, #222);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(var(--ion-text-color-rgb, 0,0,0), 0.08);
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.25s, transform 0.25s;
+  animation: chipIn 0.3s;
+}
+
+ion-chip.ng-leave {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+@keyframes chipIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+ion-chip ion-icon {
+  color: var(--ion-color-danger);
+  margin-left: 4px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+ion-chip ion-icon:hover {
+  color: var(--ion-color-primary);
+}
+
+ion-modal {
+  --background: var(--ion-background-color, #fff);
+  animation: modalFadeIn 0.3s;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+ion-button[expand="block"] {
+  transition: box-shadow 0.2s, background 0.2s;
+}
+ion-button[expand="block"]:active {
+  box-shadow: 0 2px 12px rgba(var(--ion-color-primary-rgb, 0,0,0), 0.18);
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  animation: fadeIn 0.4s;
+}
+.spinner-text {
+  margin-top: 1.2rem;
+  color: var(--ion-color-primary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  animation: fadeIn 0.7s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
