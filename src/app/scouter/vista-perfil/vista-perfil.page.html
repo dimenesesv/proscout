@@ -13,7 +13,7 @@
       <div class="swiper-wrapper">
         <!-- Slide 1: Perfil -->
         <div class="swiper-slide">
-          <app-perfil-card [perfilUsuario]="userData" [comuna]="userData.comuna" [ciudad]="userData.ciudad"></app-perfil-card>
+          <app-perfil-card [perfilUsuario]="userData" [jugadorId]="userId || undefined" [comuna]="userData.comuna" [ciudad]="userData.ciudad"></app-perfil-card>
         </div>
 
         <!-- Slide 2: Estadísticas -->
