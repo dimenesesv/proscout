@@ -9,11 +9,11 @@
   <ion-list *ngIf="notifications.length > 0; else noNotifications">
     <ion-item *ngFor="let notif of notifications" lines="full">
       <ion-avatar slot="start">
-        <ion-icon [name]="getIcon(notif.type)" size="large"></ion-icon>
+        <ion-icon [name]="getIcon(notif.tipo)" size="large"></ion-icon>
       </ion-avatar>
       <ion-label>
-        <h2>{{ notif.title }}</h2>
-        <p>{{ notif.message }}</p>
+        <p>{{ notif.mensaje }}</p>
+        <small *ngIf="notif.fecha">{{ notif.fecha.toDate ? (notif.fecha.toDate() | date:'medium') : (notif.fecha | date:'medium') }}</small>
       </ion-label>
     </ion-item>
   </ion-list>
