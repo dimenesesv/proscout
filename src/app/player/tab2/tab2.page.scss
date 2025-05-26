@@ -1,71 +1,99 @@
+@import 'src/theme/variables.scss';
+
+$color-surface-dark: #23232a;
+$color-primary: #ffd600;
+$color-success: #28a745;
+$color-text-main: #fff;
+$radius-lg: 20px;
+$shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
+
 .objectives-wrapper {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .progress-section {
-    text-align: center;
-    margin-bottom: 20px;
-  
-    h2 {
-      font-size: 1.4rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-  
-    .progress-text {
-      margin-top: 8px;
-      font-weight: 500;
-    }
-  }
-  
-  .cards-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .objective-card {
-    border-left: 6px solid #d3d3d3;
-    transition: 0.3s ease;
-    border-radius: 12px;
-  
-    &.completed {
-      border-left-color: #28a745;
-      background: #e6ffe6;
-    }
-  }
-  
-  .status {
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #444;
-  }
-  
-  .status-icon {
-    font-size: 24px;
-    margin-right: 8px;
-  }
-  
-  .trophy-earned {
-    margin-top: 24px;
-    text-align: center;
-    font-size: 1.3rem;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+}
+
+.progress-section {
+  text-align: center;
+  margin-bottom: 24px;
+  color: $color-text-main;
+
+  h2 {
+    font-size: 1.4rem;
+    font-family: $font-main;
     font-weight: bold;
-    color: #ffc107;
-    animation: bounce 1s infinite alternate;
+    margin-bottom: 8px;
+    color: $color-primary;
   }
-  
-  @keyframes bounce {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(-5px);
-    }
+
+  .progress-text {
+    margin-top: 8px;
+    font-weight: 500;
+    color: $color-text-main;
   }
+}
+
+.cards-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.objective-card {
+  border-left: 6px solid #d3d3d3;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  background: $color-surface-dark;
+  color: $color-text-main;
+  font-family: $font-main;
+  font-size: 1.18rem;
+  transition: box-shadow $transition-main, transform $transition-main, border-color $transition-main;
+  border: 2px solid transparent;
+
+  &:hover, &:active {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    border-color: $color-primary;
+    transform: scale(1.025) translateY(-2px);
+  }
+
+  &.completed {
+    border-left-color: $color-success;
+    background: lighten($color-surface-dark, 4%);
+  }
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.status-icon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.trophy-earned {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #ffc107;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}

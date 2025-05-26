@@ -1,33 +1,72 @@
+@import 'src/theme/variables.scss';
+
+$color-surface-dark: #23232a;
+$color-primary: #ffd600;
+$color-accent: #ff5252;
+$color-violet: #7c4dff;
+$color-text-main: #fff;
+$radius-lg: 20px;
+$shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
+
+grid-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+  padding: 1.5rem 0.5rem 2.5rem 0.5rem;
+}
+ion-list {
+  padding: 0;
+  background: transparent;
+}
+ion-item {
+  --background: $color-surface-dark;
+  border-radius: $radius-lg;
+  margin-bottom: 18px;
+  box-shadow: $shadow-card;
+  color: $color-text-main;
+  font-family: $font-main;
+  font-size: 1.18rem;
+  border: 2px solid transparent;
+  transition: box-shadow $transition-main, transform $transition-main, background $transition-main, border-color $transition-main;
+  &:hover, &:active {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    background: lighten($color-surface-dark, 3%);
+    border-color: $color-primary;
+    transform: scale(1.025) translateY(-2px);
+  }
+}
+ion-avatar img {
+  border-radius: 50%;
+  border: 2.5px solid $color-primary;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  background: $color-surface-dark;
+  box-shadow: 0 2px 8px rgba(255,214,0,0.10);
+}
+.chip {
+  background: $color-violet;
+  color: #fff;
+  border-radius: 14px;
+  padding: 0.25em 1em;
+  font-weight: 500;
+  margin: 0 0.25em 0.5em 0;
+  display: inline-block;
+  box-shadow: 0 1px 4px rgba(124,77,255,0.08);
+  transition: background $transition-main, color $transition-main;
+  &.active, &.selected {
+    background: $color-primary;
+    color: #18181b;
+  }
+}
+
 ion-card-title {
   text-align: center;
   font-size: 1.3rem;
   font-weight: 600;
   color: var(--ion-color-primary);
-}
-
-ion-list {
-  padding: 0;
-}
-
-ion-item {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
-  border-radius: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(var(--ion-text-color-rgb, 0,0,0), 0.06);
-  transition: box-shadow 0.2s;
-}
-
-ion-item:hover {
-  box-shadow: 0 4px 16px rgba(var(--ion-text-color-rgb, 0,0,0), 0.12);
-}
-
-ion-avatar img {
-  border-radius: 50%;
-  border: 2px solid var(--ion-color-primary);
-  width: 56px;
-  height: 56px;
-  object-fit: cover;
-  background: var(--ion-item-background, var(--ion-background-color, #f4f4f4));
 }
 
 ion-label h2 {

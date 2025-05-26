@@ -1,3 +1,13 @@
+@import 'src/theme/variables.scss';
+
+$color-surface-dark: #23232a;
+$color-primary: #ffd600;
+$color-text-main: #fff;
+$radius-lg: 20px;
+$shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
+
 .perfil-page {
   .swiper-container {
     width: 100%;
@@ -30,11 +40,18 @@
   object-fit: cover;
   margin: 0 auto 1rem auto;
   display: block;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(255,214,0,0.10);
+  border: 3px solid $color-primary;
+  transition: border $transition-main, box-shadow $transition-main;
 }
 
 .info-group, .info-box {
-  margin-bottom: 1rem;
+  background: lighten($color-surface-dark, 3%);
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(255,214,0,0.06);
+  padding: 0.5em 1em;
+  margin-bottom: 8px;
+  color: $color-text-main;
 }
 
 .stats-grid {
@@ -42,15 +59,23 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
-}
-.stat-item {
-  flex: 1 1 40%;
-  min-width: 120px;
-  background: #f8fafc;
-  border-radius: 12px;
-  padding: 0.7rem 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-  text-align: center;
+  .stat-item {
+    flex: 1 1 40%;
+    min-width: 120px;
+    background: $color-surface-dark;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-card;
+    color: $color-text-main;
+    font-family: $font-main;
+    font-size: 1.18rem;
+    padding: 12px;
+    text-align: center;
+    transition: box-shadow $transition-main, transform $transition-main;
+    &:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+      transform: scale(1.025) translateY(-2px);
+    }
+  }
 }
 
 .galeria-card ion-img {

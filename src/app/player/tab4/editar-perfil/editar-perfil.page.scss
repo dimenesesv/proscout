@@ -1,37 +1,91 @@
+@import 'src/theme/variables.scss';
+
+$color-surface-dark: #23232a;
+$color-primary: #ffd600;
+$color-text-main: #fff;
+$radius-lg: 20px;
+$shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
+
 .formulario-editar-perfil {
   max-width: 500px;
   margin: 2rem auto;
   padding: 0 1rem 2rem 1rem;
+  background: transparent;
 }
 
 ion-card {
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  border-radius: 18px;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  background: $color-surface-dark;
+  color: $color-text-main;
+  font-family: $font-main;
+  font-size: 1.18rem;
+  transition: box-shadow $transition-main, transform $transition-main;
+
+  &:hover, &:active {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    transform: scale(1.025) translateY(-2px);
+  }
 }
 
 ion-card-title {
   font-size: 1.2rem;
-  color: var(--ion-color-primary);
+  color: $color-primary;
+  font-family: $font-main;
   font-weight: 600;
 }
 
 ion-item {
   --background: transparent;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 0.7rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 4px rgba(255,214,0,0.06);
+  color: $color-text-main;
+  font-family: $font-main;
+  font-size: 1.08rem;
+  transition: box-shadow $transition-main, transform $transition-main;
+
+  &:hover, &:active {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    transform: scale(1.025) translateY(-2px);
+  }
 }
 
 ion-input, ion-select, ion-datetime {
-  font-size: 1rem;
+  font-size: 1.18rem;
+  background: $color-surface-dark;
+  color: $color-text-main;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  box-shadow: 0 1.5px 8px rgba(124,77,255,0.10);
+  transition: border $transition-main, box-shadow $transition-main, background $transition-main;
+
+  &:focus-within {
+    border-color: #7c4dff;
+    box-shadow: 0 2px 16px #7c4dff;
+    background: lighten($color-surface-dark, 4%);
+  }
 }
 
 ion-button[type="submit"] {
   margin-top: 1.5rem;
-  border-radius: 12px;
+  border-radius: 14px;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.18rem;
+  background: $color-primary;
+  color: #18181b;
+  font-family: $font-main;
+  box-shadow: 0 1px 4px rgba(255,214,0,0.08);
+  transition: background $transition-main, box-shadow $transition-main, color $transition-main;
+
+  &:active {
+    box-shadow: 0 2px 12px $color-primary;
+    background: darken($color-primary, 8%);
+    color: #fff;
+  }
 }
 
 .spinner-center {

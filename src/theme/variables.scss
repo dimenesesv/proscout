@@ -1,2 +1,20 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+// Material Design-inspired theme variables
+$theme-radius: 14px;
+$theme-radius-lg: 18px;
+$theme-shadow: 0 2px 8px rgba(0,0,0,0.08);
+$theme-shadow-lg: 0 4px 16px rgba(0,0,0,0.14);
+$theme-transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+$theme-primary: #3880ff;
+$theme-primary-light: #4f8cff;
+$theme-primary-dark: #2563c6;
+$theme-surface: #fff;
+$theme-background: #f4f6fb;
+$theme-chip-bg: #e3eafc;
+$theme-chip-color: #2563c6;
+$theme-success: #28a745;
+$theme-danger: #e53935;
+$theme-warning: #ffb300;
+$theme-info: #29b6f6;

@@ -1,16 +1,15 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Jugadores Cercanos</ion-title>
-  </ion-toolbar>
-  <ion-toolbar color="light" *ngIf="comuna || ciudad">
-    <ion-label class="ubicacion-label">
-      <ion-icon name="location-outline" style="margin-right:6px;"></ion-icon>
-      {{ comuna ? comuna + ',' : '' }} {{ ciudad }}
-    </ion-label>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
+<ion-content fullscreen="true">
+  <div class="custom-header ion-padding">
+    <ion-toolbar color="primary">
+      <ion-title>Jugadores Cercanos</ion-title>
+    </ion-toolbar>
+    <ion-toolbar color="light" *ngIf="comuna || ciudad">
+      <ion-label class="ubicacion-label">
+        <ion-icon name="location-outline" style="margin-right:6px;"></ion-icon>
+        {{ comuna ? comuna + ',' : '' }} {{ ciudad }}
+      </ion-label>
+    </ion-toolbar>
+  </div>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
   </ion-refresher>

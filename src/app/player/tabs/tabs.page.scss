@@ -1,1 +1,9 @@
+@import 'src/theme/variables.scss';
+
+$color-bg-dark: #18181b;
+$color-text-main: #fff;
+body, ion-app, ion-content {
+  background: $color-bg-dark !important;
+  color: $color-text-main;
+}
 

@@ -1,10 +1,39 @@
+@import 'src/theme/variables.scss';
+
+$color-surface-dark: #23232a;
+$color-danger: #ff5252;
+$color-text-main: #fff;
+$radius-lg: 20px;
+$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
+
 .error-message {
-  color: var(--ion-color-danger);
-  padding: 8px 16px;
-  margin-top: 5px;
-  font-size: 14px;
+  border-radius: $radius-lg;
+  box-shadow: 0 1px 4px rgba(255,82,82,0.08);
+  background: #2a1a1a;
+  color: $color-danger;
+  padding: 12px 20px;
+  margin-top: 10px;
+  font-size: 1.15rem;
+  font-family: $font-main;
   display: flex;
   align-items: center;
-  gap: 8px;
-  animation: fadeIn 0.3s ease;
+  gap: 10px;
+  animation: fadeIn 0.3s $transition-main;
+}
+
+ion-input {
+  background: $color-surface-dark;
+  border-radius: 14px;
+  color: $color-text-main;
+  font-size: 1.18rem;
+  border: 2px solid transparent;
+  box-shadow: 0 1.5px 8px rgba(255,82,82,0.10);
+  transition: border $transition-main, box-shadow $transition-main, background $transition-main;
+
+  &:focus-within {
+    border-color: $color-danger;
+    box-shadow: 0 2px 16px $color-danger;
+    background: lighten($color-surface-dark, 4%);
+  }
 }

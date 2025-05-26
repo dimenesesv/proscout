@@ -1,57 +1,195 @@
+@import 'src/theme/variables.scss';
+
+// Dark theme variables (override or extend as needed)
+$color-bg-dark: #18181b;
+$color-surface-dark: #23232a;
+$color-primary: #ffd600; // Vibrant yellow
+$color-accent: #ff5252; // Coral red
+$color-violet: #7c4dff; // Electric violet
+$color-fab: $color-primary;
+$color-fab-active: $color-accent;
+$color-text-main: #fff;
+$color-text-secondary: #bdbdbd;
+$radius-lg: 20px;
+$shadow-lg: 0 6px 24px rgba(0,0,0,0.28);
+$shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
+$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+
+body, ion-app, ion-content {
+  background: $color-bg-dark !important;
+  color: $color-text-main;
+  font-family: $font-main;
+}
+
 ion-list {
   padding: 0;
+  background: transparent;
 }
 
 ion-item {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
-  border-radius: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(var(--ion-text-color-rgb, 0,0,0), 0.06);
-  transition: box-shadow 0.2s;
+  --background: #23232a;
+  border-radius: $radius-lg;
+  margin-bottom: 18px;
+  box-shadow: $shadow-card;
+  transition: box-shadow $transition-main, transform $transition-main, background $transition-main;
   align-items: flex-start;
-}
-
-ion-item:hover {
-  box-shadow: 0 4px 16px rgba(var(--ion-text-color-rgb, 0,0,0), 0.12);
+  color: $color-text-main;
+  font-size: 1.18rem;
+  font-family: $font-main;
+  border: 1.5px solid transparent;
+  &:hover, &:active {
+    box-shadow: $shadow-lg;
+    background: lighten($color-surface-dark, 3%);
+    border-color: $color-primary;
+    transform: scale(1.025) translateY(-2px);
+  }
 }
 
 ion-avatar {
-  min-width: 48px;
-  min-height: 48px;
+  min-width: 56px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ion-color-light-shade, #f4f4f4);
+  background: $color-surface-dark;
   border-radius: 50%;
-  margin-right: 12px;
+  margin-right: 16px;
+  box-shadow: 0 2px 8px rgba(255,214,0,0.10);
+  border: 2.5px solid $color-primary;
 }
 
 ion-icon {
-  color: var(--ion-color-primary);
-  font-size: 2.1rem;
+  color: $color-primary;
+  font-size: 2.4rem;
+  filter: drop-shadow(0 2px 4px rgba(255,214,0,0.18));
 }
 
 ion-label {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-family: $font-main;
+  font-size: 1.18rem;
+  color: $color-text-main;
+  letter-spacing: 0.02em;
 }
 
 ion-label p {
   margin: 0 0 2px 0;
-  font-size: 1.08rem;
-  color: var(--ion-text-color, #222);
-  font-weight: 500;
+  font-size: 1.22rem;
+  color: $color-text-main;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.18);
 }
 
 ion-label small {
-  color: var(--ion-color-medium);
-  font-size: 0.93rem;
+  color: $color-text-secondary;
+  font-size: 1.01rem;
   margin-top: 2px;
 }
 
 .ion-text-center {
   text-align: center;
-  color: var(--ion-color-medium);
-  margin-top: 2rem;
+  color: $color-text-secondary;
+  margin-top: 2.5rem;
+  font-size: 1.15rem;
+}
+
+// Floating Action Button (FAB)
+.fab-add {
+  position: fixed;
+  right: 24px;
+  bottom: 32px;
+  z-index: 100;
+  width: 64px;
+  height: 64px;
+  background: $color-fab;
+  color: #18181b;
+  border-radius: 50%;
+  box-shadow: 0 6px 24px rgba(255,214,0,0.22), 0 2px 8px rgba(0,0,0,0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  transition: background $transition-main, transform $transition-main, box-shadow $transition-main, opacity $transition-main;
+  cursor: pointer;
+  opacity: 0.98;
+  &:active {
+    background: $color-fab-active;
+    color: #fff;
+    transform: scale(0.93);
+    opacity: 0.85;
+    box-shadow: 0 2px 12px $color-accent;
+  }
+}
+
+// Gallery grid for notifications or profiles
+.grid-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+  padding: 1.5rem 0.5rem 2.5rem 0.5rem;
+}
+
+// Animated card entrance
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.96) translateY(24px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+ion-item, .profile-card {
+  animation: cardIn 0.5s $transition-main;
+}
+
+// Tab bar styling
+ion-tab-bar {
+  background: $color-surface-dark !important;
+  border-top: 2.5px solid $color-primary;
+  box-shadow: 0 -2px 12px rgba(255,214,0,0.10);
+  padding-bottom: env(safe-area-inset-bottom);
+  ion-tab-button {
+    color: $color-text-secondary;
+    font-size: 1.5rem;
+    font-family: $font-main;
+    transition: color $transition-main, background $transition-main;
+    &.tab-selected {
+      color: $color-primary;
+      background: rgba(255,214,0,0.08);
+      border-radius: 16px 16px 0 0;
+      font-size: 1.7rem;
+      box-shadow: 0 -2px 8px $color-primary;
+    }
+    ion-icon {
+      font-size: 2.2rem;
+    }
+  }
+}
+
+// Inputs and forms
+ion-input, ion-textarea, ion-select, ion-datetime {
+  background: $color-surface-dark;
+  border-radius: 14px;
+  color: $color-text-main;
+  font-size: 1.18rem;
+  border: 2px solid transparent;
+  box-shadow: 0 1.5px 8px rgba(124,77,255,0.10);
+  transition: border $transition-main, box-shadow $transition-main, background $transition-main;
+  &:focus-within {
+    border-color: $color-violet;
+    box-shadow: 0 2px 16px $color-violet;
+    background: lighten($color-surface-dark, 4%);
+  }
+}
+
+// Touch-friendly tap zones
+ion-item, .profile-card, .fab-add, ion-tab-button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255,214,0,0.18);
+}
+
+// Hide scrollbars for a cleaner look
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }

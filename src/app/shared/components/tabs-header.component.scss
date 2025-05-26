@@ -1,19 +1,37 @@
+@import 'src/theme/variables.scss';
+
+$color-surface-dark: #23232a;
+$color-primary: #ffd600;
+$color-text-main: #fff;
+$radius-lg: 20px;
+$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
+
 .tabs-header {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 .tabs-header button {
-  background: none;
+  background: $color-surface-dark;
   border: none;
-  font-size: 1rem;
-  padding: 8px 16px;
-  border-radius: 6px;
+  font-size: 1.18rem;
+  font-family: $font-main;
+  color: $color-text-main;
+  padding: 12px 24px;
+  border-radius: $radius-lg;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background $transition-main, color $transition-main, box-shadow $transition-main;
+  box-shadow: 0 1px 4px rgba(255,214,0,0.08);
+  &:hover, &:focus {
+    background: $color-primary;
+    color: #18181b;
+    box-shadow: 0 2px 12px $color-primary;
+  }
 }
 .tabs-header button.active {
-  background: #3880ff;
-  color: #fff;
+  background: $color-primary;
+  color: #18181b;
+  box-shadow: 0 2px 12px $color-primary;
 }
