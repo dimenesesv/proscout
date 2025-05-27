@@ -1,5 +1,6 @@
 @import 'src/theme/variables.scss';
 
+
 $color-surface-dark: #23232a;
 $color-primary: #ffd600;
 $color-text-main: #fff;
@@ -22,7 +23,7 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
   background: $color-surface-dark;
-  color: $color-text-main;
+  color: #000;
   font-family: $font-main;
   font-size: 1.18rem;
   padding: 1.2rem 1rem;

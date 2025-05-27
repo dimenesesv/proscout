@@ -2,5 +2,9 @@
   "typescript.preferences.autoImportFileExcludePatterns": [
     "@ionic/angular/common",
     "@ionic/angular/standalone"
-  ]
+  ],
+  "github.copilot.advanced": {
+    "authPermissions": "default"
+
+  }
 }
