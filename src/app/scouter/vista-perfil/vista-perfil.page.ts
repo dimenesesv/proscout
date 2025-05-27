@@ -50,11 +50,39 @@ export class VistaPerfilPage implements OnInit {
     }
   }
 
-goBack() {
-  console.log('Intentando navegar a /scouter/scouter/mapa');
-  this.router.navigate(['/scouter/scouter/mapa']).then(ok => {
-    console.log('Navegación completada:', ok);
-  });
-}
+  goBack() {
+    console.log('Intentando navegar a /scouter/scouter/mapa');
+    this.router.navigate(['/scouter/scouter/mapa']).then(ok => {
+      console.log('Navegación completada:', ok);
+    });
+  }
+
+  async agregarAFavoritos(scouterUid: string, jugadorUid: string) {
+    // Actualiza favoritos del scouter (asumiendo que ya tienes esta lógica)
+    const db = (await import('firebase/firestore')).getFirestore();
+    const scouterRef = (await import('firebase/firestore')).doc(db, 'scouters', scouterUid);
+    const scouterSnap = await (await import('firebase/firestore')).getDoc(scouterRef);
+    let favoritos: string[] = [];
+    if (scouterSnap.exists()) {
+      const data = scouterSnap.data() as any;
+      favoritos = Array.isArray(data.favoritos) ? data.favoritos : [];
+    }
+    if (!favoritos.includes(jugadorUid)) {
+      favoritos.push(jugadorUid);
+      await (await import('firebase/firestore')).updateDoc(scouterRef, { favoritos });
+    }
+    // --- NUEVO: Actualiza favoritos del jugador ---
+    const jugadorRef = (await import('firebase/firestore')).doc(db, 'usuarios', jugadorUid);
+    const jugadorSnap = await (await import('firebase/firestore')).getDoc(jugadorRef);
+    let favoritosJugador: string[] = [];
+    if (jugadorSnap.exists()) {
+      const data = jugadorSnap.data() as any;
+      favoritosJugador = Array.isArray(data.favoritos) ? data.favoritos : [];
+    }
+    if (!favoritosJugador.includes(scouterUid)) {
+      favoritosJugador.push(scouterUid);
+      await (await import('firebase/firestore')).updateDoc(jugadorRef, { favoritos: favoritosJugador });
+    }
+  }
 
 }

@@ -1,40 +1,140 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Objetivos Semanales</ion-title>
+    <ion-title>Logros y Trofeos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="objectives-wrapper">
-
-    <div class="progress-section">
-      <h2>Progreso Semanal</h2>
-      <ion-progress-bar [value]="progress" color="success"></ion-progress-bar>
-      <p class="progress-text">{{ progress * 100 | number: '1.0-0' }}% Completado</p>
-    </div>
-
-    <div class="cards-container">
-      <ion-card *ngFor="let objetivo of objetivos" class="objective-card" [class.completed]="objetivo.completado">
-        <ion-card-header>
-          <ion-card-title>{{ objetivo.texto }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="status">
-            <ion-icon
-              [name]="objetivo.completado ? 'checkmark-circle' : 'ellipse-outline'"
-              slot="start"
-              class="status-icon"
-              color="success"
-            ></ion-icon>
-            <span>{{ objetivo.completado ? 'Completado' : 'Pendiente' }}</span>
+  <div class="achievements-wrapper">
+    <!-- Card: Progreso de Favoritos -->
+    <ion-card class="achievement-card animated-card" (click)="toggleFavoritosProgreso()">
+      <ion-card-header>
+        <ion-card-title>Desafío: ¡Consigue 10 favoritos!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="descripcion-desafio">Haz que 10 scouters te agreguen a favoritos para obtener la copa dorada.</div>
+        <div class="progress-section">
+          <ion-progress-bar [value]="favoritosCount / 10" class="animated-bar"></ion-progress-bar>
+          <p class="progress-text">{{ favoritosCount }} / 10 favoritos añadidos</p>
+          <div class="trophy-visual">
+            <ion-icon name="trophy" class="trophy-icon animated-trophy" [class.trophy-earned]="favoritosCount >= 10"></ion-icon>
+            <span class="trophy-label" [class.trophy-earned]="favoritosCount >= 10">
+              {{ favoritosCount >= 10 ? '¡Desafío completado!' : 'Añade más favoritos para ganar la copa'}}
+            </span>
           </div>
-        </ion-card-content>
-      </ion-card>
-    </div>
+          <div *ngIf="showFavoritosProgreso" class="progreso-detalle">
+            <ion-list>
+              <ion-item>
+                <ion-label>Progreso actual: {{ favoritosCount }} de 10 favoritos</ion-label>
+              </ion-item>
+              <ion-item *ngIf="favoritosCount < 10">
+                <ion-label>¡Te faltan {{ 10 - favoritosCount }} para la copa!</ion-label>
+              </ion-item>
+              <ion-item *ngIf="favoritosCount >= 10">
+                <ion-label>¡Has conseguido la copa de favoritos!</ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+          <div class="avance-porcentaje" [ngClass]="{'completo': favoritosCount >= 10}">
+            <span>{{ porcentajeFavoritos }}% completado</span>
+          </div>
+          <ion-button expand="block" fill="outline" color="warning" (click)="$event.stopPropagation(); irASeccion('favoritos')">Ver scouters</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
-    <div *ngIf="trofeoObtenido" class="trophy-earned">
-      🏆 ¡Has completado todos los objetivos!
-    </div>
+    <!-- Card: Trofeo por completar perfil -->
+    <ion-card class="achievement-card animated-card" (click)="togglePerfilProgreso()">
+      <ion-card-header>
+        <ion-card-title>Desafío: Completa tu perfil</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="descripcion-desafio">Completa todos los campos de tu perfil para que los scouters te conozcan mejor.</div>
+        <div class="trophy-visual">
+          <ion-icon name="trophy" class="trophy-icon animated-trophy" [class.trophy-earned]="perfilCompleto"></ion-icon>
+          <span class="trophy-label" [class.trophy-earned]="perfilCompleto">
+            {{ perfilCompleto ? '¡Desafío completado!' : 'Completa tu perfil para ganar la copa'}}
+          </span>
+        </div>
+        <div *ngIf="showPerfilProgreso" class="progreso-detalle">
+          <ion-list>
+            <ion-item *ngIf="!perfilCompleto">
+              <ion-label>Completa todos los campos obligatorios de tu perfil para obtener la copa.</ion-label>
+            </ion-item>
+            <ion-item *ngIf="perfilCompleto">
+              <ion-label>¡Has conseguido la copa de perfil completo!</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div class="avance-porcentaje" [ngClass]="{'completo': perfilCompleto}">
+          <span>{{ porcentajePerfil }}% completado</span>
+        </div>
+        <ion-button expand="block" fill="outline" color="primary" (click)="$event.stopPropagation(); irASeccion('perfil')">Completar perfil</ion-button>
+      </ion-card-content>
+    </ion-card>
 
+    <!-- Card: Trofeo por subir 3 fotos -->
+    <ion-card class="achievement-card animated-card" (click)="toggleFotosProgreso()">
+      <ion-card-header>
+        <ion-card-title>Desafío: Sube 3 fotos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="descripcion-desafio">Sube al menos 3 fotos a tu galería para mostrar tu talento y ganar la copa.</div>
+        <div class="trophy-visual">
+          <ion-icon name="trophy" class="trophy-icon animated-trophy" [class.trophy-earned]="fotosCount >= 3"></ion-icon>
+          <span class="trophy-label" [class.trophy-earned]="fotosCount >= 3">
+            {{ fotosCount >= 3 ? '¡Desafío completado!' : 'Sube 3 fotos para ganar la copa'}}
+          </span>
+        </div>
+        <div *ngIf="showFotosProgreso" class="progreso-detalle">
+          <ion-list>
+            <ion-item>
+              <ion-label>Progreso actual: {{ fotosCount }} de 3 fotos</ion-label>
+            </ion-item>
+            <ion-item *ngIf="fotosCount < 3">
+              <ion-label>¡Te faltan {{ 3 - fotosCount }} fotos para la copa!</ion-label>
+            </ion-item>
+            <ion-item *ngIf="fotosCount >= 3">
+              <ion-label>¡Has conseguido la copa de fotos!</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div class="avance-porcentaje" [ngClass]="{'completo': fotosCount >= 3}">
+          <span>{{ porcentajeFotos }}% completado</span>
+        </div>
+        <ion-button expand="block" fill="outline" color="tertiary" (click)="$event.stopPropagation(); irASeccion('galeria')">Empezar</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Card: Trofeo por subir primer video -->
+    <ion-card class="achievement-card animated-card" (click)="toggleVideoProgreso()">
+      <ion-card-header>
+        <ion-card-title>Desafío: Sube tu primer video</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="descripcion-desafio">Sube tu primer video para que los scouters vean tu juego en acción y gana la copa.</div>
+        <div class="trophy-visual">
+          <ion-icon name="trophy" class="trophy-icon animated-trophy" [class.trophy-earned]="primerVideoSubido"></ion-icon>
+          <span class="trophy-label" [class.trophy-earned]="primerVideoSubido">
+            {{ primerVideoSubido ? '¡Desafío completado!' : 'Sube tu primer video para ganar la copa'}}
+          </span>
+        </div>
+        <div *ngIf="showVideoProgreso" class="progreso-detalle">
+          <ion-list>
+            <ion-item *ngIf="!primerVideoSubido">
+              <ion-label>Sube tu primer video para obtener la copa.</ion-label>
+            </ion-item>
+            <ion-item *ngIf="primerVideoSubido">
+              <ion-label>¡Has conseguido la copa de video!</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div class="avance-porcentaje" [ngClass]="{'completo': primerVideoSubido}">
+          <span>{{ porcentajeVideo }}% completado</span>
+        </div>
+        <ion-button expand="block" fill="outline" color="success" (click)="$event.stopPropagation(); irASeccion('video')">Subir video</ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>
+

@@ -3,7 +3,7 @@ import { FirebaseService } from '../../services/firebase.service';
 import { StorageService } from '../../services/storage.service';
 import { LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import Swiper from 'swiper';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { Capacitor } from '@capacitor/core';
@@ -26,15 +26,29 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   swiper: Swiper | undefined;
   cargando: boolean = true;
 
+  autoOpenGaleria: boolean = false;
+  autoOpenVideo: boolean = false;
+
   constructor(
     private firebaseService: FirebaseService,
     private storageService: StorageService,
     private loadingController: LoadingController,
     private router: Router,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private route: ActivatedRoute
   ) {}
 
   async ngOnInit() {
+    // Leer el parámetro de la pestaña activa (galería) y autoOpen
+    this.route.queryParams.subscribe(params => {
+      const tab = Number(params['tab']);
+      if (!isNaN(tab)) {
+        this.activeTab = tab;
+      }
+      this.autoOpenGaleria = params['autoOpen'] === 'true' || params['autoOpen'] === true;
+      this.autoOpenVideo = params['video'] === 'true' || params['video'] === true;
+    });
+
     let userId: string | undefined;
 
     if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
@@ -74,6 +88,20 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     this.swiper.on('slideChange', () => {
       this.activeTab = this.swiper?.activeIndex || 0;
     });
+
+    // Si hay que abrir la galería automáticamente
+    setTimeout(() => {
+      // Forzar el slide a galería si autoOpenGaleria está activo
+      if (this.autoOpenGaleria) {
+        this.slideTo(2);
+        setTimeout(() => {
+          const galeriaCard: any = document.querySelector('app-galeria-card ion-button');
+          if (galeriaCard) {
+            galeriaCard.click();
+          }
+        }, 300);
+      }
+    }, 300);
   }
 
   ngOnDestroy() {
