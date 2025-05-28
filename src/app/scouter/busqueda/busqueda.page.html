@@ -1,9 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>busqueda</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -86,7 +80,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-        <ion-item *ngFor="let r of resultados">
+        <ion-item *ngFor="let r of pagedResultados">
           <ion-avatar slot="start">
             <img [src]="r.usuario.fotoPerfil || 'assets/default-profile.png'" />
           </ion-avatar>
@@ -101,6 +95,9 @@
           </ion-label>
         </ion-item>
       </ion-list>
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más resultados..."></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </ion-card-content>
   </ion-card>
   <ion-note *ngIf="resultados.length === 0">No hay resultados para los filtros seleccionados.</ion-note>

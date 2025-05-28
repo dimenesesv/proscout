@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Usuario } from 'src/app/interfaces/usuario';
+import { VistaPerfilPage } from '../vista-perfil/vista-perfil.page';
+import { ActivatedRoute } from '@angular/router';
 declare var google: any;
 
 @Component({
@@ -25,13 +27,15 @@ export class MapaPage implements OnInit {
   locationLabel: string = 'Mi ubicación';
   comuna: string = '';
   ciudad: string = '';
+  isLoading: boolean = true;
 
   constructor(
     private ngZone: NgZone,
     private modalCtrl: ModalController,
     private firebaseService: FirebaseService,
     private router: Router,
-    private afAuth: AngularFireAuth // <--- agregado
+    private afAuth: AngularFireAuth, // <--- agregado
+    private route: ActivatedRoute // <--- inyectar ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -39,27 +43,69 @@ export class MapaPage implements OnInit {
     // Solo inicializaciones básicas aquí si es necesario
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    this.isLoading = true;
     console.log('[MapaPage] ionViewWillEnter');
-    this.guardarUbicacionSiEsPosible();
-    this.loadUsers();
-    this.getCurrentLocation();
+    this.resetMapaState();
+    try {
+      await this.guardarUbicacionSiEsPosible();
+    } catch (e) {
+      console.warn('[MapaPage] Error en guardarUbicacionSiEsPosible', e);
+    }
+    try {
+      await this.getCurrentLocation();
+    } catch (e) {
+      console.warn('[MapaPage] Error en getCurrentLocation', e);
+    }
+    try {
+      await this.loadUsers();
+    } catch (e) {
+      console.warn('[MapaPage] Error en loadUsers', e);
+    }
+    this.isLoading = false;
+  }
+
+  ionViewDidLeave() {
+    // Limpia recursos, listeners, timers, etc. si es necesario
+    this.cleanMapaResources();
+    console.log('[MapaPage] ionViewDidLeave: recursos limpiados');
+  }
+
+  /**
+   * Limpia el estado visual y de datos del mapa para evitar quedarse pegado
+   */
+  private resetMapaState() {
+    this.users = [];
+    this.comuna = '';
+    this.ciudad = '';
+    this.locationLabel = 'Mi ubicación';
+    this.currentLocation = { lat: 19.4326, lng: -99.1332 };
+    // Si usas Google Maps, destruye el mapa aquí si es necesario
+    // Si usas otros recursos visuales, reinícialos aquí
+  }
+
+  /**
+   * Limpia recursos globales, listeners, timers, mapas, etc.
+   */
+  private cleanMapaResources() {
+    this.users = [];
+    // Si tienes timers globales, límpialos aquí
+    // Si usas listeners de mapas, remuévelos aquí
+    // Si usas Swiper u otros plugins, destrúyelos aquí
+    // Si usas Google Maps, destrúyelo aquí
   }
 
   async getCurrentLocation() {
     console.log('[MapaPage] getCurrentLocation INICIO');
     try {
       const position = await Geolocation.getCurrentPosition();
-      this.ngZone.run(async () => {
-        this.currentLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        this.locationLabel = 'Mi ubicación';
-        await this.obtenerComunaCiudad(this.currentLocation.lat, this.currentLocation.lng);
-        this.updateUserDistances();
-        console.log('[MapaPage] getCurrentLocation OK', this.currentLocation);
-      });
+      this.currentLocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+      this.locationLabel = 'Mi ubicación';
+      await this.obtenerComunaCiudad(this.currentLocation.lat, this.currentLocation.lng);
+      console.log('[MapaPage] getCurrentLocation OK', this.currentLocation);
     } catch (err) {
       console.warn('[MapaPage] ❌ Error al obtener ubicación:', err);
       // Si falla la ubicación, usa la ubicación predeterminada (CDMX)
@@ -70,7 +116,6 @@ export class MapaPage implements OnInit {
     console.log('[MapaPage] loadUsers INICIO');
     try {
       const allUsers = await this.firebaseService.getCollection('usuarios');
-      // Filtra usuarios con ubicación válida (lat/lng numéricos) y agrega campos lat/lng
       this.users = allUsers
         .filter((u: any) =>
           u.ubicacion &&
@@ -82,8 +127,8 @@ export class MapaPage implements OnInit {
           lat: u.ubicacion.latitude,
           lng: u.ubicacion.longitude,
         }));
-      console.log('[MapaPage] loadUsers OK', this.users);
       this.updateUserDistances();
+      console.log('[MapaPage] loadUsers OK', this.users);
     } catch (e) {
       this.users = [];
       this.updateUserDistances();
@@ -136,9 +181,10 @@ export class MapaPage implements OnInit {
     return deg * (Math.PI / 180);
   }
 
-  verPerfil(user: any) {
+  async verPerfil(user: any) {
     console.log('[MapaPage] verPerfil', user);
-    this.router.navigate(['/vista-perfil', user.id]);
+    // Navega correctamente dentro del contexto de tabs
+    this.router.navigate(['../vista-perfil', user.id], { relativeTo: this.route });
   }
 
   async doRefresh(event: any) {

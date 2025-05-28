@@ -24,11 +24,17 @@ const routes: Routes = [
       },
       {
         path: 'perfil',
-        loadChildren: () => import('../perfil/perfil.module').then( m => m.PerfilPageModule)
+        loadChildren: () => import('../perfil/perfil.module').then(m => m.PerfilPageModule)
       },
       {
         path: 'busqueda',
         loadChildren: () => import('../busqueda/busqueda.module').then(m => m.BusquedaPageModule)
+      },
+      {
+        path: 'vista-perfil/:id',
+        loadChildren: () => import('../vista-perfil/vista-perfil.module').then(m => m.VistaPerfilPageModule),
+        // Importante: forzar recarga del componente al navegar a otro id
+        data: { shouldDetach: false }
       },
       {
         path: '',

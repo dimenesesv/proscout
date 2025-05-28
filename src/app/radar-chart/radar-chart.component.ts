@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
@@ -9,18 +9,34 @@ Chart.register(...registerables);
   styleUrls: ['./radar-chart.component.scss'],
   standalone: true
 })
-export class RadarChartComponent implements AfterViewInit {
+export class RadarChartComponent implements AfterViewInit, OnDestroy, OnChanges {
   @ViewChild('radarCanvas') radarCanvas!: ElementRef<HTMLCanvasElement>;
   @Input() labels: string[] = [];
   @Input() data: number[] = [];
 
-  radarChart!: Chart;
+  radarChart: Chart | null = null;
 
   ngAfterViewInit() {
-    this.createChart();
+    setTimeout(() => this.createChart(), 0);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.radarChart) {
+      this.radarChart.destroy();
+      this.radarChart = null;
+    }
+    setTimeout(() => this.createChart(), 0);
+  }
+
+  ngOnDestroy() {
+    if (this.radarChart) {
+      this.radarChart.destroy();
+      this.radarChart = null;
+    }
   }
 
   createChart() {
+    if (!this.radarCanvas || !this.radarCanvas.nativeElement) return;
     this.radarChart = new Chart(this.radarCanvas.nativeElement, {
       type: 'radar',
       data: {

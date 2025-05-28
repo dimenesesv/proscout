@@ -19,6 +19,11 @@ export class BusquedaPage implements OnInit {
   @ViewChild('modalFiltros') modalFiltros!: IonModal;
   cargandoUsuarios = false;
 
+  // Infinite scroll support
+  page = 1;
+  pageSize = 10;
+  pagedResultados: { usuario: Usuario; puntaje: number; porcentaje: number; edadCalculada?: number }[] = [];
+
   // Diccionario para mostrar nombres bonitos en los chips
   filtroLabels: { [key: string]: string } = {
     altura: 'Altura', peso: 'Peso', edad: 'Edad',
@@ -37,6 +42,8 @@ export class BusquedaPage implements OnInit {
     this.cargandoUsuarios = true;
     this.usuarios = await this.firebaseService.getCollection('playground');
     this.cargandoUsuarios = false;
+    this.page = 1;
+    this.updatePagedResultados();
   }
 
   async buscarPorProximidad(filtros: Partial<Info & Stats>) {
@@ -134,6 +141,22 @@ export class BusquedaPage implements OnInit {
       .filter(r => r.puntaje > 0)
       // 4. Ordena los resultados de mayor a menor puntaje (más cercanos primero)
       .sort((a, b) => b.puntaje - a.puntaje);
+    this.page = 1;
+    this.updatePagedResultados();
+  }
+
+  updatePagedResultados() {
+    this.pagedResultados = this.resultados.slice(0, this.page * this.pageSize);
+  }
+
+  loadMore(event: any) {
+    this.page++;
+    this.updatePagedResultados();
+    event.target.complete();
+    // Si ya no hay más resultados para cargar, deshabilita el infinite scroll
+    if (this.pagedResultados.length >= this.resultados.length) {
+      event.target.disabled = true;
+    }
   }
 
   abrirModalFiltros() {

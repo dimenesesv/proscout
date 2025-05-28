@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { PushNotifications, Token } from '@capacitor/push-notifications';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { register } from 'swiper/element/bundle';
+
+register();
 
 @Component({
   selector: 'app-root',
@@ -11,6 +14,11 @@ import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 })
 export class AppComponent {
   constructor(private afAuth: AngularFireAuth, private firestore: Firestore) {
+    // Force light mode globally for all pages
+    if (typeof document !== 'undefined') {
+      document.body.classList.remove('dark');
+      document.body.classList.add('light');
+    }
     this.afAuth.authState.subscribe(user => {
       if (user) {
         console.log('Usuario sigue logueado:', user.email);

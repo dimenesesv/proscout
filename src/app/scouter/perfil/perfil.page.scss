@@ -1,0 +1,210 @@
+ion-content.profile-content {
+  --background: #18394a;
+}
+
+.profile-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem; // Reduced gap between photo and slider
+  margin: 2rem 0 0 0;
+  padding-left: 5vw;
+  padding-right: 5vw;
+}
+
+swiper-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  margin-top: 0; // Removed top margin to bring it closer to the photo
+}
+
+.profile-photo-card-square {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1/1;
+  box-shadow: none;
+  border-radius: 0.7rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  background: var(--ion-card-background, #e3f2fd);
+}
+.profile-photo-image-square {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  border-radius: 0;
+  display: block;
+}
+
+.profile-info-card-modern {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  background: var(--ion-card-background, #e3f2fd) !important;
+  color: var(--ion-text-color, #1a2329);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.profile-header-info {
+  text-align: center;
+  margin-bottom: 0.7rem;
+}
+.profile-name {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.2rem;
+  color: var(--ion-text-color, #1a2329);
+}
+.profile-age {
+  font-size: 1.1rem;
+  color: var(--ion-color-step-600, #b3c7d6);
+  margin-bottom: 0.7rem;
+}
+.profile-details {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.profile-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 1.05rem;
+  color: var(--ion-color-step-200, #e0eaf1);
+  margin-bottom: 0.3em;
+}
+.profile-detail-row ion-icon {
+  font-size: 1.2em;
+  color: var(--ion-color-primary, #4FC3F7);
+}
+.bio-text {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.08rem;
+  color: var(--ion-text-color, #1a2329);
+  background: var(--ion-color-step-100, #e3f2fd);
+  border-radius: 1rem;
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  width: 100%;
+}
+ion-button {
+  font-size: 1.08rem;
+  border-radius: 2rem;
+  --box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  --background: var(--ion-color-primary, #4FC3F7);
+  --color: var(--ion-color-primary-contrast, #fff);
+}
+.no-profile-msg {
+  text-align: center;
+  margin-top: 3rem;
+  color: var(--ion-color-step-600, #b3c7d6);
+  font-size: 1.2rem;
+}
+
+.profile-info-swiper {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+.swiper-container {
+  width: 100%;
+  height: auto;
+}
+.swiper-wrapper {
+  display: flex;
+}
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+.info-card-slide, .extra-card-slide {
+  width: 100%;
+  max-width: 480px;
+  min-height: 320px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(40px);
+}
+.extra-card-content {
+  text-align: center;
+  padding: 2rem 0.5rem 1.5rem 0.5rem;
+}
+.swiper-pagination {
+  margin-top: 0.5rem;
+}
+
+// Animación de entrada con anime.js
+.swiper-slide-active .info-card-slide,
+.swiper-slide-active .extra-card-slide {
+  animation: fadeInUpCard 0.7s cubic-bezier(.23,1.01,.32,1) forwards;
+}
+@keyframes fadeInUpCard {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .profile-card-container {
+    padding-left: 2vw;
+    padding-right: 2vw;
+  }
+  swiper-container {
+    padding-left: 2vw;
+    padding-right: 2vw;
+  }
+  .profile-info-card-modern {
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+  }
+  .profile-photo-card-square {
+    max-width: 100vw;
+  }
+}
+
+:host ::ng-deep .profile-info-card-modern,
+:host ::ng-deep .profile-photo-card-square {
+  background: var(--ion-card-background, #e3f2fd) !important;
+  color: var(--ion-text-color, #1a2329) !important;
+}
+:host ::ng-deep .bio-text {
+  color: var(--ion-text-color, #1a2329) !important;
+  background: var(--ion-color-step-100, #e3f2fd) !important;
+}
+
+.profile-info-card-modern,
+.profile-name {
+  color: #fff !important;
+}

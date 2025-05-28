@@ -1,35 +1,55 @@
 <ion-header>
   <ion-toolbar>
     <ion-title class="text-center">{{ userData ? userData.nombre : '-' }}</ion-title>
-    <ion-button *ngIf="userData" (click)="goBack()">Volver</ion-button>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="userData && isModal" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="userData && !isModal" [disabled]="!userData" (click)="goBack()">Volver</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="perfil-page">
-  <ion-spinner *ngIf="!userData" name="crescent" class="spinner-center"></ion-spinner>
-  <ng-container *ngIf="userData">
-    <div class="swiper-container">
-      <app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></app-tabs-header>
-      <div class="swiper-wrapper">
-        <!-- Slide 1: Perfil -->
-        <div class="swiper-slide">
-          <app-perfil-card [perfilUsuario]="userData" [jugadorId]="userId || undefined" [comuna]="userData.comuna" [ciudad]="userData.ciudad"></app-perfil-card>
-        </div>
-
-        <!-- Slide 2: Estadísticas -->
-        <div class="swiper-slide">
-          <ion-card>
-            <ion-card-content>
-              <app-estadisticas-card [perfilUsuario]="userData"></app-estadisticas-card>
-            </ion-card-content>
-          </ion-card>
-        </div>
-
-        <!-- Slide 3: Galería -->
-        <div class="swiper-slide">
-          <app-galeria-card [galleryUrls]="userData.galeria || []"></app-galeria-card>
+  <ion-spinner *ngIf="isLoading" name="crescent" class="spinner-center"></ion-spinner>
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="userData && !errorMsg">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <!-- Slide 1: Perfil -->
+          <div class="swiper-slide">
+            <app-perfil-card
+              [perfilUsuario]="userData"
+              [comuna]="userData.comuna"
+              [ciudad]="userData.ciudad"
+              (error)="perfilCardError = true"
+              *ngIf="!perfilCardError"
+            ></app-perfil-card>
+            <ion-card *ngIf="perfilCardError">
+              <ion-card-content color="danger">Error al cargar el perfil.</ion-card-content>
+            </ion-card>
+          </div>
+          <!-- Slide 2: Estadísticas -->
+          <div class="swiper-slide">
+            <app-estadisticas-card
+              [perfilUsuario]="userData"
+              (error)="estadisticasCardError = true"
+              *ngIf="!estadisticasCardError"
+            ></app-estadisticas-card>
+            <ion-note *ngIf="estadisticasCardError" color="danger">Error al cargar estadísticas.</ion-note>
+          </div>
+          <!-- Slide 3: Galería -->
+          <div class="swiper-slide">
+            <app-galeria-card
+              [galleryUrls]="userData.galeria"
+              *ngIf="!galeriaCardError"
+              (error)="galeriaCardError = true"
+            ></app-galeria-card>
+            <ion-note *ngIf="galeriaCardError" color="danger">Error al cargar galería.</ion-note>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
+    <div *ngIf="errorMsg" class="error-center">{{ errorMsg }}</div>
   </ng-container>
 </ion-content>

@@ -43,6 +43,7 @@ export class StorageService {
 
   /**
    * Sube una imagen a la galería del usuario, actualiza Firestore y retorna la galería actualizada.
+   * Usa arrayUnion si está disponible para evitar duplicados y condiciones de carrera.
    */
   async uploadUserGalleryImage(
     userId: string,
@@ -52,12 +53,23 @@ export class StorageService {
   ): Promise<string[]> {
     const filePath = `usuarios/${userId}/gallery/${Date.now()}_${file.name}`;
     const downloadUrl = await this.uploadImageAndGetUrl(filePath, file, onProgress);
-    // Recarga la galería desde Firestore para evitar duplicados y asegurar sincronía
-    const userDoc = await firebaseService.getDocument(`usuarios/${userId}`);
-    let gallery: string[] = Array.isArray(userDoc?.gallery) ? userDoc.gallery : [];
-    gallery.push(downloadUrl);
-    // Actualiza Firestore
-    await firebaseService.updateDocument(`usuarios/${userId}`, { gallery });
-    return gallery;
+    // Intenta usar arrayUnion si está disponible
+    if (firebaseService.arrayUnion) {
+      await firebaseService.updateDocument(`usuarios/${userId}`, {
+        gallery: firebaseService.arrayUnion(downloadUrl)
+      });
+      // Recarga la galería real desde Firestore
+      const userDoc = await firebaseService.getDocument(`usuarios/${userId}`);
+      return Array.isArray(userDoc?.gallery) ? userDoc.gallery : [];
+    } else {
+      // Fallback: recarga, agrega y actualiza (puede causar duplicados si hay concurrencia)
+      const userDoc = await firebaseService.getDocument(`usuarios/${userId}`);
+      let gallery: string[] = Array.isArray(userDoc?.gallery) ? userDoc.gallery : [];
+      if (!gallery.includes(downloadUrl)) {
+        gallery.push(downloadUrl);
+        await firebaseService.updateDocument(`usuarios/${userId}`, { gallery });
+      }
+      return gallery;
+    }
   }
 }

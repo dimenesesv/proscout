@@ -1,34 +1,40 @@
-<ion-content fullscreen="true">
-  <div class="custom-header ion-padding">
-    <ion-toolbar color="primary">
-      <ion-title>Jugadores Cercanos</ion-title>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Jugadores Cercanos</ion-title>
     </ion-toolbar>
-    <ion-toolbar color="light" *ngIf="comuna || ciudad">
-      <ion-label class="ubicacion-label">
-        <ion-icon name="location-outline" style="margin-right:6px;"></ion-icon>
-        {{ comuna ? comuna + ',' : '' }} {{ ciudad }}
-      </ion-label>
-    </ion-toolbar>
+  </ion-header>
+
+  <div *ngIf="comuna || ciudad" style="display: flex; justify-content: center; margin-top: 0.5rem;">
+    <ion-chip color="primary" style="font-size:1.08rem; font-weight:600;">
+      <ion-icon name="location-outline" style="margin-right:6px;"></ion-icon>
+      <ion-label>{{ comuna ? comuna + ',' : '' }} {{ ciudad }}</ion-label>
+    </ion-chip>
   </div>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
-  </ion-refresher>
-  <div class="jugadores-grid grid-3-cols" *ngIf="users.length > 0">
-    <ng-container *ngFor="let row of getRows(users); let rowIndex = index">
-      <div class="jugadores-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
-        <ng-container *ngFor="let user of row">
-          <ion-item button (click)="verPerfil(user)" class="jugador-card perfil-cuadro">
-            <div class="perfil-img-wrapper">
-              <img [src]="user.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" class="perfil-img" />
-              <div class="perfil-overlay">
-                <div class="perfil-nombre">{{ user.nombre }}</div>
-                <div class="perfil-comuna">{{ user.comuna || comuna }}</div>
+
+  <ion-spinner *ngIf="isLoading" name="crescent" class="spinner-center"></ion-spinner>
+  <div *ngIf="!isLoading">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
+    </ion-refresher>
+    <div class="jugadores-grid grid-3-cols" *ngIf="users.length > 0">
+      <ng-container *ngFor="let row of getRows(users); let rowIndex = index">
+        <div class="jugadores-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
+          <ng-container *ngFor="let user of row">
+            <ion-item button (click)="verPerfil(user)" class="jugador-card perfil-cuadro">
+              <div class="perfil-img-wrapper">
+                <img [src]="user.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" class="perfil-img" />
+                <div class="perfil-overlay">
+                  <div class="perfil-nombre">{{ user.nombre }}</div>
+                  <div class="perfil-comuna">{{ user.comuna || comuna }}</div>
+                </div>
               </div>
-            </div>
-          </ion-item>
-        </ng-container>
-      </div>
-    </ng-container>
+            </ion-item>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+    <ion-note *ngIf="users.length === 0" color="medium" class="ion-text-center" style="margin-top:2rem;">No hay jugadores cercanos.</ion-note>
   </div>
-  <ion-note *ngIf="users.length === 0" color="medium" class="ion-text-center" style="margin-top:2rem;">No hay jugadores cercanos.</ion-note>
 </ion-content>

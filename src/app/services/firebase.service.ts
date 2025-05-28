@@ -21,11 +21,41 @@ export class FirebaseService {
     }
   }
 
+  // --- Utilidad para parsear Firestore REST (soporta objetos y arrays anidados) ---
+  private parseFirestoreFields(fields: any): any {
+    const parseValue = (v: any): any => {
+      if (v === null || v === undefined) return null;
+      if (v.stringValue !== undefined) return v.stringValue;
+      if (v.booleanValue !== undefined) return v.booleanValue;
+      if (v.integerValue !== undefined) return Number(v.integerValue);
+      if (v.doubleValue !== undefined) return Number(v.doubleValue);
+      if (v.geoPointValue !== undefined) return v.geoPointValue;
+      if (v.timestampValue !== undefined) return v.timestampValue;
+      if (v.arrayValue !== undefined) {
+        // arrayValue.values puede ser undefined si el array está vacío
+        return (v.arrayValue.values || []).map(parseValue);
+      }
+      if (v.mapValue !== undefined) {
+        const obj: any = {};
+        const mapFields = v.mapValue.fields || {};
+        for (const key in mapFields) {
+          obj[key] = parseValue(mapFields[key]);
+        }
+        return obj;
+      }
+      return null;
+    };
+    const parsed: any = {};
+    for (const k in fields) {
+      parsed[k] = parseValue(fields[k]);
+    }
+    return parsed;
+  }
+
   async getDocument(path: string): Promise<any> {
     try {
       console.log('[FirebaseService] Intentando leer documento en:', path);
       const platform = Capacitor.getPlatform();
-
       if (platform === 'ios' || platform === 'android') {
         const { token } = await FirebaseAuthentication.getIdToken();
         const [collection, docId] = path.split('/');
@@ -34,13 +64,8 @@ export class FirebaseService {
         const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
         if (!res.ok) throw new Error(`HTTP ${res.status} - ${res.statusText}`);
         const data = await res.json();
-        // Simplificado: solo convierte los fields básicos
         const fields = data.fields || {};
-        const parsed: any = {};
-        for (const k in fields) {
-          const v = fields[k];
-          parsed[k] = v?.stringValue ?? v?.booleanValue ?? v?.integerValue ?? null;
-        }
+        const parsed = this.parseFirestoreFields(fields);
         return parsed;
       } else {
         const ref = doc(this.firestore, path);
@@ -59,7 +84,6 @@ export class FirebaseService {
       console.log('[FirebaseService] getCollection INICIO', collectionPath);
       const platform = Capacitor.getPlatform();
       if (platform === 'ios' || platform === 'android') {
-        // Intenta obtener el token, pero si falla, prueba sin autenticación (modo público)
         let token = '';
         try {
           const res = await FirebaseAuthentication.getIdToken();
@@ -76,18 +100,8 @@ export class FirebaseService {
         if (!data.documents) return [];
         const docs = data.documents.map((doc: any) => {
           const fields = doc.fields || {};
-          const parsed: any = { id: doc.name.split('/').pop() };
-          for (const k in fields) {
-            const v = fields[k];
-            if (v.geoPointValue) parsed[k] = v.geoPointValue;
-            else if (v.stringValue !== undefined) parsed[k] = v.stringValue;
-            else if (v.integerValue !== undefined) parsed[k] = Number(v.integerValue);
-            else if (v.doubleValue !== undefined) parsed[k] = Number(v.doubleValue);
-            else if (v.booleanValue !== undefined) parsed[k] = v.booleanValue;
-            else if (v.arrayValue) parsed[k] = v.arrayValue.values || [];
-            else if (v.mapValue) parsed[k] = v.mapValue.fields || {};
-            else parsed[k] = null;
-          }
+          const parsed = this.parseFirestoreFields(fields);
+          parsed.id = doc.name.split('/').pop();
           return parsed;
         });
         console.log('[FirebaseService] getCollection OK', docs);

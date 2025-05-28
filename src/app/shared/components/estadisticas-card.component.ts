@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { RadarChartComponent } from 'src/app/radar-chart/radar-chart.component';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [IonicModule, RadarChartComponent, CommonModule, FormsModule],
 })
-export class EstadisticasCardComponent {
+export class EstadisticasCardComponent implements OnInit, OnDestroy {
   @Input() perfilUsuario: any;
   perfilScouter: any;
 
@@ -28,10 +28,10 @@ export class EstadisticasCardComponent {
   }
 
   agregarEquipo() {
+    if (!this.perfilScouter) return;
     if (!this.perfilScouter.equiposHistorial) {
       this.perfilScouter.equiposHistorial = [];
     }
-
     if (this.nuevoEquipo.trim()) {
       this.perfilScouter.equiposHistorial.push(this.nuevoEquipo.trim());
       this.nuevoEquipo = '';
@@ -39,10 +39,10 @@ export class EstadisticasCardComponent {
   }
 
   agregarLogro() {
+    if (!this.perfilScouter) return;
     if (!this.perfilScouter.logros) {
       this.perfilScouter.logros = [];
     }
-
     if (this.nuevoLogro.trim()) {
       this.perfilScouter.logros.push(this.nuevoLogro.trim());
       this.nuevoLogro = '';
@@ -50,6 +50,7 @@ export class EstadisticasCardComponent {
   }
 
   async subirArchivoCertificacion(event: any) {
+    if (!this.perfilScouter) return;
     const archivo = event.target.files[0];
     if (!archivo) return;
 
@@ -66,10 +67,18 @@ export class EstadisticasCardComponent {
       console.error('Error subiendo archivo:', error);
       alert('Hubo un problema al subir el archivo');
     }
-    }
-    ngOnInit() {
-  if (this.perfilUsuario?.esScouter) {
-    this.perfilScouter = this.perfilUsuario;
   }
-}
+  ngOnInit() {
+    // Solo inicializa perfilScouter si esScouter, pero nunca lo dejes undefined
+    if (this.perfilUsuario?.esScouter) {
+      this.perfilScouter = this.perfilUsuario;
+    } else {
+      this.perfilScouter = null;
+    }
+    // Aquí puedes agregar lógica de inicialización si es necesario
+  }
+
+  ngOnDestroy() {
+    // Limpieza de recursos, listeners, timers, etc. si es necesario
+  }
 }

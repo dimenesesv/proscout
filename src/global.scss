@@ -42,64 +42,37 @@
 
 body {
   font-family: 'Bebas Neue', sans-serif;
+  --ion-background-color: #ffffff;
+  --ion-text-color: #000000;
+
+  --ion-color-step-50: #f2f2f2;
+  --ion-color-step-100: #e5e5e5;
+  --ion-color-step-150: #d9d9d9;
+  --ion-color-step-200: #cccccc;
 }
 html, body, ion-app, ion-content, ion-card, ion-label, ion-card-title, ion-title, ion-button, h1, h2, h3, h4, h5, h6, p, div {
   font-family: 'Bebas Neue', sans-serif !important;
 }
-ion-note {
-  font-family: var(--ion-font-family, inherit) !important;
-  font-size: 15px !important;
-  font-weight: 400 !important;
+:root {
+  color-scheme: light;
 }
 
-body, ion-app {
-  background: $theme-background !important;
+ion-card,
+.profile-info-card-modern,
+.profile-photo-card-square {
+  --ion-card-background: #225C73 !important;
+  background: #225C73 !important;
+  color: #fff !important;
 }
 
-ion-card, .mat-card, .perfil-card, .galeria-card, .objective-card, .stat-item, .notificacion-item, .info-box, .info-group {
-  border-radius: $theme-radius-lg !important;
-  box-shadow: $theme-shadow !important;
-  background: $theme-surface !important;
-  transition: box-shadow $theme-transition, transform $theme-transition;
+ion-content {
+  --background: #18394a !important;
+  --color: #fff !important;
 }
 
-ion-card:hover, .mat-card:hover, .perfil-card:hover, .galeria-card:hover, .objective-card:hover, .stat-item:hover, .notificacion-item:hover {
-  box-shadow: $theme-shadow-lg !important;
-  transform: translateY(-2px) scale(1.01);
-}
-
-ion-button, button, .chip, .tabs-header button {
-  border-radius: $theme-radius !important;
-  box-shadow: 0 1px 4px rgba(56,128,255,0.08);
-  transition: background $theme-transition, box-shadow $theme-transition, color $theme-transition;
-}
-
-ion-button:active, button:active, .chip:active, .tabs-header button:active {
-  box-shadow: 0 2px 8px rgba(56,128,255,0.16);
-}
-
-.chip {
-  background: $theme-chip-bg;
-  color: $theme-chip-color;
-  border-radius: $theme-radius;
-  padding: 0.25em 1em;
-  font-weight: 500;
-  margin: 0 0.25em 0.5em 0;
-  display: inline-block;
-  box-shadow: 0 1px 4px rgba(56,128,255,0.08);
-  transition: background $theme-transition, color $theme-transition;
-}
-
-.chip.active, .chip.selected {
-  background: $theme-primary;
-  color: #fff;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  background: $theme-background;
-}
-::-webkit-scrollbar-thumb {
-  background: $theme-primary-light;
-  border-radius: $theme-radius;
+ion-tab-bar {
+  --background: #18394a !important;
+  --color: #b3c7d6 !important;
+  --color-selected: #4FC3F7 !important;
+  border-top: none;
 }
