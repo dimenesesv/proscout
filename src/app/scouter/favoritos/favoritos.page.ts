@@ -19,32 +19,36 @@ export class FavoritosPage implements OnInit {
     await this.cargarJugadoresFavoritos();
   }
 
+  async ionViewWillEnter() {
+    await this.cargarJugadoresFavoritos();
+  }
+
   async cargarJugadoresFavoritos() {
     const auth = getAuth();
     const user = auth.currentUser;
     if (!user) return;
 
     const db = getFirestore();
-    const scouterRef = doc(db, 'scouters', user.uid);
-    const scouterSnap = await getDoc(scouterRef);
+    // Cambia aquí: lee desde la colección 'favoritos' en vez del documento scouter
+    const favoritosRef = doc(db, 'favoritos', user.uid);
+    const favoritosSnap = await getDoc(favoritosRef);
 
-    if (scouterSnap.exists()) {
-      const data = scouterSnap.data() as Scouter;
-      const favoritosIds: string[] = Array.isArray(data.favoritos) ? data.favoritos : [];
-
-      // Obtener datos de cada jugador favorito
-      const jugadores: any[] = [];
-
-      for (const uid of favoritosIds) {
-        const jugadorRef = doc(db, 'usuarios', uid);
-        const jugadorSnap = await getDoc(jugadorRef);
-        if (jugadorSnap.exists()) {
-          jugadores.push({ uid, ...jugadorSnap.data() });
-        }
-      }
-
-      this.jugadoresFavoritos = jugadores;
+    let favoritosIds: string[] = [];
+    if (favoritosSnap.exists()) {
+      const data = favoritosSnap.data() as any;
+      favoritosIds = Array.isArray(data.jugadores) ? data.jugadores : [];
     }
+
+    // Obtener datos de cada jugador favorito
+    const jugadores: any[] = [];
+    for (const uid of favoritosIds) {
+      const jugadorRef = doc(db, 'usuarios', uid);
+      const jugadorSnap = await getDoc(jugadorRef);
+      if (jugadorSnap.exists()) {
+        jugadores.push({ uid, ...jugadorSnap.data() });
+      }
+    }
+    this.jugadoresFavoritos = jugadores;
   }
 
   calcularEdad(fecha: string): number {

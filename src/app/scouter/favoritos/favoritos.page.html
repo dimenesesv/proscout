@@ -8,12 +8,17 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-md="6" size-lg="4" *ngFor="let jugador of jugadoresFavoritos">
-        <ion-card>
-          <ion-img [src]="jugador.fotoPerfil || 'https://placehold.co/300x300?text=Jugador'" alt="Foto del jugador"></ion-img>
-          <ion-card-header>
-            <ion-card-title>{{ jugador.nombre }}</ion-card-title>
-            <ion-card-subtitle>Edad: {{ calcularEdad(jugador.fechaNacimiento) }} años</ion-card-subtitle>
-          </ion-card-header>
+        <ion-card class="jugador-favorito-card">
+          <ion-item lines="none">
+            <ion-label>
+              <h2>{{ jugador.nombre }}</h2>
+              <p>Edad: {{ calcularEdad(jugador.fechaNacimiento) }} años</p>
+              <p>Posición: {{ jugador.info?.posicion || '-' }}</p>
+            </ion-label>
+            <ion-avatar slot="end">
+              <img [src]="jugador.fotoPerfil || 'https://placehold.co/80x80?text=Jugador'" alt="Foto del jugador" />
+            </ion-avatar>
+          </ion-item>
         </ion-card>
       </ion-col>
     </ion-row>

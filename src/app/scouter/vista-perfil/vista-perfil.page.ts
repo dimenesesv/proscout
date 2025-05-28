@@ -83,6 +83,9 @@ export class VistaPerfilPage implements OnInit {
       favoritosJugador.push(scouterUid);
       await (await import('firebase/firestore')).updateDoc(jugadorRef, { favoritos: favoritosJugador });
     }
+    // Mensaje de confirmación antes de redirigir
+    alert('¡Jugador agregado a favoritos!');
+    this.router.navigate(['/scouter/favoritos']);
   }
 
 }

@@ -1,4 +1,5 @@
-@import 'src/theme/variables.scss';
+@use 'sass:color';
+@use 'src/theme/variables.scss' as *;
 
 $color-bg-dark: #18181b;
 $color-surface-dark: #23232a;
@@ -22,6 +23,9 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
   font-family: $font-main;
   font-size: 1.18rem;
   border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   &:hover, &:active {
     box-shadow: 0 6px 24px rgba(0,0,0,0.28);
     border-color: $color-primary;
@@ -33,18 +37,33 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 0 auto 16px auto;
+  margin: 16px auto;
   box-shadow: 0 2px 8px rgba(255,214,0,0.10);
   border: 3px solid $color-primary;
   transition: border $transition-main, box-shadow $transition-main;
+  display: block;
 }
 .info-group, .info-box {
-  background: lighten($color-surface-dark, 3%);
+  background: color.adjust($color-surface-dark, $lightness: 3%);
   border-radius: 14px;
   box-shadow: 0 1px 4px rgba(255,214,0,0.06);
   padding: 0.5em 1em;
   margin-bottom: 8px;
   color: $color-text-main;
+}
+// Eliminar el background oscuro heredado SOLO cuando es jugador
+::ng-deep ion-card[ng-reflect-ng-if][ng-reflect-ng-if*='esJugador'] .perfil-card .info-group,
+::ng-deep ion-card[ng-reflect-ng-if][ng-reflect-ng-if*='esJugador'] .perfil-card .info-box {
+  background: #fff !important;
+  color: #111 !important;
+  box-shadow: none !important;
+}
+// Forzar fondo blanco y texto negro en todos los atributos principales del perfil de jugador
+::ng-deep ion-card[ng-reflect-ng-if][ng-reflect-ng-if*='esJugador'] .perfil-card .info,
+::ng-deep ion-card[ng-reflect-ng-if][ng-reflect-ng-if*='esJugador'] .perfil-card .info * {
+  background: #fff !important;
+  color: #111 !important;
+  fill: #111 !important;
 }
 .acciones {
   margin-top: 16px;

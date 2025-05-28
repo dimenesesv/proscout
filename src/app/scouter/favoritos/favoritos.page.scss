@@ -19,6 +19,54 @@ ion-card {
   }
 }
 
+.jugador-favorito-card ion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px;
+  min-height: 72px;
+}
+.jugador-favorito-card ion-label {
+  flex: 1 1 auto;
+  margin-right: 12px;
+  min-width: 0;
+}
+.jugador-favorito-card ion-avatar {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.jugador-favorito-card ion-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffd600;
+  background: #fff;
+  display: block;
+}
+.jugador-favorito-card h2 {
+  font-size: 1.08rem;
+  margin: 0 0 2px 0;
+  font-weight: 600;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jugador-favorito-card p {
+  font-size: 0.97rem;
+  margin: 0;
+  color: #444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .mensaje-vacio {
   margin-top: 40px;
   text-align: center;

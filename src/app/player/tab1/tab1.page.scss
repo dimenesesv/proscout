@@ -21,14 +21,18 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
   flex: 0 0 auto;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
-  background: $color-surface-dark;
-  color: $color-text-main;
+  background: #fff; // Fondo blanco
+  color: #111; // Texto negro
   font-family: $font-main;
   font-size: 1.18rem;
   padding: 1.2rem 1rem;
   margin-bottom: 1.2rem;
   transition: box-shadow $transition-main, transform $transition-main;
   border: 2px solid transparent;
+
+  h3, p, ion-card-content, ng-container {
+    color: #111 !important;
+  }
 
   &:hover, &:active {
     box-shadow: 0 6px 24px rgba(0,0,0,0.28);

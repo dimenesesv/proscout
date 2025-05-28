@@ -51,9 +51,7 @@ export class PerfilCardComponent {
   async agregarAFavoritos() {
     console.log('[PerfilCardComponent] agregarAFavoritos INICIO', this.perfilUsuario);
     const scouter = await this.afAuth.currentUser;
-    // Usa el jugadorId del input si está definido
     let jugadorId: string | undefined = this.jugadorId;
-    // Si no, intenta obtenerlo de los atributos conocidos
     if (!jugadorId) {
       if ((this.perfilUsuario as any).uid) {
         jugadorId = (this.perfilUsuario as any).uid;
@@ -76,23 +74,38 @@ export class PerfilCardComponent {
       return;
     }
     const scouterId = scouter.uid;
-    const path = `favoritos/${scouterId}`;
-    let doc = await this.firebaseService.getDocument(path);
-    let favoritos: string[] = doc?.jugadores || [];
+    // --- Actualiza favoritos en scouters/{scouterId} ---
+    const db = (await import('firebase/firestore')).getFirestore();
+    const scouterRef = (await import('firebase/firestore')).doc(db, 'scouters', scouterId);
+    const scouterSnap = await (await import('firebase/firestore')).getDoc(scouterRef);
+    let favoritos: string[] = [];
+    if (scouterSnap.exists()) {
+      const data = scouterSnap.data() as any;
+      favoritos = Array.isArray(data.favoritos) ? data.favoritos : [];
+    }
     if (!favoritos.includes(jugadorId)) {
       favoritos.push(jugadorId);
-      console.log('[PerfilCardComponent] Guardando nuevo favorito', { path, scouterId, favoritos });
-      await this.firebaseService.setDocument(path, { scouterId, jugadores: favoritos });
-      // Notifica al jugador
-      try {
-        console.log('[PerfilCardComponent] Llamando notificacionesService.notificarFavorito', { jugadorId, scouterId });
-        await this.notificacionesService.notificarFavorito(jugadorId, scouterId);
-        console.log('[PerfilCardComponent] Notificación enviada correctamente');
-      } catch (error) {
-        console.error('[PerfilCardComponent] Error al notificar favorito', error);
-      }
-    } else {
-      console.log('[PerfilCardComponent] El jugador ya está en favoritos', { jugadorId });
+      await (await import('firebase/firestore')).updateDoc(scouterRef, { favoritos });
     }
+    // --- Actualiza favoritos en usuarios/{jugadorId} ---
+    const jugadorRef = (await import('firebase/firestore')).doc(db, 'usuarios', jugadorId);
+    const jugadorSnap = await (await import('firebase/firestore')).getDoc(jugadorRef);
+    let favoritosJugador: string[] = [];
+    if (jugadorSnap.exists()) {
+      const data = jugadorSnap.data() as any;
+      favoritosJugador = Array.isArray(data.favoritos) ? data.favoritos : [];
+    }
+    if (!favoritosJugador.includes(scouterId)) {
+      favoritosJugador.push(scouterId);
+      await (await import('firebase/firestore')).updateDoc(jugadorRef, { favoritos: favoritosJugador });
+    }
+    // Notifica al jugador
+    try {
+      await this.notificacionesService.notificarFavorito(jugadorId, scouterId);
+    } catch (error) {
+      console.error('[PerfilCardComponent] Error al notificar favorito', error);
+    }
+    alert('¡Jugador agregado a favoritos!');
+    window.location.href = '/scouter/favoritos';
   }
 }
