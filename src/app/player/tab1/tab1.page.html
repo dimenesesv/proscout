@@ -45,7 +45,7 @@
     <ion-card-title>Jugadores destacados</ion-card-title>
   </ion-card-header>
   <div class="horizontal-scroll">
-    <ion-card *ngFor="let destacado of jugadoresDestacados" class="jugador-card">
+    <ion-card *ngFor="let destacado of jugadoresDestacados" class="jugador-card animate-card">
       <ion-card-content>
         <h3>{{ destacado.nombre }}</h3>
         <p *ngIf="destacado.info && destacado.info.posicion">Posición: {{ destacado.info.posicion }}</p>

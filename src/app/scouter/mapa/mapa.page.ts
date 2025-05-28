@@ -28,6 +28,12 @@ export class MapaPage implements OnInit {
   comuna: string = '';
   ciudad: string = '';
   isLoading: boolean = true;
+  locationError: boolean = false;
+
+  // Infinite scroll: cargar más usuarios
+  page = 1;
+  pageSize = 20;
+  pagedUsers: any[] = [];
 
   constructor(
     private ngZone: NgZone,
@@ -40,12 +46,13 @@ export class MapaPage implements OnInit {
 
   ngOnInit() {
     console.log('[MapaPage] ngOnInit');
+    this.page = 1;
+    this.pagedUsers = [];
     // Solo inicializaciones básicas aquí si es necesario
   }
 
   async ionViewWillEnter() {
     this.isLoading = true;
-    console.log('[MapaPage] ionViewWillEnter');
     this.resetMapaState();
     try {
       await this.guardarUbicacionSiEsPosible();
@@ -66,7 +73,6 @@ export class MapaPage implements OnInit {
   }
 
   ionViewDidLeave() {
-    // Limpia recursos, listeners, timers, etc. si es necesario
     this.cleanMapaResources();
     console.log('[MapaPage] ionViewDidLeave: recursos limpiados');
   }
@@ -80,8 +86,8 @@ export class MapaPage implements OnInit {
     this.ciudad = '';
     this.locationLabel = 'Mi ubicación';
     this.currentLocation = { lat: 19.4326, lng: -99.1332 };
-    // Si usas Google Maps, destruye el mapa aquí si es necesario
-    // Si usas otros recursos visuales, reinícialos aquí
+    this.isLoading = true;
+    this.locationError = false;
   }
 
   /**
@@ -89,10 +95,7 @@ export class MapaPage implements OnInit {
    */
   private cleanMapaResources() {
     this.users = [];
-    // Si tienes timers globales, límpialos aquí
-    // Si usas listeners de mapas, remuévelos aquí
-    // Si usas Swiper u otros plugins, destrúyelos aquí
-    // Si usas Google Maps, destrúyelo aquí
+    // Limpia timers, listeners, mapas, etc. aquí si es necesario
   }
 
   async getCurrentLocation() {
@@ -105,9 +108,11 @@ export class MapaPage implements OnInit {
       };
       this.locationLabel = 'Mi ubicación';
       await this.obtenerComunaCiudad(this.currentLocation.lat, this.currentLocation.lng);
+      this.locationError = false;
       console.log('[MapaPage] getCurrentLocation OK', this.currentLocation);
     } catch (err) {
       console.warn('[MapaPage] ❌ Error al obtener ubicación:', err);
+      this.locationError = true;
       // Si falla la ubicación, usa la ubicación predeterminada (CDMX)
     }
   }
@@ -115,7 +120,7 @@ export class MapaPage implements OnInit {
   async loadUsers() {
     console.log('[MapaPage] loadUsers INICIO');
     try {
-      const allUsers = await this.firebaseService.getCollection('usuarios');
+      const allUsers = await this.firebaseService.getCollection('playground');
       this.users = allUsers
         .filter((u: any) =>
           u.ubicacion &&
@@ -128,11 +133,51 @@ export class MapaPage implements OnInit {
           lng: u.ubicacion.longitude,
         }));
       this.updateUserDistances();
+      // Obtener comuna para cada usuario si no existe
+      this.users.forEach(async (user, idx) => {
+        const u: any = user;
+        if (!u.comuna && u.lat && u.lng) {
+          u.comuna = await this.obtenerComunaDeLatLng(u.lat, u.lng);
+        }
+      });
+      this.page = 1;
+      this.updatePagedUsers();
       console.log('[MapaPage] loadUsers OK', this.users);
     } catch (e) {
       this.users = [];
       this.updateUserDistances();
       console.error('[MapaPage] loadUsers ERROR', e);
+    }
+  }
+
+  updatePagedUsers() {
+    this.pagedUsers = this.users.slice(0, this.page * this.pageSize);
+  }
+
+  loadMore(event: any) {
+    this.page++;
+    this.updatePagedUsers();
+    setTimeout(() => {
+      event.target.complete();
+    }, 400);
+  }
+
+  async obtenerComunaDeLatLng(lat: number, lng: number): Promise<string> {
+    try {
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${environment.googleApiKey}&language=es`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.status === 'OK') {
+        const components = data.results[0]?.address_components || [];
+        for (const comp of components) {
+          if (comp.types.includes('administrative_area_level_3')) {
+            return comp.long_name;
+          }
+        }
+      }
+      return '';
+    } catch (e) {
+      return '';
     }
   }
 
@@ -242,9 +287,42 @@ export class MapaPage implements OnInit {
 
   getRows(arr: any[]): any[][] {
     const rows = [];
-    for (let i = 0; i < arr.length; i += 3) {
-      rows.push(arr.slice(i, i + 3));
+    for (let i = 0; i < arr.length; i += 2) {
+      rows.push(arr.slice(i, i + 2));
     }
     return rows;
+  }
+
+  calcularEdad(fechaNacimiento: string): number | string {
+    if (!fechaNacimiento) return '--';
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  }
+
+  async abrirModalUbicacion() {
+    const modal = await this.modalCtrl.create({
+      component: (await import('./mapa-ubicacion-modal.component')).MapaUbicacionModalComponent,
+      componentProps: {
+        lat: this.currentLocation.lat,
+        lng: this.currentLocation.lng
+      },
+      breakpoints: [0, 0.8],
+      initialBreakpoint: 0.8,
+      cssClass: 'mapa-ubicacion-modal',
+    });
+    modal.onDidDismiss().then((result) => {
+      if (result.data && result.data.lat && result.data.lng) {
+        this.currentLocation = { lat: result.data.lat, lng: result.data.lng };
+        this.obtenerComunaCiudad(result.data.lat, result.data.lng);
+        this.updateUserDistances();
+      }
+    });
+    await modal.present();
   }
 }

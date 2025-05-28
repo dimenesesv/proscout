@@ -1,0 +1,30 @@
+.animado {
+  width: 150px;
+  height: 150px;
+  background-color: #3880ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin: 50px auto;
+  cursor: pointer;
+
+  transform-origin: center center;
+  will-change: transform, background-color, border-radius;
+  transform: translateZ(0);
+  transition: none !important;
+}
+
+.wipe-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--ion-color-primary, #225C73);
+  z-index: 9999;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left;
+}

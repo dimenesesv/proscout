@@ -1,0 +1,73 @@
+.perfil-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 250px;
+
+  .imagen-con-label {
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .etiqueta-nueva {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: black;
+      color: white;
+      padding: 4px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-top-left-radius: 6px;
+    }
+  }
+
+  .info-contenido {
+    padding: 10px;
+
+    .ubicacion {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+      color: #333;
+    }
+
+    .nombre-edad {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 5px;
+
+      .estado-online {
+        width: 8px;
+        height: 8px;
+        background: green;
+        border-radius: 50%;
+      }
+
+      .nombre {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .edad {
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+    }
+
+    .descripcion {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 5px;
+    }
+  }
+}

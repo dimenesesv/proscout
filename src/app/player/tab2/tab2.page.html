@@ -14,7 +14,7 @@
     </div>
 
     <div class="cards-container">
-      <ion-card *ngFor="let objetivo of objetivos" class="objective-card" [class.completed]="objetivo.completado">
+      <ion-card *ngFor="let objetivo of objetivos" class="objective-card animate-card" [class.completed]="objetivo.completado">
         <ion-card-header>
           <ion-card-title>{{ objetivo.texto }}</ion-card-title>
         </ion-card-header>

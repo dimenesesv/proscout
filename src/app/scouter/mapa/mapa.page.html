@@ -1,40 +1,47 @@
+<ion-header class="mapa-header">
+  <ion-toolbar>
+    <ion-title size="large" class="ion-text-center">Jugadores Cercanos</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Jugadores Cercanos</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
   <div *ngIf="comuna || ciudad" style="display: flex; justify-content: center; margin-top: 0.5rem;">
-    <ion-chip color="primary" style="font-size:1.08rem; font-weight:600;">
+    <ion-chip color="primary" style="font-size:1.08rem; font-weight:600;" (click)="abrirModalUbicacion()">
       <ion-icon name="location-outline" style="margin-right:6px;"></ion-icon>
       <ion-label>{{ comuna ? comuna + ',' : '' }} {{ ciudad }}</ion-label>
     </ion-chip>
   </div>
 
-  <ion-spinner *ngIf="isLoading" name="crescent" class="spinner-center"></ion-spinner>
-  <div *ngIf="!isLoading">
+  <ion-spinner *ngIf="isLoading" name="crescent" class="spinner-center center-spinner"></ion-spinner>
+  <ion-note *ngIf="locationError" color="danger" class="ion-text-center" style="margin-top:2rem;">
+    No se pudo obtener tu ubicación. Por favor revisa los permisos de localización y vuelve a intentarlo.
+  </ion-note>
+  <div *ngIf="!isLoading && !locationError">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
+ <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
     </ion-refresher>
-    <div class="jugadores-grid grid-3-cols" *ngIf="users.length > 0">
-      <ng-container *ngFor="let row of getRows(users); let rowIndex = index">
-        <div class="jugadores-row" style="display: flex; gap: 16px; margin-bottom: 16px;">
-          <ng-container *ngFor="let user of row">
-            <ion-item button (click)="verPerfil(user)" class="jugador-card perfil-cuadro">
-              <div class="perfil-img-wrapper">
-                <img [src]="user.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" class="perfil-img" />
-                <div class="perfil-overlay">
-                  <div class="perfil-nombre">{{ user.nombre }}</div>
-                  <div class="perfil-comuna">{{ user.comuna || comuna }}</div>
-                </div>
-              </div>
-            </ion-item>
-          </ng-container>
+    <div class="jugadores-grid" *ngIf="pagedUsers.length > 0" style="margin: 0 12px;">
+      <div class="jugador-card perfil-card animate-card" *ngFor="let user of pagedUsers; let i = index" (click)="verPerfil(user)" [style.animationDelay]="(i * 80) + 'ms'">
+        <div class="imagen-con-label">
+          <img [src]="user.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" />
+          <div hidden="true" class="etiqueta-nueva">NEW</div>
         </div>
-      </ng-container>
+        <div class="info-contenido">
+          <div class="ubicacion">
+            <ion-icon name="location-outline"></ion-icon>
+            {{ user.comuna || 'Comuna desconocida' }}
+          </div>
+          <div class="nombre-edad">
+            <strong class="nombre">{{ user.nombre }}</strong>
+            <span class="edad">{{ user.fechaNacimiento ? (calcularEdad(user.fechaNacimiento)) + ' años' : '--' }}</span>
+          </div>
+        </div>
+      </div>
     </div>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más jugadores..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
     <ion-note *ngIf="users.length === 0" color="medium" class="ion-text-center" style="margin-top:2rem;">No hay jugadores cercanos.</ion-note>
   </div>
 </ion-content>

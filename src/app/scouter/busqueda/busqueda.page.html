@@ -80,7 +80,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-        <ion-item *ngFor="let r of pagedResultados">
+        <ion-item *ngFor="let r of pagedResultados" class="animate-card">
           <ion-avatar slot="start">
             <img [src]="r.usuario.fotoPerfil || 'assets/default-profile.png'" />
           </ion-avatar>

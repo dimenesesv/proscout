@@ -42,6 +42,10 @@ const routes: Routes = [
   {
     path: 'busqueda',
     loadChildren: () => import('./scouter/busqueda/busqueda.module').then( m => m.BusquedaPageModule)
+  },
+  {
+    path: 'example',
+    loadChildren: () => import('./example/example.module').then( m => m.ExamplePageModule)
   }
 ];
 

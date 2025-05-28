@@ -78,7 +78,7 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
         if (this.isModal) this.closeModal();
         this.isLoading = false;
       }, 8000);
-      const data = await this.firebaseService.getDocument(`usuarios/${this.userId}`);
+      const data = await this.firebaseService.getDocument(`playground/${this.userId}`);
       clearTimeout(timeoutId);
       if (!data) {
         this.errorMsg = 'No se encontró el perfil.';

@@ -11,6 +11,7 @@ export interface Usuario {
     contrasena?: string;       // Contraseña del usuario
     telefono?: string;         // Teléfono del usuario
     direccion?: string;        // Dirección del usuario
+    comuna?: string;            // Comuna del usuario
     ciudad?: string;           // Ciudad del usuario
     region?: string;           // Región del usuario
     pais?: string;             // País del usuario

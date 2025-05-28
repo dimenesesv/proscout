@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, NgZone } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { StorageService } from '../../services/storage.service';
 import { LoadingController } from '@ionic/angular';
@@ -31,7 +31,8 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     private loadingController: LoadingController,
     private router: Router,
     private afAuth: AngularFireAuth,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ngZone: NgZone
   ) {}
 
   async loadUserData(userId: string) {
@@ -84,34 +85,32 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {}
-
-  ngOnDestroy() {
-    console.log('[PerfilPage] ngOnDestroy called');
-    if (this.profileSubscription) {
-      this.profileSubscription.unsubscribe();
-    }
-    if (this.paramSub) {
-      this.paramSub.unsubscribe();
-    }
-    // Limpieza explícita de componentes hijos
-    setTimeout(() => {
-      const swiperEls = document.querySelectorAll('.swiper-container, .swiper-wrapper, .swiper-slide');
-      swiperEls.forEach(el => {
-        if (el && el.parentNode) {
-          el.parentNode.removeChild(el);
-        }
-      });
-    }, 0);
-    // Limpieza de referencias
-    this.perfilUsuario = null;
-    this.galleryUrls = [];
-    this.activeTab = 0;
-    this.uploadProgress = null;
+  ngAfterViewInit() {
+    setTimeout(() => this.ejecutarAnimacionesPerfil(), 100);
   }
 
-  slideTo(index: number) {
-    this.activeTab = index;
+  async ejecutarAnimacionesPerfil() {
+    const { animate, stagger } = await import('@motionone/dom');
+    // Animate main card (fade in + slide up)
+    const card = document.querySelector('.profile-info-card-modern');
+    if (card) {
+      animate(card, { opacity: [0, 1], y: [40, 0] }, { duration: 0.7, easing: 'ease-out' });
+    }
+    // Animate profile image (pop in)
+    const img = document.querySelector('.profile-img, .perfil-img');
+    if (img) {
+      animate(img, { scale: [0.7, 1.1, 1], opacity: [0, 1] }, { duration: 0.6, easing: 'ease-in-out' });
+    }
+    // Animate chips (staggered fade/slide)
+    const chips = document.querySelectorAll('.profile-chips ion-chip');
+    if (chips.length) {
+      animate(chips, { opacity: [0, 1], y: [20, 0] }, { delay: stagger(0.08), duration: 0.4, easing: 'ease-out' });
+    }
+    // Animate detail rows (staggered fade/slide)
+    const rows = document.querySelectorAll('.profile-detail-row');
+    if (rows.length) {
+      animate(rows, { opacity: [0, 1], x: [-30, 0] }, { delay: stagger(0.06), duration: 0.35, easing: 'ease-out' });
+    }
   }
 
   logout() {
@@ -139,13 +138,13 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     input.onchange = async (event: any) => {
       const file = event.target.files[0];
       if (file) {
-        await this.uploadImage(file);
+        await this.uploadImage(file, true); // true = update profile pic
       }
     };
     input.click();
   }
 
-  async uploadImage(file: File) {
+  async uploadImage(file: File, isProfilePic: boolean = false) {
     let userId: string | undefined;
     if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
       const { user } = await FirebaseAuthentication.getCurrentUser();
@@ -161,25 +160,34 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     const loading = await this.loadingController.create({
-      message: 'Subiendo imagen...',
+      message: isProfilePic ? 'Actualizando foto de perfil...' : 'Subiendo imagen...',
       spinner: 'crescent',
     });
     await loading.present();
     try {
-      console.log('[uploadImage] Llamando a uploadUserGalleryImage con userId:', userId, 'file:', file);
-      this.galleryUrls = await this.storageService.uploadUserGalleryImage(
-        userId,
-        file,
-        this.firebaseService,
-        (progress) => {
-          this.uploadProgress = progress / 100;
-          loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
-          if (progress % 10 === 0) {
-            console.log(`[uploadImage] Progreso: ${progress}%`);
+      if (isProfilePic) {
+        // Upload profile picture to a fixed path and update Firestore
+        const filePath = `profile-pics/${userId}`;
+        const url = await this.storageService.uploadImageAndGetUrl(filePath, file);
+        this.perfilUsuario.fotoPerfil = url;
+        await this.firebaseService.updateDocument(`usuarios/${userId}`, { fotoPerfil: url });
+      } else {
+        // ...existing gallery upload logic...
+        this.galleryUrls = await this.storageService.uploadUserGalleryImage(
+          userId,
+          file,
+          this.firebaseService,
+          (progress) => {
+            this.uploadProgress = progress / 100;
+            loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
+            if (progress % 10 === 0) {
+              console.log(`[uploadImage] Progreso: ${progress}%`);
+            }
           }
-        }
-      );
-      console.log('[uploadImage] Galería actualizada:', this.galleryUrls);
+        );
+        console.log('[uploadImage] Galería actualizada:', this.galleryUrls);
+        setTimeout(() => this.ejecutarAnimacionesPerfil(), 200); // Animate again after upload
+      }
     } catch (error) {
       console.error('[uploadImage] Error al subir la imagen:', error);
     } finally {
@@ -200,8 +208,6 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
 
   animateChips() {}
 
-  ejecutarAnimacionesPerfil() {}
-
   calcularEdad(fechaNacimiento: string): number {
     if (!fechaNacimiento) return 0;
     const hoy = new Date();
@@ -221,6 +227,11 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
       edad--;
     }
     return edad;
+  }
+
+  ngOnDestroy() {
+    this.paramSub?.unsubscribe();
+    this.profileSubscription?.unsubscribe();
   }
 }
 

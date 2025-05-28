@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -7,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class TabsPage implements OnInit {
+  constructor(private router: Router) { }
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  isVistaPerfil(): boolean {
+    return this.router.url.includes('vista-perfil');
   }
-
 }

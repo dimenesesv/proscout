@@ -6,7 +6,16 @@
     <div class="profile-card-container">
       <!-- Card 1: Profile Photo (square, no border) -->
       <ion-card class="profile-photo-card-square">
-        <ion-img class="profile-photo-image-square" [src]="perfilUsuario?.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil"></ion-img>
+        <div class="profile-img-wrapper" style="position: relative; display: inline-block;">
+          <ion-img class="profile-photo-image-square" [src]="perfilUsuario?.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil"></ion-img>
+          <button class="edit-photo-btn" (click)="selectImage()" title="Editar foto de perfil">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <div *ngIf="uploadProgress !== null" class="profile-progress-bar-wrapper">
+            <div class="profile-progress-bar" [style.width]="(uploadProgress * 100) + '%'">
+            </div>
+          </div>
+        </div>
       </ion-card>
     </div>
   </ng-container>

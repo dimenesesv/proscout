@@ -1,7 +1,7 @@
 <ion-tabs>
   <router-outlet></router-outlet>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="mapa">
+    <ion-tab-button tab="mapa" [disabled]="isVistaPerfil()">
       <ion-icon name="map-outline"></ion-icon>
       <ion-label>Mapa</ion-label>
     </ion-tab-button>
@@ -21,6 +21,5 @@
       <ion-icon name="person-outline"></ion-icon>
       <ion-label>Perfil</ion-label>
     </ion-tab-button>
-
   </ion-tab-bar>
 </ion-tabs>
