@@ -5,6 +5,7 @@ ion-content.configuracion-content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding-bottom: 5.5rem; // Prevent tab bar overlap
 }
 
 ion-toolbar {
@@ -39,8 +40,13 @@ ion-button[color="danger"] {
   font-weight: 600;
   letter-spacing: 0.02em;
   border: 2px solid #ff5252;
+  padding-block: 6rem;
+
 }
 ion-button[color="danger"]:hover, ion-button[color="danger"]:focus {
   --background: #ff5252;
   --color: #fff;
+}
+.configuracion-content {
+  margin-bottom: 6rem;
 }
