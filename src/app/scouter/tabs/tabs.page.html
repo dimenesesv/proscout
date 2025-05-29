@@ -1,24 +1,20 @@
 <ion-tabs (ionTabsWillChange)="onTabWillChange()">
   <router-outlet></router-outlet>
-  <div class="tab-bar-placeholder">
   <ion-tab-bar slot="bottom">
-    <div class="tab-bar">
-      <ion-tab-button tab="mapa" [disabled]="isVistaPerfil()">
-        <ion-icon name="map-outline"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="favoritos">
-        <ion-icon name="heart-outline"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="busqueda">
-        <ion-icon name="search-outline"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="notificaciones">
-        <ion-icon name="notifications-outline"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="perfil">
-        <ion-icon name="person-outline"></ion-icon>
-      </ion-tab-button>
-    </div>
+    <ion-tab-button tab="mapa" [disabled]="isVistaPerfil()">
+      <ion-icon name="map-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button tab="favoritos">
+      <ion-icon name="heart-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button tab="busqueda">
+      <ion-icon name="search-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button tab="notificaciones">
+      <ion-icon name="notifications-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button tab="perfil">
+      <ion-icon name="person-outline"></ion-icon>
+    </ion-tab-button>
   </ion-tab-bar>
-  </div>
 </ion-tabs>

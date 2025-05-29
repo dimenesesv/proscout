@@ -24,7 +24,6 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
-@import "../node_modules/swiper/swiper.min.css";
 
 /**
  * Ionic Dark Mode
@@ -55,4 +54,14 @@ body, html, ion-app, ion-content, ion-card, ion-label, ion-card-title, ion-title
   border-radius: 50%;
   z-index: -1;
   pointer-events: none;
+}
+
+/* Perfil card global style for @extend usage */
+.global-perfil-card {
+  background: #23232a;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+  color: #fff;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }

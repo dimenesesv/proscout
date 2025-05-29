@@ -68,6 +68,31 @@ export class Tab1Page {
       const ubicacion = new GeoPoint(position.coords.latitude, position.coords.longitude);
       try {
         await this.firebaseService.updateDocument(`usuarios/${user.uid}`, { ubicacion });
+        // Geocode and update comuna/ciudad/region/pais if missing
+        const datos = await this.firebaseService.getDocument(`usuarios/${user.uid}`);
+        if (datos && (!datos.comuna || !datos.ciudad || !datos.region || !datos.pais)) {
+          // Use Google Geocoding API
+          const apiKey = 'AIzaSyB_FhkH1Co7ALNj_lVPO8EPAiBZ25BH45c'; // or use environment.googleApiKey
+          const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${apiKey}&language=es`;
+          const res = await fetch(url);
+          const data = await res.json();
+          if (data.status === 'OK') {
+            let comuna = '', ciudad = '', region = '', pais = '';
+            const components = data.results[0]?.address_components || [];
+            for (const comp of components) {
+              if (comp.types.includes('locality')) ciudad = comp.long_name;
+              if (comp.types.includes('administrative_area_level_3')) comuna = comp.long_name;
+              if (comp.types.includes('administrative_area_level_1')) region = comp.long_name;
+              if (comp.types.includes('country')) pais = comp.long_name;
+            }
+            await this.firebaseService.updateDocument(`usuarios/${user.uid}`, {
+              comuna,
+              ciudad,
+              region,
+              pais
+            });
+          }
+        }
       } catch (e) {
         // Silenciar error, no es crítico
       }

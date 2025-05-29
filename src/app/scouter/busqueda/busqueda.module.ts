@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { BusquedaPageRoutingModule } from './busqueda-routing.module';
 
 import { BusquedaPage } from './busqueda.page';
+import { FiltrosModalComponent } from './filtros-modal.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    BusquedaPageRoutingModule
+    BusquedaPageRoutingModule,
+    FiltrosModalComponent // Importar como standalone
   ],
   declarations: [BusquedaPage]
 })

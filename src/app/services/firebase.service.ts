@@ -2,6 +2,7 @@ import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { Injectable, Inject } from '@angular/core';
 import { Firestore, doc, setDoc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { getAuth } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -129,6 +130,15 @@ export class FirebaseService {
     } catch (error: any) {
       console.error('Error al actualizar el documento:', error);
       alert('Ocurrió un error al actualizar el documento. Por favor, inténtalo de nuevo.');
+    }
+  }
+
+  getCurrentUserUid(): string | null {
+    try {
+      const user = getAuth().currentUser;
+      return user ? user.uid : null;
+    } catch (e) {
+      return null;
     }
   }
 }

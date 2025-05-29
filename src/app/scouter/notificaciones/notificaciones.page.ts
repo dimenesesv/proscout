@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
+import { Notificacion } from 'src/app/interfaces/notificacion';
 
 @Component({
   selector: 'app-notificaciones',
@@ -9,11 +10,30 @@ import { NotificacionesService } from 'src/app/services/notificaciones.service';
 })
 
 export class NotificacionesPage implements OnInit {
-  notificaciones: any[] = [];
+  notificaciones: Notificacion[] = [];
 
   constructor(private notificacionesService: NotificacionesService) {}
 
   async ngOnInit() {
-    this.notificaciones = await this.notificacionesService.getNotificacionesScouter();
+    let notificacionesRaw = await this.notificacionesService.getNotificacionesScouter();
+    // Normaliza y mapea a la interfaz Notificacion
+    this.notificaciones = notificacionesRaw.map((n: any) => {
+      let fecha: Date = n.fecha;
+      if (fecha && typeof fecha === 'object' && (fecha as any).seconds !== undefined) {
+        // Firestore Timestamp seguro
+        fecha = new Date((fecha as any).seconds * 1000);
+      }
+      return {
+        id: n.id || '',
+        tipo: n.tipo || 'actividad',
+        contenido: n.contenido || n.mensaje || '',
+        fecha,
+        leida: n.leida ?? false,
+        remitenteId: n.remitenteId || n.uidScouter,
+        destinatarioId: n.destinatarioId || n.uidJugador,
+        prioridad: n.prioridad || 'media',
+      } as Notificacion;
+    });
+    console.log('[NotificacionesPage] notificaciones normalizadas:', this.notificaciones);
   }
 }

@@ -83,8 +83,15 @@
                 <ion-icon name="document-text-outline"></ion-icon> {{ userData?.biografia }}
               </div>
               <div class="profile-actions">
-                <ion-button color="primary" shape="round" fill="solid"><ion-icon slot="start" name="mail-outline"></ion-icon>Contactar</ion-button>
-                <ion-button color="secondary" shape="round" fill="outline"><ion-icon slot="start" name="person-add-outline"></ion-icon>Seguir</ion-button>
+                <ion-button color="primary" shape="round" fill="solid">
+                  <ion-icon slot="start" name="mail-outline"></ion-icon>Contactar
+                </ion-button>
+                <ion-button *ngIf="!esFavorito" color="secondary" shape="round" fill="outline" (click)="onSeguirClick()">
+                  <ion-icon slot="start" name="person-add-outline"></ion-icon>Seguir
+                </ion-button>
+                <ion-button *ngIf="esFavorito" color="danger" shape="round" fill="outline" (click)="eliminarDeFavoritos()">
+                  <ion-icon slot="start" name="trash-outline"></ion-icon>Eliminar de favoritos
+                </ion-button>
               </div>
             </ion-card>
             <ion-card *ngIf="perfilCardError">

@@ -4,6 +4,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { Location } from '@angular/common';
 import { ModalController } from '@ionic/angular';
 import Swiper from 'swiper';
+import { Notificacion } from 'src/app/interfaces/notificacion';
 
 @Component({
   selector: 'app-vista-perfil',
@@ -31,6 +32,7 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
   nuevoLogro: string = '';
   uploadProgress: number | null = null;
   loadedImages: { [url: string]: boolean } = {};
+  esFavorito: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -103,6 +105,17 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
         this.isLoading = false;
       });
       console.log('[VistaPerfilPage] Perfil cargado correctamente', data);
+
+      // --- Lógica para saber si el jugador está en favoritos ---
+      const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+      if (scouterUid && this.userId) {
+        const scouterDoc = await this.firebaseService.getDocument(`usuarios/${scouterUid}`);
+        const favoritos: string[] = scouterDoc?.scouter?.favoritos || [];
+        this.esFavorito = favoritos.includes(this.userId);
+        console.log('[VistaPerfilPage] ¿Es favorito?', this.esFavorito, 'Favoritos:', favoritos);
+      } else {
+        this.esFavorito = false;
+      }
 
       if (this.userData && this.userData.esScouter) {
         this.perfilScouter = {
@@ -228,5 +241,72 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
   }
   onImgDidLoad(url: string) {
     this.loadedImages[url] = true;
+  }
+
+  async agregarAFavoritos(scouterUid: string, jugadorUid: string) {
+    // Actualiza favoritos del scouter (dentro del objeto scouter del usuario)
+    const db = (await import('firebase/firestore')).getFirestore();
+    const scouterRef = (await import('firebase/firestore')).doc(db, 'usuarios', scouterUid);
+    const scouterSnap = await (await import('firebase/firestore')).getDoc(scouterRef);
+    let scouterData = scouterSnap.exists() ? scouterSnap.data() : {};
+    let scouterInfo = scouterData['scouter'] || {};
+    let favoritos: string[] = Array.isArray(scouterInfo.favoritos) ? scouterInfo.favoritos : [];
+    if (!favoritos.includes(jugadorUid)) {
+      favoritos.push(jugadorUid);
+      await (await import('firebase/firestore')).updateDoc(scouterRef, { 'scouter.favoritos': favoritos });
+      // Crear notificación usando la interfaz Notificacion
+      const notificacion: Notificacion = {
+        id: '', // Firestore lo asigna
+        tipo: 'actividad',
+        contenido: `¡Un scouter te ha añadido a favoritos!`,
+        fecha: new Date(),
+        leida: false,
+        remitenteId: scouterUid,
+        destinatarioId: jugadorUid,
+        prioridad: 'media',
+      };
+      console.log('[DEBUG][VistaPerfilPage] Notificación a guardar:', notificacion);
+      // Guardar notificación en Firestore
+      const notificacionesRef = (await import('firebase/firestore')).collection(db, 'notificaciones');
+      const docRef = await (await import('firebase/firestore')).addDoc(notificacionesRef, notificacion);
+      console.log('[DEBUG][VistaPerfilPage] Notificación guardada con ID:', docRef.id);
+    }
+    alert('¡Jugador agregado a favoritos!');
+    this.router.navigate(['/scouter/scouter/favoritos']);
+  }
+
+  async eliminarDeFavoritos() {
+    const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+    const jugadorUid = this.userId;
+    if (!scouterUid || !jugadorUid) {
+      alert('No se pudo obtener el usuario actual o el perfil.');
+      return;
+    }
+    const db = (await import('firebase/firestore')).getFirestore();
+    const scouterRef = (await import('firebase/firestore')).doc(db, 'usuarios', scouterUid);
+    const scouterSnap = await (await import('firebase/firestore')).getDoc(scouterRef);
+    let scouterData = scouterSnap.exists() ? scouterSnap.data() : {};
+    let scouterInfo = scouterData['scouter'] || {};
+    let favoritos: string[] = Array.isArray(scouterInfo.favoritos) ? scouterInfo.favoritos : [];
+    if (favoritos.includes(jugadorUid)) {
+      favoritos = favoritos.filter(id => id !== jugadorUid);
+      await (await import('firebase/firestore')).updateDoc(scouterRef, { 'scouter.favoritos': favoritos });
+      this.esFavorito = false;
+      alert('Jugador eliminado de favoritos.');
+    } else {
+      alert('El jugador no estaba en favoritos.');
+    }
+  }
+
+  onSeguirClick() {
+    const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+    const jugadorUid = this.userId;
+    if (scouterUid && jugadorUid) {
+      this.agregarAFavoritos(scouterUid, jugadorUid).then(() => {
+        this.esFavorito = true;
+      });
+    } else {
+      alert('No se pudo obtener el usuario actual o el perfil.');
+    }
   }
 }

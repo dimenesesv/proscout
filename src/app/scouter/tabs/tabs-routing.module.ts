@@ -28,7 +28,8 @@ const routes: Routes = [
       },
       {
         path: 'busqueda',
-        loadChildren: () => import('../busqueda/busqueda.module').then(m => m.BusquedaPageModule)
+        loadChildren: () => import('../busqueda/busqueda.module').then(m => m.BusquedaPageModule),
+        data: { shouldDetach: false }
       },
       {
         path: 'vista-perfil/:id',

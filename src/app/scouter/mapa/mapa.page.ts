@@ -34,7 +34,7 @@ export class MapaPage implements OnInit, AfterViewInit {
   // Infinite scroll: cargar más usuarios
   page = 1;
   pageSize = 20;
-  pagedUsers: any[] = [];
+  pagedUsers: Usuario[] = [];
 
   private loadingRef: HTMLIonLoadingElement | null = null;
 
@@ -124,6 +124,15 @@ export class MapaPage implements OnInit, AfterViewInit {
   async loadUsers() {
     console.log('[MapaPage] loadUsers INICIO');
     try {
+      // 1. Obtener UID del scouter autenticado
+      const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+      let favoritosIds: string[] = [];
+      if (scouterUid) {
+        const scouterDoc = await this.firebaseService.getDocument(`usuarios/${scouterUid}`);
+        favoritosIds = Array.isArray(scouterDoc?.scouter?.favoritos) ? scouterDoc.scouter.favoritos : [];
+        console.log('[MapaPage] Favoritos del scouter:', favoritosIds);
+      }
+      // 2. Obtener todos los usuarios
       const allUsers = await this.firebaseService.getCollection('playground');
       this.users = allUsers
         .filter((u: any) =>
@@ -135,15 +144,9 @@ export class MapaPage implements OnInit, AfterViewInit {
           ...u,
           lat: u.ubicacion.latitude,
           lng: u.ubicacion.longitude,
+          esFavorito: favoritosIds.includes(u.id || u.uid) // Marca si es favorito
         }));
       this.updateUserDistances();
-      // Obtener comuna para cada usuario si no existe
-      this.users.forEach(async (user, idx) => {
-        const u: any = user;
-        if (!u.comuna && u.lat && u.lng) {
-          u.comuna = await this.obtenerComunaDeLatLng(u.lat, u.lng);
-        }
-      });
       this.page = 1;
       this.updatePagedUsers();
       console.log('[MapaPage] loadUsers OK', this.users);
@@ -166,25 +169,6 @@ export class MapaPage implements OnInit, AfterViewInit {
     }, 400);
   }
 
-  async obtenerComunaDeLatLng(lat: number, lng: number): Promise<string> {
-    try {
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${environment.googleApiKey}&language=es`;
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.status === 'OK') {
-        const components = data.results[0]?.address_components || [];
-        for (const comp of components) {
-          if (comp.types.includes('administrative_area_level_3')) {
-            return comp.long_name;
-          }
-        }
-      }
-      return '';
-    } catch (e) {
-      return '';
-    }
-  }
-
   async guardarUbicacionSiEsPosible() {
     console.log('[MapaPage] guardarUbicacionSiEsPosible INICIO');
     const user = await this.afAuth.currentUser;
@@ -200,6 +184,32 @@ export class MapaPage implements OnInit, AfterViewInit {
       const ubicacion = new GeoPoint(position.coords.latitude, position.coords.longitude);
       try {
         await this.firebaseService.updateDocument(`usuarios/${user.uid}`, { ubicacion });
+        // Obtener datos actuales del usuario
+        const datos = await this.firebaseService.getDocument(`usuarios/${user.uid}`);
+        if (datos && (!datos.comuna || !datos.ciudad || !datos.region || !datos.pais)) {
+          // Llamar a la API de geocoding solo si falta algún campo
+          const apiKey = 'AIzaSyB_FhkH1Co7ALNj_lVPO8EPAiBZ25BH45c'; // o usa environment.googleApiKey
+          const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${apiKey}&language=es`;
+          const res = await fetch(url);
+          const data = await res.json();
+          if (data.status === 'OK') {
+            let comuna = '', ciudad = '', region = '', pais = '';
+            const components = data.results[0]?.address_components || [];
+            for (const comp of components) {
+              if (comp.types.includes('locality')) ciudad = comp.long_name;
+              if (comp.types.includes('administrative_area_level_3')) comuna = comp.long_name;
+              if (comp.types.includes('administrative_area_level_1')) region = comp.long_name;
+              if (comp.types.includes('country')) pais = comp.long_name;
+            }
+            await this.firebaseService.updateDocument(`usuarios/${user.uid}`, {
+              comuna,
+              ciudad,
+              region,
+              pais
+            });
+            console.log('[MapaPage] comuna/ciudad/region/pais guardados en Firestore', { comuna, ciudad, region, pais });
+          }
+        }
         console.log('[MapaPage] guardarUbicacionSiEsPosible OK');
       } catch (e) {
         console.warn('[MapaPage] guardarUbicacionSiEsPosible ERROR', e);

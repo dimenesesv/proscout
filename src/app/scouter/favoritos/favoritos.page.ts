@@ -12,38 +12,77 @@ import { Router } from '@angular/router';
 })
 export class FavoritosPage implements OnInit {
   jugadoresFavoritos: any[] = [];
+  loading = false;
+  timeoutId: any = null;
 
-  constructor() {}
+  constructor(
+    public router: Router,
+  ) {}
 
   async ngOnInit() {
     await this.cargarJugadoresFavoritos();
   }
 
+  async ionViewWillEnter() {
+    this.loading = true;
+    // Timeout to hide loading after 7 seconds max
+    this.timeoutId = setTimeout(() => {
+      this.loading = false;
+    }, 7000);
+    await this.cargarJugadoresFavoritos();
+    this.loading = false;
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
+    }
+  }
+
   async cargarJugadoresFavoritos() {
     const auth = getAuth();
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+      console.warn('[FavoritosPage] No hay usuario autenticado');
+      this.jugadoresFavoritos = [];
+      return;
+    }
 
     const db = getFirestore();
-    const scouterRef = doc(db, 'scouters', user.uid);
+    const scouterRef = doc(db, 'usuarios', user.uid); // Cambiado de 'scouters' a 'usuarios'
     const scouterSnap = await getDoc(scouterRef);
 
     if (scouterSnap.exists()) {
-      const data = scouterSnap.data() as Scouter;
-      const favoritosIds: string[] = Array.isArray(data.favoritos) ? data.favoritos : [];
+      const data = scouterSnap.data() as any;
+      // Acceso correcto: favoritos está en data.scouter.favoritos
+      const favoritosIds: string[] = Array.isArray(data.scouter?.favoritos) ? data.scouter.favoritos : [];
+      console.log('[FavoritosPage] IDs de favoritos:', favoritosIds);
 
       // Obtener datos de cada jugador favorito
       const jugadores: any[] = [];
 
       for (const uid of favoritosIds) {
-        const jugadorRef = doc(db, 'usuarios', uid);
+        const jugadorRef = doc(db, 'playground', uid);
         const jugadorSnap = await getDoc(jugadorRef);
         if (jugadorSnap.exists()) {
-          jugadores.push({ uid, ...jugadorSnap.data() });
+          const jugadorData = jugadorSnap.data();
+          console.log('[FavoritosPage] Datos jugador favorito:', uid, jugadorData);
+          jugadores.push({ uid, ...jugadorData });
+        } else {
+          console.warn('[FavoritosPage] Jugador favorito no encontrado en usuarios:', uid);
         }
       }
 
       this.jugadoresFavoritos = jugadores;
+      console.log('[FavoritosPage] jugadoresFavoritos final:', this.jugadoresFavoritos);
+    } else {
+      console.warn('[FavoritosPage] No existe documento scouter para UID:', user.uid);
+      this.jugadoresFavoritos = [];
+    }
+  }
+
+  verPerfil(jugadorUid: string) {
+    // Redirige a la vista de perfil del jugador
+    if (jugadorUid) {
+      this.router.navigate([`/scouter/scouter/vista-perfil`, jugadorUid]);
     }
   }
 

@@ -17,6 +17,8 @@ export function animateTabTransition() {
           el => el.nodeType === 1 && (el as HTMLElement).offsetParent !== null
         );
       }
+      // Si no hay targets válidos, no animar
+      if (!targets || targets.length === 0) return;
       animate(targets, {
         opacity: [0, 1],
         transform: ['translateY(40px)', 'translateY(0)']
@@ -26,5 +28,21 @@ export function animateTabTransition() {
         easing: 'ease'
       });
     }
+  }
+}
+
+export function animateWelcomeScreen() {
+  const el = document.getElementById('welcomeScreen');
+  if (el) {
+    animate(el, 
+      { 
+        opacity: [0, 0.3, 1],
+        transform: ['scale(0.95) translateY(-20px)', 'scale(1.02) translateY(10px)', 'scale(1) translateY(0)']
+      },
+      { 
+        duration: 0.9,
+        easing: [0.22, 1, 0.36, 1]
+      }
+    );
   }
 }

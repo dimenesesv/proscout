@@ -5,14 +5,14 @@
     <h1 class="notificaciones-title">Notificaciones</h1>
   </div>
   <ion-list *ngIf="notificaciones.length > 0; else noNotificaciones">
-    <ion-item-sliding *ngFor="let notificacion of notificaciones">
+    <ion-item-sliding *ngFor="let notificacion of notificaciones; let i = index">
       <ion-item lines="none" class="notificacion-item">
         <ion-avatar slot="start">
-          <img [src]="notificacion.imagen || 'https://placehold.co/64x64'" />
+          <ion-icon [name]="notificacion.tipo === 'alerta' ? 'alert-circle' : notificacion.tipo === 'mensaje' ? 'mail' : 'star'" size="large"></ion-icon>
         </ion-avatar>
         <ion-label>
-          <h2>{{ notificacion.titulo }}</h2>
-          <p>{{ notificacion.mensaje }}</p>
+          <h2>{{ notificacion.tipo | titlecase }}</h2>
+          <p>{{ notificacion.contenido }}</p>
           <ion-text color="medium">
             <small>{{ notificacion.fecha | date: 'short' }}</small>
           </ion-text>

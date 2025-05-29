@@ -429,3 +429,49 @@ ion-note.ion-text-center {
   from { opacity: 0; transform: translateY(-18px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+.estrella-favorito {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 2rem;
+  color: #000000;
+  z-index: 10;
+  text-shadow: 0 0 8px #000, 0 0 2px #000, 0 0 12px #37ff00;
+  pointer-events: none;
+}
+
+.mapa-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(24, 24, 27, 0.85);
+  z-index: 1000;
+}
+
+.mapa-loading-overlay ion-spinner,
+.mapa-loading-overlay .loading-text {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mapa-loading-overlay ion-spinner {
+  width: 64px;
+  height: 64px;
+  color: #39ff14;
+}
+
+.mapa-loading-overlay .loading-text {
+  margin-top: 1.2rem;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: center;
+}

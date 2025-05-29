@@ -1,0 +1,36 @@
+<ion-content>
+  <form #filtrosForm="ngForm" (ngSubmit)="aplicarFiltros(filtrosForm)" autocomplete="off">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="modal-title">Filtros físicos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Altura (cm)</ion-label>
+          <ion-input class="input-redondeado" type="number" name="altura" ngModel min="100" max="250" pattern="^[0-9]*$"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Peso (kg)</ion-label>
+          <ion-input class="input-redondeado" type="number" name="peso" ngModel min="30" max="200" pattern="^[0-9]*$"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Edad</ion-label>
+          <ion-input class="input-redondeado" type="number" name="edad" ngModel min="10" max="60" pattern="^[0-9]*$"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="modal-title">Filtros deportivos (Stats)</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let stat of ['velocidad','resistencia','fuerza','agilidad','equilibrio','coordinacion','salto','controlBalon','regate','pase','tiro','cabeceo']">
+          <ion-label position="stacked">{{ stat | titlecase }}</ion-label>
+          <ion-input class="input-redondeado" type="number" [name]="stat" ngModel min="1" max="100" pattern="^[0-9]*$"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    <ion-button expand="block" type="submit" color="primary" class="aplicar-btn">Aplicar filtros</ion-button>
+    <ion-button expand="block" fill="clear" color="medium" (click)="cancelar()" class="cancelar-btn">Cancelar</ion-button>
+  </form>
+</ion-content>

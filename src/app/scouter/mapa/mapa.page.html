@@ -4,6 +4,9 @@
     <span class="refresh-text">Actualizando...</span>
   </div>
 </div>
+<div *ngIf="isLoading" class="mapa-loading-overlay">
+  <ion-spinner name="crescent"></ion-spinner>
+</div>
 <ion-content [fullscreen]="true">
   <div class="circle-top">
   </div>
@@ -19,7 +22,6 @@
     </ion-chip>
   </div>
 
-  <ion-spinner *ngIf="isLoading" name="crescent" class="spinner-center center-spinner"></ion-spinner>
   <ion-note *ngIf="locationError" color="danger" class="ion-text-center" style="margin-top:2rem;">
     No se pudo obtener tu ubicación. Por favor revisa los permisos de localización y vuelve a intentarlo.
   </ion-note>
@@ -31,7 +33,7 @@
       <div class="jugador-card perfil-card animate-card" *ngFor="let user of pagedUsers; let i = index" (click)="verPerfil(user)" [style.animationDelay]="(i * 80) + 'ms'">
         <div class="imagen-con-label">
           <img [src]="user.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" />
-          <div hidden="true" class="etiqueta-nueva">NEW</div>
+          <ion-icon *ngIf="user.esFavorito" name="star" class="estrella-favorito"></ion-icon>
         </div>
         <div class="info-contenido">
           <div class="ubicacion">

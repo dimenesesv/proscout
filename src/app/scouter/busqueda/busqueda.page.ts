@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { Info } from 'src/app/interfaces/info';
 import { Stats } from 'src/app/interfaces/stats';
-import { IonModal } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { FiltrosModalComponent } from './filtros-modal.component';
 
 @Component({
   selector: 'app-busqueda',
@@ -17,9 +18,10 @@ export class BusquedaPage implements OnInit, OnDestroy {
   resultados: { usuario: Usuario; puntaje: number; porcentaje: number; edadCalculada?: number }[] = [];
   filtrosActivos: { key: string, label: string, value: any }[] = [];
   filtrosActuales: any = {};
-  @ViewChild('modalFiltros') modalFiltros!: IonModal;
   cargandoUsuarios = false;
   badgeState: 'none' | 'active' | 'loading' = 'none';
+
+  showWelcomeScreen = false;
 
   // Infinite scroll support
   page = 1;
@@ -34,17 +36,47 @@ export class BusquedaPage implements OnInit, OnDestroy {
     regate: 'Regate', pase: 'Pase', tiro: 'Tiro', cabeceo: 'Cabeceo'
   };
 
-  constructor(private firebaseService: FirebaseService, private router: Router) { }
+  testValue = 42;
+
+  constructor(private firebaseService: FirebaseService, private router: Router, private modalCtrl: ModalController) {
+    try {
+      console.log('[DEBUG] BusquedaPage constructor called');
+    } catch (err) {
+      console.error('[ERROR] Exception in BusquedaPage constructor:', err);
+    }
+  }
 
   private deviceOrientationHandler = (event: DeviceOrientationEvent) => {
     this.onWelcomeDeviceParallax(event);
   };
 
   ngOnInit() {
+    try {
+      console.log('[DEBUG] BusquedaPage ngOnInit called');
+      // this.abrirModalFiltros(); // Quitar apertura automática del modal
+    } catch (err) {
+      console.error('[ERROR] Exception in BusquedaPage ngOnInit:', err);
+    }
     this.setBadgeState();
     this.cargarUsuarios();
     if (window && 'DeviceOrientationEvent' in window) {
       window.addEventListener('deviceorientation', this.deviceOrientationHandler);
+    }
+  }
+
+  ionViewWillEnter() {
+    this.showWelcomeScreen = true;
+  }
+
+  ionViewDidEnter() {
+    console.log('[DEBUG] BusquedaPage ionViewDidEnter called (animation removed)');
+  }
+
+  ionViewWillLeave() {
+    this.showWelcomeScreen = false;
+    const welcome = document.getElementById('welcomeScreen');
+    if (welcome) {
+      welcome.style.display = 'none';
     }
   }
 
@@ -177,8 +209,19 @@ export class BusquedaPage implements OnInit, OnDestroy {
     }
   }
 
-  abrirModalFiltros() {
-    this.modalFiltros.present();
+  async abrirModalFiltros() {
+    console.log('[DEBUG] abrirModalFiltros called');
+    const modal = await this.modalCtrl.create({
+      component: FiltrosModalComponent
+    });
+    modal.onDidDismiss().then(result => {
+      console.log('[DEBUG] modal onDidDismiss', result);
+      if (result.data) {
+        this.aplicarFiltros(result.data, modal);
+      }
+    });
+    await modal.present();
+    console.log('[DEBUG] modal.present() called');
   }
 
   aplicarFiltros(valores: any, modal: any) {

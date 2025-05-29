@@ -1,2 +1,105 @@
 @import '../registro.page.scss';
 // Hereda los estilos globales de registro para un look unificado.
+
+ion-content {
+    --background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+
+    .formulario-boton {
+        background: #18181b !important;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(57,255,20,0.10), 0 2px 12px rgba(0,0,0,0.22);
+        color: #b3c7d6;
+        border: 2px solid #39ff14;
+        padding: 2.2rem 2rem;
+        max-width: 400px;
+        margin: 2.5rem auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+
+        ion-item {
+            --background: transparent;
+            --highlight-background: transparent;
+            --min-height: 56px;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+
+            ion-label {
+                color: #fff !important;
+                font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+                font-size: 1.13rem;
+            }
+
+            ion-input {
+                background: #23232a !important;
+                color: #b3c7d6 !important;
+                border-radius: 12px !important;
+                border: none !important;
+                font-size: 1.18rem !important;
+                padding: 1.1rem 1rem !important;
+                box-shadow: none !important;
+                caret-color: #39ff14 !important;
+
+                &:focus {
+                    background: #18394a !important;
+                    color: #39ff14 !important;
+                    outline: none !important;
+                    border: 1.5px solid #39ff14 !important;
+                }
+            }
+        }
+
+        button, ion-button {
+            min-height: 56px;
+            height: 56px;
+            font-size: 1.18rem;
+            font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+            font-weight: 700;
+            background: #fff !important;
+            color: #23232a !important;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px 0 #39ff1444;
+            transition: background 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s, color 0.22s;
+            width: 100%;
+            padding: 0.7rem 0;
+            border: none;
+            --background: #fff;
+            --color: #23232a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:active {
+                background: #23232a !important;
+                color: #39ff14 !important;
+            }
+        }
+
+        button.secondary, ion-button.secondary {
+            background: transparent !important;
+            color: #fff !important;
+            border: none !important;
+            box-shadow: none !important;
+            --background: transparent;
+            --color: #fff;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .formulario-boton {
+            padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+            max-width: 98vw;
+        }
+    }
+}
