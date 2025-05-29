@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { Info } from 'src/app/interfaces/info';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./busqueda.page.scss'],
   standalone: false, 
 })
-export class BusquedaPage implements OnInit {
+export class BusquedaPage implements OnInit, OnDestroy {
   usuarios: Usuario[] = [];
   resultados: { usuario: Usuario; puntaje: number; porcentaje: number; edadCalculada?: number }[] = [];
   filtrosActivos: { key: string, label: string, value: any }[] = [];
@@ -36,9 +36,22 @@ export class BusquedaPage implements OnInit {
 
   constructor(private firebaseService: FirebaseService, private router: Router) { }
 
+  private deviceOrientationHandler = (event: DeviceOrientationEvent) => {
+    this.onWelcomeDeviceParallax(event);
+  };
+
   ngOnInit() {
     this.setBadgeState();
     this.cargarUsuarios();
+    if (window && 'DeviceOrientationEvent' in window) {
+      window.addEventListener('deviceorientation', this.deviceOrientationHandler);
+    }
+  }
+
+  ngOnDestroy() {
+    if (window && 'DeviceOrientationEvent' in window) {
+      window.removeEventListener('deviceorientation', this.deviceOrientationHandler);
+    }
   }
 
   async cargarUsuarios() {
@@ -210,5 +223,27 @@ export class BusquedaPage implements OnInit {
   verPerfil(usuario: any) {
     if (!usuario || !usuario.id) return;
     this.router.navigate(['/scouter/vista-perfil', usuario.id]);
+  }
+
+  onWelcomeParallax(event: MouseEvent) {
+    const welcome = event.currentTarget as HTMLElement;
+    const rect = welcome.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    welcome.style.setProperty('--gradient-x', `${x}%`);
+    welcome.style.setProperty('--gradient-y', `${y}%`);
+  }
+
+  onWelcomeDeviceParallax(event: DeviceOrientationEvent) {
+    // gamma: left-right [-90,90], beta: front-back [-180,180]
+    const welcome = document.querySelector('.welcome-screen') as HTMLElement;
+    if (!welcome) return;
+    // Normalize gamma and beta to [0,100]
+    const gamma = event.gamma || 0;
+    const beta = event.beta || 0;
+    const x = ((gamma + 90) / 180) * 100;
+    const y = ((beta + 180) / 360) * 100;
+    welcome.style.setProperty('--gradient-x', `${x}%`);
+    welcome.style.setProperty('--gradient-y', `${y}%`);
   }
 }

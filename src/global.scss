@@ -43,3 +43,16 @@
 body, html, ion-app, ion-content, ion-card, ion-label, ion-card-title, ion-title, ion-button, h1, h2, h3, h4, h5, h6, p, div {
   font-family: 'Bebas Neue', sans-serif !important;
 }
+
+.circle-top {
+  position: absolute;
+  top: -250px; /* Oculta la mitad superior */
+  left: 50%;
+  margin-left: -250px; /* Mitad del ancho negativo */
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at center, rgba(57, 255, 20, 0.1) 0%, rgba(57, 255, 20, 0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}

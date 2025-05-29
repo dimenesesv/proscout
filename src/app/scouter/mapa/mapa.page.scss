@@ -12,6 +12,18 @@ ion-content {
   --background: #18181b !important;
   color: #fff;
 }
+.circle-top {
+  position: absolute;
+  top: -250px; /* Oculta la mitad superior */
+  left: 50%;
+  margin-left: -250px; /* Mitad del ancho negativo */
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at center, rgba(57, 255, 20, 0.1) 0%, rgba(57, 255, 20, 0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
 
 .custom-header ion-toolbar {
   background: #97BC62 !important; // Moss green

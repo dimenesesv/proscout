@@ -1,5 +1,6 @@
 <ion-tabs (ionTabsWillChange)="onTabWillChange()">
   <router-outlet></router-outlet>
+  <div class="tab-bar-placeholder">
   <ion-tab-bar slot="bottom">
     <div class="tab-bar">
       <ion-tab-button tab="mapa" [disabled]="isVistaPerfil()">
@@ -19,4 +20,5 @@
       </ion-tab-button>
     </div>
   </ion-tab-bar>
+  </div>
 </ion-tabs>

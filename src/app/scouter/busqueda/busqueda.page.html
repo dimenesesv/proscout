@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <ng-container *ngIf="!filtrosActivos || filtrosActivos.length === 0">
-    <div class="welcome-screen">
+    <div class="welcome-screen" (mousemove)="onWelcomeParallax($event)">
       <h2>Búsqueda avanzada</h2>
       <p>Utiliza los filtros para encontrar jugadores que se ajusten a tus necesidades. Haz clic en <b>Filtros</b> para comenzar.</p>
       <ion-button expand="block" (click)="abrirModalFiltros()" class="filtros-btn">
