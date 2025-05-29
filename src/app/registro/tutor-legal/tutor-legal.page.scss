@@ -1,17 +1,26 @@
+@import '../registro.page.scss';
+// Hereda los estilos globales de registro para un look unificado.
+
 .formulario-boton {
-  max-width: 420px;
-  margin: 32px auto;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.08);
+  max-width: 400px;
+  margin: 2.5rem auto;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(57,255,20,0.10), 0 2px 12px rgba(0,0,0,0.22);
+  color: #b3c7d6;
+  border: 2px solid #39ff14;
+  padding: 2.2rem 2rem;
 }
 
 .form-title {
   margin-bottom: 18px;
   display: block;
-  font-size: 16px;
+  font-size: 1.13rem;
   font-weight: 600;
   text-align: center;
+  color: #fff;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 }
+
 ion-note {
   font-family: var(--ion-font-family, inherit) !important;
   font-size: 15px !important;
@@ -37,13 +46,57 @@ ion-item {
   --background: #f8f9fa;
 }
 
-ion-input, ion-select {
-  font-size: 15px;
-  color: var(--ion-color-medium-shade, #000000);
+ion-input, ion-select, ion-textarea, input, select, textarea {
+  background: #23232a !important;
+  color: #b3c7d6 !important;
+  border-radius: 12px !important;
+  border: none !important;
+  font-size: 1.18rem !important;
+  padding: 1.1rem 1rem !important;
+  box-shadow: none !important;
+  caret-color: #39ff14 !important;
 }
 
-ion-button {
-  margin-top: 18px;
+ion-input:focus, ion-select:focus, ion-textarea:focus, input:focus, select:focus, textarea:focus {
+  background: #18394a !important;
+  color: #39ff14 !important;
+  outline: none !important;
+  border: 1.5px solid #39ff14 !important;
+}
+
+ion-button, button {
+  min-height: 56px;
+  height: 56px;
+  font-size: 1.18rem;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 700;
+  background: #fff !important;
+  color: #23232a !important;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px 0 #39ff1444;
+  transition: background 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s, color 0.22s;
+  width: 100%;
+  padding: 0.7rem 0;
+  border: none;
+  --background: #fff;
+  --color: #23232a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-button.secondary, button.secondary {
+  background: transparent !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  --background: transparent;
+  --color: #fff;
+}
+
+ion-button:active, button:active {
+  background: #23232a !important;
+  color: #39ff14 !important;
 }
 
 .autocomplete-list {
@@ -89,7 +142,7 @@ ion-button {
 
 @media (max-width: 500px) {
   .formulario-boton {
-    margin: 16px 4px;
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
     max-width: 98vw;
   }
 }

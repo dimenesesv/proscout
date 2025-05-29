@@ -35,6 +35,10 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
     private ngZone: NgZone
   ) {}
 
+  goToConfiguracion() {
+    this.router.navigate(['/scouter/scouter/configuracion']);
+  }
+
   async loadUserData(userId: string) {
     console.log('[PerfilPage] Loading user data for:', userId);
     if (!userId) {

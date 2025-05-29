@@ -1,19 +1,38 @@
+@import '../registro.page.scss';
+// Hereda los estilos globales de registro para un look unificado.
+
 .custom-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100px;
-    text-align: center;
-    --padding-start: 0;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100px;
+  text-align: center;
+  --padding-start: 0;
+  background: #23232a !important;
+  color: #b3c7d6 !important;
+  border-radius: 18px;
+  border: 2px solid #39ff14;
+  box-shadow: 0 2px 8px rgba(57,255,20,0.10);
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.13rem;
+  margin: 0 0.5rem;
+}
 
-  .custom-button ion-icon {
-    font-size: 40px;
-    margin-bottom: 5px;
-  }
+.custom-button.selected {
+  background: #18394a !important;
+  color: #39ff14 !important;
+  border: 2px solid #39ff14;
+}
 
-  .custom-button span {
-    font-size: 14px;
-  }
+.custom-button ion-icon {
+  font-size: 40px;
+  margin-bottom: 5px;
+  color: #39ff14;
+}
+
+.custom-button span {
+  font-size: 1.13rem;
+  color: #fff;
+}

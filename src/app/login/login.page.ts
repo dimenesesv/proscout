@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { AuthService } from '../services/auth.service'; // Asegúrate que el path sea correcto
 import { Router } from '@angular/router'; // Para redirigir después de login
 import { RegistroService } from 'src/app/services/registro.service';
@@ -12,12 +12,11 @@ import { GeoPoint } from 'firebase/firestore';
   styleUrls: ['./login.page.scss'],
   standalone: false,
 })
-export class LoginPage {
+export class LoginPage implements AfterViewInit {
   email: string = '';
   password: string = '';
   showError: boolean = false;
   errorMessage: string = '';
-  debugInfo: string = '';
 
   constructor(
     private authService: AuthService,
@@ -31,7 +30,6 @@ export class LoginPage {
       await this.authService.loginAndRedirect(this.email, this.password, this.firebaseService);
     } catch (error: any) {
       this.showError = true;
-      this.debugInfo = 'Error en login: ' + (error?.message || error);
       console.error('[LoginPage] Error en login:', error);
       if (error.code === 'auth/invalid-credential') {
         this.errorMessage = 'Email o contraseña incorrectos';
@@ -48,5 +46,14 @@ export class LoginPage {
   }
   goToRegister() {
     this.router.navigate(['/registro']); // Redirige a la página de registro
+  }
+
+  async ngAfterViewInit() {
+    // Motion One animation for login card
+    const motion = await import('@motionone/dom');
+    const card = document.querySelector('.login-card');
+    if (card) {
+      motion.animate(card, { opacity: [0, 1], y: [40, 0] }, { duration: 0.7, easing: 'ease-out' });
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core';
-import { ModalController, IonContent } from '@ionic/angular';
-import { AfterViewInit } from '@angular/core';
+import { ModalController, IonContent, LoadingController } from '@ionic/angular';
+import { AfterViewInit, HostListener } from '@angular/core';
 import { calcularDistancia } from 'src/app/utils/distancia';
 import { Geolocation } from '@capacitor/geolocation';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -19,7 +19,7 @@ declare var google: any;
   styleUrls: ['./mapa.page.scss'],
   standalone: false,
 })
-export class MapaPage implements OnInit {
+export class MapaPage implements OnInit, AfterViewInit {
   @ViewChild(IonContent, { static: false }) content!: IonContent;
 
   currentLocation: { lat: number; lng: number } = { lat: 19.4326, lng: -99.1332 }; // Default: CDMX
@@ -29,11 +29,14 @@ export class MapaPage implements OnInit {
   ciudad: string = '';
   isLoading: boolean = true;
   locationError: boolean = false;
+  isRefreshing: boolean = false;
 
   // Infinite scroll: cargar más usuarios
   page = 1;
   pageSize = 20;
   pagedUsers: any[] = [];
+
+  private loadingRef: HTMLIonLoadingElement | null = null;
 
   constructor(
     private ngZone: NgZone,
@@ -41,7 +44,8 @@ export class MapaPage implements OnInit {
     private firebaseService: FirebaseService,
     private router: Router,
     private afAuth: AngularFireAuth, // <--- agregado
-    private route: ActivatedRoute // <--- inyectar ActivatedRoute
+    private route: ActivatedRoute, // <--- inyectar ActivatedRoute
+    private loadingController: LoadingController // <-- add LoadingController
   ) {}
 
   ngOnInit() {
@@ -235,23 +239,62 @@ export class MapaPage implements OnInit {
   async doRefresh(event: any) {
     console.log('[MapaPage] doRefresh iniciado');
     let timeoutId: any;
+    this.isRefreshing = true;
     try {
-      timeoutId = setTimeout(() => {
-        console.warn('[MapaPage] doRefresh: Timeout alcanzado, forzando complete');
-        event.target.complete();
-      }, 7000);
       await this.getCurrentLocation();
       console.log('[MapaPage] getCurrentLocation completado');
       await this.loadUsers();
       console.log('[MapaPage] loadUsers completado');
       event.target.complete();
-      console.log('[MapaPage] event.target.complete() ejecutado');
     } catch (err) {
       console.error('[MapaPage] Error en doRefresh:', err);
       event.target.complete();
     } finally {
+      this.isRefreshing = false;
       if (timeoutId) clearTimeout(timeoutId);
       console.log('[MapaPage] doRefresh finalizado');
+    }
+  }
+
+  async presentUpdatingLoading() {
+    this.dismissUpdatingLoading();
+    this.loadingRef = await this.loadingController.create({
+      message: '<div style="display:flex;align-items:center;justify-content:center;padding:0.5rem 0;"><ion-spinner name="crescent" style="width:32px;height:32px;"></ion-spinner></div>',
+      cssClass: 'loading-toast-top',
+      duration: 0,
+      translucent: true,
+      backdropDismiss: false,
+      showBackdrop: false,
+      keyboardClose: false,
+      mode: 'ios',
+      // @ts-ignore
+      innerHTML: true
+    });
+    await this.loadingRef.present();
+    // Mueve el loading a la parte superior como toast
+    setTimeout(() => {
+      const el = document.querySelector('.loading-toast-top .loading-wrapper, .loading-toast-top .loading-content');
+      if (el) {
+        (el as HTMLElement).style.top = '1.5rem';
+        (el as HTMLElement).style.margin = '0 auto';
+        (el as HTMLElement).style.position = 'fixed';
+        (el as HTMLElement).style.left = '0';
+        (el as HTMLElement).style.right = '0';
+        (el as HTMLElement).style.transform = 'none';
+        (el as HTMLElement).style.background = 'rgba(24,24,27,0.92)';
+        (el as HTMLElement).style.borderRadius = '16px';
+        (el as HTMLElement).style.boxShadow = '0 2px 16px 0 rgba(0,0,0,0.18)';
+        (el as HTMLElement).style.width = 'auto';
+        (el as HTMLElement).style.maxWidth = '180px';
+        (el as HTMLElement).style.zIndex = '9999';
+      }
+    }, 10);
+  }
+
+  dismissUpdatingLoading() {
+    if (this.loadingRef) {
+      this.loadingRef.dismiss();
+      this.loadingRef = null;
     }
   }
 
@@ -324,5 +367,31 @@ export class MapaPage implements OnInit {
       }
     });
     await modal.present();
+  }
+
+  ngAfterViewInit() {
+    const contentEl = document.querySelector('ion-content');
+    if (contentEl) {
+      contentEl.addEventListener('ionScroll', this.handleScrollGlow.bind(this));
+    }
+    // Set initial glow
+    this.setGlowBlur(18);
+  }
+
+  setGlowBlur(px: number) {
+    const title = document.querySelector('.mapa-title') as HTMLElement;
+    if (title) {
+      title.style.setProperty('--glow-blur', `${px}px`);
+    }
+  }
+
+  handleScrollGlow(event: any) {
+    let scrollTop = 0;
+    if (event && event.detail && typeof event.detail.scrollTop === 'number') {
+      scrollTop = event.detail.scrollTop;
+    }
+    // Animate between 18px (top) and 4px (scrolled)
+    const blur = Math.max(4, 18 - scrollTop / 8);
+    this.setGlowBlur(blur);
   }
 }

@@ -18,33 +18,209 @@
         <div class="swiper-wrapper">
           <!-- Slide 1: Perfil -->
           <div class="swiper-slide">
-            <app-perfil-card
-              [perfilUsuario]="userData"
-              [comuna]="userData.comuna"
-              [ciudad]="userData.ciudad"
-              (error)="perfilCardError = true"
-              *ngIf="!perfilCardError"
-            ></app-perfil-card>
+            <!-- Card 1: Profile Photo (visualizer, no edit) -->
+            <ion-card class="profile-card">
+              <ion-img class="profile-photo" [src]="userData?.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil"></ion-img>
+              <div class="profile-info-wrapper">
+                <h2>{{ userData?.nombre }}</h2>
+                <div *ngIf="userData?.fechaNacimiento">Edad: {{ userData?.edad || '--' }}</div>
+                <div *ngIf="userData?.correo">{{ userData.correo }}</div>
+              </div>
+            </ion-card>
+            <!-- Card 2: Info -->
+            <ion-card class="profile-card">
+              <div class="profile-header-info">
+                <h1 class="profile-name">{{ userData?.nombre }}</h1>
+                <div class="profile-age" *ngIf="userData?.fechaNacimiento">Edad: {{ userData?.edad || '--' }}</div>
+              </div>
+              <div class="profile-details">
+                <div class="profile-detail-row" *ngIf="userData?.correo">
+                  <ion-icon name="mail-outline"></ion-icon>
+                  <span>{{ userData.correo }}</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.nacionalidad">
+                  <ion-icon name="flag-outline"></ion-icon>
+                  <span>{{ userData.nacionalidad }}</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.rut">
+                  <ion-icon name="card-outline"></ion-icon>
+                  <span>RUT: {{ userData.rut }}</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.sexo">
+                  <ion-icon name="male-female-outline"></ion-icon>
+                  <span>Sexo: {{ userData.sexo }}</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.anosExperiencia">
+                  <ion-icon name="briefcase-outline"></ion-icon>
+                  <span>{{ userData.anosExperiencia }} años de experiencia</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.equipoActual">
+                  <ion-icon name="people-outline"></ion-icon>
+                  <span>Equipo: {{ userData.equipoActual }}</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.clubActual">
+                  <ion-icon name="trophy-outline"></ion-icon>
+                  <span>Club: {{ userData.clubActual }}</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.jugadoresVistos">
+                  <ion-icon name="eye-outline"></ion-icon>
+                  <span>{{ userData.jugadoresVistos }} jugadores vistos</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.aceptaVideos">
+                  <ion-icon name="videocam-outline"></ion-icon>
+                  <span>Acepta videos</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.idiomas?.length">
+                  <ion-icon name="language-outline"></ion-icon>
+                  <span>Idiomas: {{ userData.idiomas.join(', ') }}</span>
+                </div>
+                <div class="profile-detail-row" *ngIf="userData?.regionesQueCubre?.length">
+                  <ion-icon name="map-outline"></ion-icon>
+                  <span>Regiones: {{ userData.regionesQueCubre.join(', ') }}</span>
+                </div>
+              </div>
+              <div class="bio-text" *ngIf="userData?.biografia">
+                <ion-icon name="document-text-outline"></ion-icon> {{ userData?.biografia }}
+              </div>
+              <div class="profile-actions">
+                <ion-button color="primary" shape="round" fill="solid"><ion-icon slot="start" name="mail-outline"></ion-icon>Contactar</ion-button>
+                <ion-button color="secondary" shape="round" fill="outline"><ion-icon slot="start" name="person-add-outline"></ion-icon>Seguir</ion-button>
+              </div>
+            </ion-card>
             <ion-card *ngIf="perfilCardError">
               <ion-card-content color="danger">Error al cargar el perfil.</ion-card-content>
             </ion-card>
           </div>
           <!-- Slide 2: Estadísticas -->
           <div class="swiper-slide">
-            <app-estadisticas-card
-              [perfilUsuario]="userData"
-              (error)="estadisticasCardError = true"
-              *ngIf="!estadisticasCardError"
-            ></app-estadisticas-card>
+            <ion-card *ngIf="userData && userData.esJugador" class="estadisticas-card animate-card">
+              <ion-card-header>
+                <ion-card-title class="estadisticas-title">Estadísticas</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <div class="estadisticas-content">
+                  <app-radar-chart
+                    [labels]="['Ataque', 'Defensa', 'Habilidad', 'Táctica', 'Creatividad']"
+                    [data]="[
+                      userData.stats?.ataque || 0,
+                      userData.stats?.defensa || 0,
+                      userData.stats?.habilidad || 0,
+                      userData.stats?.tactica || 0,
+                      userData.stats?.creatividad || 0
+                    ]"
+                  ></app-radar-chart>
+                  <div class="stats-grid">
+                    <div class="stat-item">
+                      <h3>Partidos jugados</h3>
+                      <p>{{ userData.stats?.partidosJugados ?? '-' }}</p>
+                    </div>
+                    <div class="stat-item">
+                      <h3>Goles</h3>
+                      <p>{{ userData.stats?.goles ?? '-' }}</p>
+                    </div>
+                    <div class="stat-item">
+                      <h3>Asistencias</h3>
+                      <p>{{ userData.stats?.asistencias ?? '-' }}</p>
+                    </div>
+                    <div class="stat-item">
+                      <h3>Tarjetas amarillas</h3>
+                      <p>{{ userData.stats?.tarjetasAmarillas ?? '-' }}</p>
+                    </div>
+                    <div class="stat-item">
+                      <h3>Tarjetas rojas</h3>
+                      <p>{{ userData.stats?.tarjetasRojas ?? '-' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+            <ion-card *ngIf="userData && userData.esScouter" class="estadisticas-card animate-card">
+              <ion-card-header>
+                <ion-card-title class="estadisticas-title">Trayectoria</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <div class="estadisticas-content">
+                  <!-- 🔹 Biografía -->
+                  <div class="section">
+                    <ion-label class="section-title">Biografía</ion-label>
+                    <ion-textarea
+                      auto-grow="true"
+                      placeholder="Escribe una breve biografía..."
+                      [(ngModel)]="biografia"
+                    ></ion-textarea>
+                  </div>
+                  <!-- 🔹 Historial de equipos -->
+                  <div class="section">
+                    <ion-label class="section-title">Historial de Equipos</ion-label>
+                    <ion-list *ngIf="perfilScouter?.equiposHistorial">
+                      <ion-item *ngFor="let equipo of perfilScouter.equiposHistorial">
+                        <ion-label>{{ equipo }}</ion-label>
+                      </ion-item>
+                    </ion-list>
+                    <ion-input
+                      [(ngModel)]="nuevoEquipo"
+                      placeholder="Agregar nuevo equipo"
+                    ></ion-input>
+                    <ion-button expand="block" (click)="agregarEquipo()">Agregar equipo</ion-button>
+                  </div>
+                  <!-- 🔹 Certificación / Título -->
+                  <div class="section">
+                    <ion-label class="section-title">Título Profesional o Certificación</ion-label>
+                    <ion-item>
+                      <ion-label>Archivo actual:</ion-label>
+                      <ion-text *ngIf="perfilScouter?.tituloUrl; else noArchivo">
+                        <a [href]="perfilScouter?.tituloUrl" target="_blank">Ver documento</a>
+                      </ion-text>
+                      <ng-template #noArchivo>
+                        <ion-text color="medium">No se ha subido un archivo.</ion-text>
+                      </ng-template>
+                    </ion-item>
+                    <input
+                      type="file"
+                      (change)="subirArchivoCertificacion($event)"
+                      accept=".pdf,.jpg,.png,.doc,.docx"
+                    />
+                  </div>
+                  <!-- 🔹 Logros importantes -->
+                  <div class="section">
+                    <ion-label class="section-title">Logros Importantes</ion-label>
+                    <ion-list *ngIf="perfilScouter?.logros">
+                      <ion-item *ngFor="let logro of perfilScouter.logros">
+                        <ion-label>{{ logro }}</ion-label>
+                      </ion-item>
+                    </ion-list>
+                    <ion-input
+                      [(ngModel)]="nuevoLogro"
+                      placeholder="Agregar nuevo logro"
+                    ></ion-input>
+                    <ion-button expand="block" (click)="agregarLogro()">Agregar logro</ion-button>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
             <ion-note *ngIf="estadisticasCardError" color="danger">Error al cargar estadísticas.</ion-note>
           </div>
           <!-- Slide 3: Galería -->
           <div class="swiper-slide">
-            <app-galeria-card
-              [galleryUrls]="userData.galeria"
-              *ngIf="!galeriaCardError"
-              (error)="galeriaCardError = true"
-            ></app-galeria-card>
+            <ion-card class="galeria-card">
+              <ion-card-header>
+                <ion-card-title>Galería</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-button expand="block" (click)="selectImage()">Subir Imagen</ion-button>
+                <ion-progress-bar *ngIf="uploadProgress !== null" [value]="uploadProgress"></ion-progress-bar>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="6" *ngFor="let imageUrl of userData.galeria">
+                      <div class="galeria-img-wrapper">
+                        <ion-spinner *ngIf="!loadedImages[imageUrl]" name="crescent" class="galeria-img-spinner"></ion-spinner>
+                        <ion-img [src]="imageUrl" alt="Imagen subida" (ionImgWillLoad)="onImgWillLoad(imageUrl)" (ionImgDidLoad)="onImgDidLoad(imageUrl)"></ion-img>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
             <ion-note *ngIf="galeriaCardError" color="danger">Error al cargar galería.</ion-note>
           </div>
         </div>

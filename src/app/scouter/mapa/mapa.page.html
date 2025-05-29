@@ -1,10 +1,14 @@
-<ion-header class="mapa-header">
-  <ion-toolbar>
-    <ion-title size="large" class="ion-text-center">Jugadores Cercanos</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<div class="refresh-spinner-bar" *ngIf="isRefreshing">
+  <div class="spinner-bar-inner">
+    <ion-spinner name="crescent"></ion-spinner>
+    <span class="refresh-text">Actualizando...</span>
+  </div>
+</div>
 <ion-content [fullscreen]="true">
+  <div class="mapa-title-container">
+    <span class="mapa-subtitle">Explora</span>
+    <h1 class="mapa-title">Jugadores Cercanos</h1>
+  </div>
 
   <div *ngIf="comuna || ciudad" style="display: flex; justify-content: center; margin-top: 0.5rem;">
     <ion-chip color="primary" style="font-size:1.08rem; font-weight:600;" (click)="abrirModalUbicacion()">
@@ -19,7 +23,7 @@
   </ion-note>
   <div *ngIf="!isLoading && !locationError">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
- <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="crescent" pullingText="Desliza para actualizar" refreshingText="Actualizando..."></ion-refresher-content>
+      <ion-refresher-content pullingIcon="" refreshingSpinner="" pullingText="" refreshingText=""></ion-refresher-content>
     </ion-refresher>
     <div class="jugadores-grid" *ngIf="pagedUsers.length > 0" style="margin: 0 12px;">
       <div class="jugador-card perfil-card animate-card" *ngFor="let user of pagedUsers; let i = index" (click)="verPerfil(user)" [style.animationDelay]="(i * 80) + 'ms'">

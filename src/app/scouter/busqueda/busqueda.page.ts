@@ -4,6 +4,7 @@ import { Usuario } from 'src/app/interfaces/usuario';
 import { Info } from 'src/app/interfaces/info';
 import { Stats } from 'src/app/interfaces/stats';
 import { IonModal } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-busqueda',
@@ -18,6 +19,7 @@ export class BusquedaPage implements OnInit {
   filtrosActuales: any = {};
   @ViewChild('modalFiltros') modalFiltros!: IonModal;
   cargandoUsuarios = false;
+  badgeState: 'none' | 'active' | 'loading' = 'none';
 
   // Infinite scroll support
   page = 1;
@@ -32,18 +34,21 @@ export class BusquedaPage implements OnInit {
     regate: 'Regate', pase: 'Pase', tiro: 'Tiro', cabeceo: 'Cabeceo'
   };
 
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(private firebaseService: FirebaseService, private router: Router) { }
 
   ngOnInit() {
+    this.setBadgeState();
     this.cargarUsuarios();
   }
 
   async cargarUsuarios() {
+    this.setBadgeState('loading');
     this.cargandoUsuarios = true;
     this.usuarios = await this.firebaseService.getCollection('playground');
     this.cargandoUsuarios = false;
     this.page = 1;
     this.updatePagedResultados();
+    this.setBadgeState();
   }
 
   async buscarPorProximidad(filtros: Partial<Info & Stats>) {
@@ -164,9 +169,9 @@ export class BusquedaPage implements OnInit {
   }
 
   aplicarFiltros(valores: any, modal: any) {
-    // Guarda los valores originales del formulario para los chips
     this.filtrosActuales = { ...valores };
     this.actualizarFiltrosActivos();
+    this.setBadgeState('active');
     this.buscarPorProximidad(this.filtrosActuales);
     modal.dismiss();
   }
@@ -185,5 +190,25 @@ export class BusquedaPage implements OnInit {
     this.filtrosActuales[key] = undefined;
     this.actualizarFiltrosActivos();
     this.buscarPorProximidad(this.filtrosActuales);
+    this.setBadgeState(this.filtrosActivos.length > 0 ? 'active' : 'none');
+  }
+
+  setBadgeState(state?: 'none' | 'active' | 'loading') {
+    if (state) {
+      this.badgeState = state;
+      return;
+    }
+    if (this.cargandoUsuarios) {
+      this.badgeState = 'loading';
+    } else if (this.filtrosActivos && this.filtrosActivos.length > 0) {
+      this.badgeState = 'active';
+    } else {
+      this.badgeState = 'none';
+    }
+  }
+
+  verPerfil(usuario: any) {
+    if (!usuario || !usuario.id) return;
+    this.router.navigate(['/scouter/vista-perfil', usuario.id]);
   }
 }

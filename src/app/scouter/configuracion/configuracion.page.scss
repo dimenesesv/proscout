@@ -1,0 +1,46 @@
+ion-content.configuracion-content {
+  --background: #18181b !important;
+  background: #18181b !important;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+ion-toolbar {
+  --background: #23232a !important;
+  --color: #39ff14 !important;
+  border-bottom: 1.5px solid #23232a;
+}
+ion-title {
+  color: #39ff14 !important;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.configuracion-list {
+  padding: 2rem 1.2rem 1rem 1.2rem;
+}
+.cerrar-sesion-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: env(safe-area-inset-bottom, 0);
+  padding: 1.5rem 1.2rem 1.5rem 1.2rem;
+  background: linear-gradient(0deg, #18181b 90%, transparent 100%);
+  z-index: 10;
+}
+ion-button[color="danger"] {
+  --background: transparent;
+  --color: #ff5252;
+  --border-radius: 1.2rem;
+  --box-shadow: 0 2px 8px rgba(255,82,82,0.10);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 2px solid #ff5252;
+}
+ion-button[color="danger"]:hover, ion-button[color="danger"]:focus {
+  --background: #ff5252;
+  --color: #fff;
+}

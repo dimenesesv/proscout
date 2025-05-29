@@ -1,10 +1,7 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Notificaciones</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
+<ion-content class="ion-padding notificaciones-content" [fullscreen]="true">
+  <div class="notificaciones-title-container">
+    <h1 class="notificaciones-title">Notificaciones</h1>
+  </div>
   <ion-list *ngIf="notificaciones.length > 0; else noNotificaciones">
     <ion-item-sliding *ngFor="let notificacion of notificaciones">
       <ion-item lines="none" class="notificacion-item">

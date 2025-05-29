@@ -1,0 +1,82 @@
+ion-content, body, html {
+  --background: #000 !important;
+  background: #000 !important;
+  min-height: 100vh;
+}
+
+.formulario-boton, ion-card, .registro-card {
+  background: linear-gradient(135deg, #1b4022 0%, #3b7a3c 100%) !important;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(57,255,20,0.10), 0 2px 12px rgba(0,0,0,0.22);
+  color: #b3c7d6;
+  border: 2px solid #39ff14;
+  padding: 2.2rem 2rem;
+  max-width: 400px;
+  margin: 2.5rem auto;
+}
+
+ion-label, label {
+  color: #fff !important;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.13rem;
+}
+
+ion-input, ion-select, ion-textarea, input, select, textarea {
+  background: #23232a !important;
+  color: #b3c7d6 !important;
+  border-radius: 12px !important;
+  border: none !important;
+  font-size: 1.18rem !important;
+  padding: 1.1rem 1rem !important;
+  box-shadow: none !important;
+  caret-color: #39ff14 !important;
+}
+
+ion-input:focus, ion-select:focus, ion-textarea:focus, input:focus, select:focus, textarea:focus {
+  background: #18394a !important;
+  color: #39ff14 !important;
+  outline: none !important;
+  border: 1.5px solid #39ff14 !important;
+}
+
+ion-button, button {
+  min-height: 56px;
+  height: 56px;
+  font-size: 1.18rem;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 700;
+  background: #fff !important;
+  color: #23232a !important;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px 0 #39ff1444;
+  transition: background 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s, color 0.22s;
+  width: 100%;
+  padding: 0.7rem 0;
+  border: none;
+  --background: #fff;
+  --color: #23232a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-button.secondary, button.secondary {
+  background: transparent !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  --background: transparent;
+  --color: #fff;
+}
+
+ion-button:active, button:active {
+  background: #23232a !important;
+  color: #39ff14 !important;
+}
+
+@media (max-width: 500px) {
+  .formulario-boton, ion-card, .registro-card {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+    max-width: 98vw;
+  }
+}

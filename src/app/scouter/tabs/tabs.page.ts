@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { animateTabTransition } from './motion';
 
 @Component({
   selector: 'app-tabs',
@@ -14,5 +15,9 @@ export class TabsPage implements OnInit {
 
   isVistaPerfil(): boolean {
     return this.router.url.includes('vista-perfil');
+  }
+
+  onTabWillChange() {
+    animateTabTransition();
   }
 }

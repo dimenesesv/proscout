@@ -9,24 +9,29 @@ $font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 
 ion-content {
-  --background: #18394a !important;
-  --color: #fff !important;
+  --background: #18181b !important;
+  color: #fff;
 }
 
 .custom-header ion-toolbar {
-  background: #225C73 !important;
-  color: #fff !important;
-  --color: #fff !important;
+  background: #97BC62 !important; // Moss green
+  color: #000 !important;
+  --color: #000 !important;
   border-radius: 1.2rem 1.2rem 0 0;
-  box-shadow: 0 2px 12px rgba(34,92,115,0.10);
+  box-shadow: 0 2px 12px rgba(44,95,45,0.10);
   margin-bottom: 0.5rem;
+  border-bottom: none !important;
 }
 
 .ion-header, ion-header, ion-toolbar {
-  background: #18394a !important;
-  box-shadow: 0 2px 12px rgba(34,92,115,0.10);
+  --background: #23232a !important;
+  --color: #fff !important;
+  box-shadow: 0 2px 12px rgba(44,95,45,0.10);
   border-bottom-left-radius: 1.2rem;
   border-bottom-right-radius: 1.2rem;
+  border-bottom: 0 !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
 }
 
 ion-title {
@@ -40,7 +45,7 @@ ion-title {
 }
 
 ion-toolbar {
-  --background: #18394a !important;
+  --background: #2C5F2D !important;
   --color: #fff !important;
 }
 
@@ -64,8 +69,8 @@ ion-toolbar {
 }
 
 .jugador-card.perfil-cuadro {
-  background: #225C73 !important;
-  color: #fff !important;
+  background: #97BC62 !important; // Moss green
+  color: #000 !important;
   border-radius: 1.2rem;
   box-shadow: 0 4px 24px rgba(0,0,0,0.10);
   padding: 0.5rem 0.2rem 0.7rem 0.2rem;
@@ -77,17 +82,18 @@ ion-toolbar {
 
   &:hover, &:active {
     box-shadow: 0 6px 24px rgba(0,0,0,0.28);
-    border-color: $color-primary;
+    border-color: #000;
     transform: scale(1.04) translateY(-2px);
   }
 }
 
 .perfil-cuadro {
+  background: #2C5F2D;
+  color: #fff;
   width: 120px;
   height: 120px;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
-  background: $color-surface-dark;
   transition: box-shadow $transition-main, transform $transition-main;
   margin: 0 auto;
 
@@ -162,82 +168,14 @@ ion-toolbar {
 
 ion-note {
   color: #b3c7d6 !important;
-  text-align: center;
-  margin-top: 2rem;
   font-size: 1.15rem;
-}
-
-.cuadrado-card {
-  width: 170px;
-  height: 190px;
-  background: #18394a;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(34,92,115,0.10);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  cursor: pointer;
-  transition: box-shadow 0.18s, transform 0.18s;
-  border: 2px solid #225C73;
-  overflow: hidden;
-  padding: 0;
-}
-
-.cuadrado-card:hover {
-  box-shadow: 0 6px 24px rgba(34,92,115,0.18);
-  transform: translateY(-4px) scale(1.04);
-}
-
-.cuadrado-img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 0;
-  background: #225C73;
-  border-bottom: 1.5px solid #225C73;
-}
-
-.cuadrado-nombre {
-  width: 100%;
   text-align: center;
-  font-size: 1.08rem;
-  font-weight: 600;
-  color: #fff;
-  background: #225C73;
-  padding: 8px 0 0 0;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  letter-spacing: 0.01em;
-}
-
-@media (max-width: 900px) {
-  .jugadores-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .jugadores-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 0.7rem 0.1rem 1.5rem 0.1rem;
-  }
-
-  .perfil-img-wrapper {
-    width: 70px;
-    height: 70px;
-  }
-
-  .jugador-card.perfil-cuadro {
-    border-radius: 0.7rem;
-    padding: 0.3rem 0.1rem 0.5rem 0.1rem;
-  }
 }
 
 // === Card estilo perfil-card ===
 .perfil-card {
-  background: white;
+  background: #fff;
+  color: #2C5F2D;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -291,7 +229,7 @@ ion-note {
       }
 
       .nombre {
-        color: #000000;
+        color: #2C5F2D;
         font-weight: 600;
       }
 
@@ -302,7 +240,7 @@ ion-note {
 
     .descripcion {
       font-size: 0.8rem;
-      color: #666;
+      color: #3A6B35;
       margin-top: 5px;
     }
   }
@@ -340,4 +278,142 @@ ion-header {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+ion-chip {
+  background: #23232a;
+  color: #39ff14; // Neon green accent
+  font-weight: 700;
+  border-radius: 1.2rem;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 8px rgba(44,95,45,0.10);
+  transition: background 0.18s, color 0.18s;
+}
+ion-chip:hover, ion-chip:focus {
+  background: #1b4022;
+  color: #fff;
+}
+
+ion-chip ion-icon {
+  color: #39ff14; // Neon green accent
+  margin-right: 0.3rem;
+}
+
+ion-spinner.center-spinner {
+  display: block;
+  margin: 2.5rem auto 1.5rem auto;
+}
+
+ion-note.ion-text-center {
+  color: #b3c7d6 !important;
+  font-size: 1.15rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.mapa-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+.mapa-subtitle {
+  font-size: 0.92rem;
+  color: #b3c7d6;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  margin-bottom: 0.1em;
+}
+.mapa-title {
+  font-size: 2.2rem;
+  color: #39ff14;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin: 0;
+  background: transparent;
+  text-align: center;
+  transition: color 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes mapaTitleGlowIn {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.98);
+    text-shadow: 0 2px 0px #23232a44, 0 0 0px #39ff14, 0 0 0px #39ff1488;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 2px 16px #23232a44, 0 0 18px #39ff14, 0 0 32px #39ff1488;
+  }
+}
+
+.mapa-title.less-glow {
+  text-shadow: 0 2px 6px #23232a44, 0 0 4px #39ff14, 0 0 8px #39ff1488;
+}
+
+.loading-top .loading-wrapper, .loading-top .loading-content {
+  top: 1.5rem !important;
+  margin: 0 auto !important;
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.loading-actualizando .loading-spinner-circles {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 auto !important;
+}
+
+.loading-actualizando .loading-content {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.refresh-spinner-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1002;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+  animation: spinnerBarIn 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.spinner-bar-inner {
+  margin-top: 0.7rem;
+  background: rgba(24, 24, 27, 0.98);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px 0 rgba(0,255,64,0.12), 0 1.5px 8px rgba(57,255,20,0.18);
+  padding: 0.45rem 1.2rem 0.45rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1.5px solid #39ff14;
+}
+.spinner-bar-inner ion-spinner {
+  color: #39ff14;
+  width: 28px;
+  height: 28px;
+  --color: #39ff14;
+}
+.refresh-text {
+  color: #39ff14;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.13rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 8px #39ff1488;
+}
+@keyframes spinnerBarIn {
+  from { opacity: 0; transform: translateY(-18px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }

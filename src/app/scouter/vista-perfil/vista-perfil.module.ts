@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { VistaPerfilPageRoutingModule } from './vista-perfil-routing.module';
 import { VistaPerfilPage } from './vista-perfil.page';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { RadarChartComponent } from 'src/app/radar-chart/radar-chart.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     IonicModule,
     VistaPerfilPageRoutingModule,
-    SharedModule
+    SharedModule,
+    RadarChartComponent
   ],
   declarations: [
     VistaPerfilPage,

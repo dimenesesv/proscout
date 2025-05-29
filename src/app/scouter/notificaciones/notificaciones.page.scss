@@ -80,6 +80,29 @@ ion-list {
   }
 }
 
+.notificaciones-content {
+  --background: #18181b !important;
+}
+
+.notificaciones-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+
+.notificaciones-title {
+  font-size: 2.1rem;
+  color: #39ff14;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin: 0;
+  background: transparent;
+  text-align: center;
+}
+
 .mensaje-vacio {
   margin-top: 3rem;
   text-align: center;

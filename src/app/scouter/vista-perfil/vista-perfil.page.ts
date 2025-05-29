@@ -25,6 +25,13 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
   galeriaCardError = false;
   private paramSub: any;
 
+  perfilScouter: any = null;
+  biografia: string = '';
+  nuevoEquipo: string = '';
+  nuevoLogro: string = '';
+  uploadProgress: number | null = null;
+  loadedImages: { [url: string]: boolean } = {};
+
   constructor(
     private route: ActivatedRoute,
     private firebaseService: FirebaseService,
@@ -96,6 +103,15 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
         this.isLoading = false;
       });
       console.log('[VistaPerfilPage] Perfil cargado correctamente', data);
+
+      if (this.userData && this.userData.esScouter) {
+        this.perfilScouter = {
+          equiposHistorial: this.userData.equiposHistorial || [],
+          tituloUrl: this.userData.tituloUrl || '',
+          logros: this.userData.logros || []
+        };
+        this.biografia = this.userData.biografia || '';
+      }
     } catch (err) {
       clearTimeout(timeoutId);
       console.error('[VistaPerfilPage] Error al cargar datos:', err);
@@ -148,5 +164,69 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
       this.swiper.destroy(true, true);
       this.swiper = undefined;
     }
+  }
+
+  agregarEquipo() {
+    if (this.nuevoEquipo && this.perfilScouter) {
+      this.perfilScouter.equiposHistorial.push(this.nuevoEquipo);
+      this.nuevoEquipo = '';
+    }
+  }
+
+  agregarLogro() {
+    if (this.nuevoLogro && this.perfilScouter) {
+      this.perfilScouter.logros.push(this.nuevoLogro);
+      this.nuevoLogro = '';
+    }
+  }
+
+  subirArchivoCertificacion(event: any) {
+    // Solo placeholder, aquí iría la lógica real de subida
+    alert('Subida de archivo no implementada en este mockup.');
+  }
+
+  async selectImage() {
+    if (!this.userId) {
+      alert('No se ha encontrado el usuario.');
+      return;
+    }
+    // Crear input file dinámicamente
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (event: any) => {
+      const file: File = event.target.files[0];
+      if (!file) return;
+      this.uploadProgress = 0;
+      try {
+        // Usar storageService.uploadUserGalleryImage con progreso
+        const updatedGallery = await (this as any).storageService.uploadUserGalleryImage(
+          this.userId,
+          file,
+          this.firebaseService,
+          (progress: number) => {
+            this.ngZone.run(() => {
+              this.uploadProgress = progress / 100;
+            });
+          }
+        );
+        // Actualizar galería en el objeto userData
+        this.ngZone.run(() => {
+          this.userData.galeria = updatedGallery;
+          this.uploadProgress = null;
+        });
+      } catch (err) {
+        this.uploadProgress = null;
+        alert('Error al subir la imagen. Intenta nuevamente.');
+        console.error('[VistaPerfilPage] Error al subir imagen:', err);
+      }
+    };
+    input.click();
+  }
+  onImgWillLoad(url: string) {
+    this.loadedImages[url] = false;
+  }
+  onImgDidLoad(url: string) {
+    this.loadedImages[url] = true;
   }
 }

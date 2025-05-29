@@ -37,6 +37,10 @@ const routes: Routes = [
         data: { shouldDetach: false }
       },
       {
+        path: 'configuracion',
+        loadChildren: () => import('../configuracion/configuracion.module').then(m => m.ConfiguracionPageModule)
+      },
+      {
         path: '',
         redirectTo: 'mapa',
         pathMatch: 'full'

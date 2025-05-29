@@ -1,4 +1,10 @@
-<ion-content class="profile-content" [fullscreen]="true">
+<ion-content class="profile-content perfil-content" [fullscreen]="true">
+  <div class="perfil-title-container" style="position:relative;">
+    <h1 class="perfil-title">Perfil</h1>
+    <ion-button fill="clear" class="config-btn" (click)="goToConfiguracion()" style="position:absolute;top:0;right:0;z-index:2;">
+      <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+    </ion-button>
+  </div>
   <ng-container *ngIf="!perfilUsuario">
     <div class="no-profile-msg">No se encontró información de perfil.</div>
   </ng-container>
@@ -6,7 +12,7 @@
     <div class="profile-card-container">
       <!-- Card 1: Profile Photo (square, no border) -->
       <ion-card class="profile-photo-card-square">
-        <div class="profile-img-wrapper" style="position: relative; display: inline-block;">
+        <div class="profile-img-wrapper">
           <ion-img class="profile-photo-image-square" [src]="perfilUsuario?.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil"></ion-img>
           <button class="edit-photo-btn" (click)="selectImage()" title="Editar foto de perfil">
             <ion-icon name="create-outline"></ion-icon>
@@ -15,6 +21,13 @@
             <div class="profile-progress-bar" [style.width]="(uploadProgress * 100) + '%'">
             </div>
           </div>
+        </div>
+        <div class="profile-info-wrapper">
+          <!-- Aquí puedes poner nombre, edad, etc. -->
+          <h2>{{ perfilUsuario?.name }}</h2>
+          <div *ngIf="perfilUsuario?.fechaNacimiento">Edad: {{ calcularEdad(perfilUsuario?.fechaNacimiento) }} años</div>
+          <div *ngIf="perfilUsuario?.email">{{ perfilUsuario.email }}</div>
+          <!-- Agrega más info si quieres -->
         </div>
       </ion-card>
     </div>
@@ -79,9 +92,6 @@
         <div class="profile-actions">
           <ion-button color="primary" shape="round" fill="solid"><ion-icon slot="start" name="mail-outline"></ion-icon>Contactar</ion-button>
           <ion-button color="secondary" shape="round" fill="outline"><ion-icon slot="start" name="person-add-outline"></ion-icon>Seguir</ion-button>
-          <ion-button color="danger" shape="round" fill="outline" (click)="logout()">
-            <ion-icon slot="start" name="log-out-outline"></ion-icon>Cerrar sesión
-          </ion-button>
         </div>
       </ion-card>
     </swiper-slide>
