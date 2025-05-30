@@ -1,147 +1,24 @@
 @import 'src/theme/variables.scss';
 
-$color-surface-dark: #23232a;
-$color-primary: #ffd600;
-$color-text-main: #fff;
-$radius-lg: 20px;
-$shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
-$font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
-$transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 
-/* Espaciado general del contenido */
-ion-card-content {
-  padding: 16px;
+// Espaciado extra para secciones
+.estadisticas-section {
+  margin-bottom: 2rem;
 }
 
-/* Estilo para secciones */
-.section {
-  margin-bottom: 24px;
-  padding: 12px 0;
-
-  ion-label.section-title,
-  h4 {
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 8px;
-    color: var(--ion-color-primary);
-  }
-
-  ion-textarea,
-  ion-input {
-    margin-top: 8px;
-    margin-bottom: 12px;
-    --padding-start: 10px;
-    --padding-end: 10px;
-    --border-radius: 8px;
-    --background: #f8f9fa;
-  }
-
-  input[type='file'] {
-    margin-top: 12px;
-  }
+.estadisticas-content {
+  padding: 0.2rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-/* Grid para estadísticas */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-
-  .stat-item {
-    background-color: $color-surface-dark;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-card;
-    padding: 12px;
-    text-align: center;
-    color: $color-text-main;
-    font-family: $font-main;
-    font-size: 1.18rem;
-    transition: box-shadow $transition-main, transform $transition-main;
-
-    &:hover {
-      box-shadow: 0 6px 24px rgba(0,0,0,0.28);
-      transform: scale(1.025) translateY(-2px);
-    }
-
-    h3 {
-      font-size: 0.95rem;
-      margin: 0;
-      color: #333;
-    }
-
-    p {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: var(--ion-color-primary);
-      margin: 6px 0 0;
-    }
-  }
-}
-
-/* Estilos para ion-list (equipos y logros) */
-ion-list {
-  background: transparent;
-
-  ion-item {
-    --background: $color-surface-dark;
-    --border-radius: 14px;
-    margin-bottom: 6px;
-    box-shadow: 0 1px 4px rgba(255,214,0,0.06);
-    color: $color-text-main;
-    font-family: $font-main;
-    font-size: 1.08rem;
-    transition: box-shadow $transition-main, transform $transition-main;
-
-    &:hover {
-      box-shadow: 0 6px 24px rgba(0,0,0,0.28);
-      transform: scale(1.025) translateY(-2px);
-    }
-
-    ion-label {
-      color: #333;
-      font-size: 0.95rem;
-    }
-  }
-}
-
-/* Botones de acción */
-ion-button {
-  margin-top: 8px;
-  --border-radius: 10px;
-  border-radius: 14px !important;
-  box-shadow: 0 1px 4px rgba(255,214,0,0.08);
-  background: $color-primary;
-  color: #18181b;
-  font-family: $font-main;
-  font-size: 1.18rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: background $transition-main, box-shadow $transition-main, color $transition-main;
-
-  &:active {
-    box-shadow: 0 2px 12px $color-primary;
-    background: darken($color-primary, 8%);
-    color: #fff;
-  }
-}
-
-/* Enlaces */
-a {
-  color: var(--ion-color-primary);
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-/* Texto de estado o mensaje */
-ion-text {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Responsive padding para pantallas pequeñas */
-@media screen and (max-width: 400px) {
-  .stats-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
+.estadisticas-title {
+  color: #39ff14;
+  font-size: 1.25rem;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.7rem;
+  text-align: center;
 }

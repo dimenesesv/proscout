@@ -1,95 +1,116 @@
-.formulario-boton {
+ion-content {
+  --background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.tutor-legal-card {
+  background: #23232a !important;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 32px rgba(57, 255, 20, 0.1), 0 2px 12px rgba(0, 0, 0, 0.18);
+  color: #eaf5e6;
+  border: 2px solid #39ff14;
+  padding: 2.2rem 1.2rem 1.5rem 1.2rem;
   max-width: 420px;
-  margin: 32px auto;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.08);
-}
-
-.form-title {
-  margin-bottom: 18px;
-  display: block;
-  font-size: 16px;
-  font-weight: 600;
-  text-align: center;
-}
-ion-note {
-  font-family: var(--ion-font-family, inherit) !important;
-  font-size: 15px !important;
-  font-weight: 400 !important;
-  color: var(--ion-color-danger, #eb445a) !important;
-  margin-top: 4px;
-  margin-bottom: 0;
-  padding-left: 0;
-  background: none;
-  box-shadow: none;
-  letter-spacing: normal;
-}
-
-.input-label {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ion-color-dark-shade, #000000);
-}
-
-ion-item {
-  border-radius: 10px;
-  margin-bottom: 10px;
-  --background: #f8f9fa;
-}
-
-ion-input, ion-select {
-  font-size: 15px;
-  color: var(--ion-color-medium-shade, #000000);
-}
-
-ion-button {
-  margin-top: 18px;
-}
-
-.autocomplete-list {
-  position: absolute;
-  z-index: 100;
+  margin: 2.5rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
   width: 100%;
-  background: #fff;
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
-  max-height: 180px;
-  overflow-y: auto;
-  left: 0;
-}
-.autocomplete-list ion-item {
-  --background: #fff;
-  font-size: 15px;
-  border-bottom: 1px solid #eee;
-}
-.autocomplete-list ion-item:last-child {
-  border-bottom: none;
 }
 
-.phone-input-wrapper {
+.tutor-legal-card ion-item {
+  --background: transparent;
+  --highlight-background: transparent;
+  --min-height: 56px;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 1.2rem;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.tutor-legal-card ion-label {
+  color: #fff !important;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.13rem;
+}
+
+.tutor-legal-card ion-input {
+  background: #18181b !important;
+  color: #eaf5e6 !important;
+  border-radius: 1.2rem !important;
+  border: none !important;
+  font-size: 1.18rem !important;
+  padding: 1.1rem 1rem !important;
+  box-shadow: none !important;
+  caret-color: #39ff14 !important;
+}
+
+.tutor-legal-card ion-input:focus {
+  background: #18394a !important;
+  color: #39ff14 !important;
+  outline: none !important;
+  border: 1.5px solid #39ff14 !important;
+}
+
+.tutor-legal-card ion-button {
+  all: unset;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  height: 56px;
+  font-size: 1.18rem;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 700;
+  border-radius: 1.2rem;
+  width: 100%;
+  padding: 0.7rem 0;
+  border: none;
+  gap: 0.7em;
+  cursor: pointer;
+  background: #39ff14 !important;
+  color: #23232a !important;
+  box-shadow: 0 4px 18px 0 #39ff1444 !important;
+  --background: #39ff14 !important;
+  --color: #23232a !important;
+  transition: background 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s, color 0.22s, transform 0.18s;
+  outline: none;
+  position: relative;
+  overflow: hidden;
 }
-.phone-prefix {
-  background: #f1f1f1;
-  border-radius: 8px 0 0 8px;
-  padding: 8px 10px;
-  font-size: 15px;
-  color: #444;
-  border-right: 1px solid #e0e0e0;
-  height: 38px;
-  display: flex;
-  align-items: center;
+
+.tutor-legal-card ion-button:active {
+  background: #23232a !important;
+  color: #39ff14 !important;
+  --background: #23232a !important;
+  --color: #39ff14 !important;
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px 0 #39ff1444 !important;
 }
-.phone-input-wrapper ion-input {
-  flex: 1;
-  border-radius: 0 8px 8px 0;
-  margin-left: 0;
+
+.tutor-legal-card ion-button span {
+  font-size: 1.13rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 8px #23232a22;
+}
+
+.tutor-legal-card ion-button ion-icon {
+  font-size: 1.5em;
+  margin-right: 0.5em;
+  filter: drop-shadow(0 2px 6px #39ff1444);
 }
 
 @media (max-width: 500px) {
-  .formulario-boton {
-    margin: 16px 4px;
+  .tutor-legal-card {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
     max-width: 98vw;
   }
 }

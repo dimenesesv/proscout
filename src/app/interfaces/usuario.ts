@@ -11,6 +11,7 @@ export interface Usuario {
     contrasena?: string;       // Contraseña del usuario
     telefono?: string;         // Teléfono del usuario
     direccion?: string;        // Dirección del usuario
+    comuna?: string;           // Comuna del usuario
     ciudad?: string;           // Ciudad del usuario
     region?: string;           // Región del usuario
     pais?: string;             // País del usuario
@@ -27,4 +28,5 @@ export interface Usuario {
     info?: Info;          // Información adicional del usuario
     stats?: Stats | undefined;         // Estadísticas del usuario
     scouter?: Scouter | undefined;         // Información del usuario como cazatalentos
+    esFavorito?: boolean; // Indica si el usuario es favorito del scouter autenticado (solo para UI)
 }

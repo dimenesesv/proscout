@@ -1,38 +1,114 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title class="text-center">{{ perfilUsuario?.name }}</ion-title>
-    <ion-button (click)="logout()">Cerrar sesión</ion-button>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="perfil-page">
-  <app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></app-tabs-header>
-
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <!-- Slide 1: Perfil -->
-      <div class="swiper-slide">
-       
-        <app-perfil-card [perfilUsuario]="perfilUsuario" [comuna]="perfilUsuario?.comuna" [ciudad]="perfilUsuario?.ciudad"></app-perfil-card>
-      </div>
-
-      <!-- Slide 2: Estadísticas -->
-      <div class="swiper-slide">
-        <ion-card>
-          <ion-card-content>
-            <app-estadisticas-card [perfilUsuario]="perfilUsuario"></app-estadisticas-card>
-          </ion-card-content>
-        </ion-card>
-      </div>
-
-      <!-- Slide 3: Galería -->
-      <div class="swiper-slide">
-        <app-galeria-card
-          [galleryUrls]="galleryUrls"
-          [uploadProgress]="uploadProgress"
-          [selectImage]="selectImage.bind(this)"
-        ></app-galeria-card>
-      </div>
-    </div>
+<ion-content class="profile-content perfil-content" [fullscreen]="true">
+    <div class="circle-top">
   </div>
+  <div class="perfil-title-container" style="position:relative;">
+    <h1 class="perfil-title">Perfil</h1>
+    <ion-button fill="clear" class="config-btn" (click)="goToConfiguracion()" style="position:absolute;top:0;right:0;z-index:2;">
+      <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+    </ion-button>
+  </div>
+  <ng-container *ngIf="!perfilUsuario">
+    <div class="no-profile-msg">No se encontró información de perfil.</div>
+  </ng-container>
+  <ng-container *ngIf="perfilUsuario">
+    <div class="profile-card-container">
+      <!-- Card 1: Profile Photo (square, no border) -->
+      <ion-card class="profile-photo-card-square">
+        <div class="profile-img-wrapper">
+          <ion-img class="profile-photo-image-square" [src]="perfilUsuario?.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil"></ion-img>
+          <button class="edit-photo-btn" (click)="selectImage()" title="Editar foto de perfil">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <div *ngIf="uploadProgress !== null" class="profile-progress-bar-wrapper">
+            <div class="profile-progress-bar" [style.width]="(uploadProgress * 100) + '%'">
+            </div>
+          </div>
+        </div>
+        <div class="profile-info-wrapper">
+          <!-- Aquí puedes poner nombre, edad, etc. -->
+          <h2>{{ perfilUsuario?.name }}</h2>
+          <div *ngIf="perfilUsuario?.fechaNacimiento">Edad: {{ calcularEdad(perfilUsuario?.fechaNacimiento) }} años</div>
+          <div *ngIf="perfilUsuario?.email">{{ perfilUsuario.email }}</div>
+          <!-- Agrega más info si quieres -->
+        </div>
+      </ion-card>
+    </div>
+  </ng-container>
+
+  <swiper-container pagination="true" loop="true">
+    <swiper-slide>
+      <ion-card class="profile-info-card-modern">
+        <div class="profile-header-info">
+          <h1 class="profile-name">{{ perfilUsuario?.name }}</h1>
+          <div class="profile-age" *ngIf="perfilUsuario?.fechaNacimiento">Edad: {{ calcularEdad(perfilUsuario?.fechaNacimiento) }} años</div>
+        </div>
+        <div class="profile-details">
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.email">
+            <ion-icon name="mail-outline"></ion-icon>
+            <span>{{ perfilUsuario.email }}</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.nacionality">
+            <ion-icon name="flag-outline"></ion-icon>
+            <span>{{ perfilUsuario.nacionality }}</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.rut">
+            <ion-icon name="card-outline"></ion-icon>
+            <span>RUT: {{ perfilUsuario.rut }}</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.sex">
+            <ion-icon name="male-female-outline"></ion-icon>
+            <span>Sexo: {{ perfilUsuario.sex }}</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.anosExperiencia">
+            <ion-icon name="briefcase-outline"></ion-icon>
+            <span>{{ perfilUsuario.anosExperiencia }} años de experiencia</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.equipoActual">
+            <ion-icon name="people-outline"></ion-icon>
+            <span>Equipo: {{ perfilUsuario.equipoActual }}</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.clubActual">
+            <ion-icon name="trophy-outline"></ion-icon>
+            <span>Club: {{ perfilUsuario.clubActual }}</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.jugadoresVistos">
+            <ion-icon name="eye-outline"></ion-icon>
+            <span>{{ perfilUsuario.jugadoresVistos }} jugadores vistos</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.aceptaVideos">
+            <ion-icon name="videocam-outline"></ion-icon>
+            <span>Acepta videos</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.idiomas?.length">
+            <ion-icon name="language-outline"></ion-icon>
+            <span>Idiomas: {{ perfilUsuario.idiomas.join(', ') }}</span>
+          </div>
+          <div class="profile-detail-row" *ngIf="perfilUsuario?.regionesQueCubre?.length">
+            <ion-icon name="map-outline"></ion-icon>
+            <span>Regiones: {{ perfilUsuario.regionesQueCubre.join(', ') }}</span>
+          </div>
+        </div>
+        <div class="bio-text" *ngIf="perfilUsuario?.biografia">
+          <ion-icon name="document-text-outline"></ion-icon> {{ perfilUsuario?.biografia }}
+        </div>
+        <div class="profile-actions">
+          <ion-button color="primary" shape="round" fill="solid"><ion-icon slot="start" name="mail-outline"></ion-icon>Contactar</ion-button>
+          <ion-button color="secondary" shape="round" fill="outline"><ion-icon slot="start" name="person-add-outline"></ion-icon>Seguir</ion-button>
+        </div>
+      </ion-card>
+    </swiper-slide>
+    <swiper-slide>
+      <ion-card class="profile-info-card-modern">
+        <div class="profile-header-info">
+          <h2 class="profile-name">Otra tarjeta</h2>
+        </div>
+        <div class="profile-details">
+          <div class="profile-detail-row">
+            <ion-icon name="star-outline"></ion-icon>
+            <span>Contenido personalizado aquí</span>
+          </div>
+        </div>
+      </ion-card>
+    </swiper-slide>
+  </swiper-container>
 </ion-content>

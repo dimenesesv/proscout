@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
@@ -9,12 +9,20 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [IonicModule, CommonModule]
 })
-export class GaleriaCardComponent {
+export class GaleriaCardComponent implements OnInit, OnDestroy {
   @Input() galleryUrls: string[] = [];
   @Input() uploadProgress: number | null = null;
   @Input() selectImage!: () => void;
 
   loadedImages: { [url: string]: boolean } = {};
+
+  ngOnInit() {
+    // Inicialización de recursos si es necesario
+  }
+
+  ngOnDestroy() {
+    // Limpieza de recursos, listeners, timers, etc. si es necesario
+  }
 
   onImgWillLoad(url: string) {
     this.loadedImages[url] = false;

@@ -1,50 +1,111 @@
 @import 'src/theme/variables.scss';
 
-$color-surface-dark: #23232a;
-$color-primary: #ffd600;
+$color-surface-dark: #18394a;
+$color-primary: #4FC3F7;
 $color-text-main: #fff;
 $radius-lg: 20px;
 $shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
 $font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 
-.jugadores-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 16px;
+ion-content {
+  --background: #18181b !important;
+  color: #fff;
+}
+.circle-top {
+  position: absolute;
+  top: -250px; /* Oculta la mitad superior */
+  left: 50%;
+  margin-left: -250px; /* Mitad del ancho negativo */
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at center, rgba(57, 255, 20, 0.1) 0%, rgba(57, 255, 20, 0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
 }
 
-.jugador-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.custom-header ion-toolbar {
+  background: #97BC62 !important; // Moss green
+  color: #000 !important;
+  --color: #000 !important;
+  border-radius: 1.2rem 1.2rem 0 0;
+  box-shadow: 0 2px 12px rgba(44,95,45,0.10);
+  margin-bottom: 0.5rem;
+  border-bottom: none !important;
+}
+
+.ion-header, ion-header, ion-toolbar {
+  --background: #23232a !important;
+  --color: #fff !important;
+  box-shadow: 0 2px 12px rgba(44,95,45,0.10);
+  border-bottom-left-radius: 1.2rem;
+  border-bottom-right-radius: 1.2rem;
+  border-bottom: 0 !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+}
+
+ion-title {
+  color: #fff !important;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 2.1rem !important;
+  letter-spacing: 0.03em;
+  font-weight: 700;
   text-align: center;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-card;
-  background: $color-surface-dark;
-  color: $color-text-main;
-  font-family: $font-main;
-  font-size: 1.18rem;
-  padding: 1.2rem 1rem;
-  margin-bottom: 1.2rem;
-  transition: box-shadow $transition-main, transform $transition-main;
+  padding: 0.5rem 0 0.5rem 0;
+}
+
+ion-toolbar {
+  --background: #2C5F2D !important;
+  --color: #fff !important;
+}
+
+.ubicacion-label {
+  display: flex;
+  align-items: center;
+  font-size: 1.08rem;
+  color: #b3c7d6 !important;
+  font-weight: 600;
+}
+
+.jugadores-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  padding: 1.5rem 0.7rem 2.5rem 0.7rem;
+}
+
+.jugadores-row {
+  display: contents;
+}
+
+.jugador-card.perfil-cuadro {
+  background: #97BC62 !important; // Moss green
+  color: #000 !important;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 0.5rem 0.2rem 0.7rem 0.2rem;
+  margin: 0 auto;
+  min-width: 0;
+  min-height: 0;
+  transition: box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s cubic-bezier(0.4,0,0.2,1);
   border: 2px solid transparent;
 
   &:hover, &:active {
     box-shadow: 0 6px 24px rgba(0,0,0,0.28);
-    border-color: $color-primary;
-    transform: scale(1.025) translateY(-2px);
+    border-color: #000;
+    transform: scale(1.04) translateY(-2px);
   }
 }
 
 .perfil-cuadro {
+  background: #2C5F2D;
+  color: #fff;
   width: 120px;
   height: 120px;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
-  background: $color-surface-dark;
   transition: box-shadow $transition-main, transform $transition-main;
   margin: 0 auto;
 
@@ -55,20 +116,26 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 }
 
 .perfil-img-wrapper {
-  width: 100%;
-  height: 100%;
   position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 0.5rem auto;
+  border-radius: 50%;
   overflow: hidden;
-  border-radius: 14px;
-  box-shadow: 0 1px 4px rgba(255,214,0,0.06);
+  box-shadow: 0 2px 8px rgba(79,195,247,0.10);
+  background: #18394a;
+  border: 2.5px solid #4FC3F7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .perfil-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  border-radius: 14px;
+  border-radius: 50%;
+  background: #18394a;
 }
 
 .perfil-overlay {
@@ -76,42 +143,335 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
   bottom: 0;
   left: 0;
   width: 100%;
-  background: linear-gradient(0deg, rgba(0,0,0,0.7) 70%, rgba(0,0,0,0.1) 100%);
-  color: $color-text-main;
-  padding: 8px 4px 4px 4px;
-  box-sizing: border-box;
-  text-align: left;
-  border-radius: 0 0 14px 14px;
+  background: rgba(34,92,115,0.92);
+  color: #fff;
+  font-size: 0.98rem;
+  font-weight: 600;
+  border-radius: 0 0 50% 50%;
+  padding: 0.3rem 0.2rem 0.5rem 0.2rem;
+  text-align: center;
 }
 
 .perfil-nombre {
-  font-weight: bold;
-  font-size: 1.18rem;
-  line-height: 1.1;
-  margin-bottom: 2px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-  color: $color-primary;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.1rem;
 }
 
 .perfil-comuna {
-  font-size: 1rem;
-  opacity: 0.85;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-  color: $color-text-main;
+  font-size: 0.95rem;
+  color: #b3c7d6;
 }
 
-.jugadores-row {
-  justify-content: flex-start;
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 180px;
 }
 
-@media (max-width: 900px) {
-  .jugadores-grid {
-    grid-template-columns: repeat(2, 1fr);
+.center-spinner {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 2rem auto !important;
+}
+
+ion-note {
+  color: #b3c7d6 !important;
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+// === Card estilo perfil-card ===
+.perfil-card {
+  background: #fff;
+  color: #2C5F2D;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 250px;
+
+  .imagen-con-label {
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .etiqueta-nueva {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: black;
+      color: white;
+      padding: 4px 6px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-top-left-radius: 6px;
+    }
+  }
+
+  .info-contenido {
+    padding: 10px;
+
+    .ubicacion {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+      color: #333;
+    }
+
+    .nombre-edad {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 5px;
+
+      .estado-online {
+        width: 8px;
+        height: 8px;
+        background: green;
+        border-radius: 50%;
+      }
+
+      .nombre {
+        color: #2C5F2D;
+        font-weight: 600;
+      }
+
+      .edad {
+        font-weight: 500;
+      }
+    }
+
+    .descripcion {
+      font-size: 0.8rem;
+      color: #3A6B35;
+      margin-top: 5px;
+    }
   }
 }
 
-@media (max-width: 600px) {
-  .jugadores-grid {
-    grid-template-columns: 1fr;
+ion-header {
+  animation: headerFadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes headerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-32px) scale(0.98);
+    box-shadow: none;
   }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 2px 12px rgba(34,92,115,0.10);
+  }
+}
+
+.animate-card {
+  opacity: 0;
+  transform: translateY(32px) scale(0.97);
+  animation: cardIn 0.48s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+ion-chip {
+  background: #23232a;
+  color: #39ff14; // Neon green accent
+  font-weight: 700;
+  border-radius: 1.2rem;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 8px rgba(44,95,45,0.10);
+  transition: background 0.18s, color 0.18s;
+}
+ion-chip:hover, ion-chip:focus {
+  background: #1b4022;
+  color: #fff;
+}
+
+ion-chip ion-icon {
+  color: #39ff14; // Neon green accent
+  margin-right: 0.3rem;
+}
+
+ion-spinner.center-spinner {
+  display: block;
+  margin: 2.5rem auto 1.5rem auto;
+}
+
+ion-note.ion-text-center {
+  color: #b3c7d6 !important;
+  font-size: 1.15rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.mapa-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+.mapa-subtitle {
+  font-size: 0.92rem;
+  color: #b3c7d6;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  margin-bottom: 0.1em;
+}
+.mapa-title {
+  font-size: 2.2rem;
+  color: #39ff14;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin: 0;
+  background: transparent;
+  text-align: center;
+  transition: color 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes mapaTitleGlowIn {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.98);
+    text-shadow: 0 2px 0px #23232a44, 0 0 0px #39ff14, 0 0 0px #39ff1488;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 2px 16px #23232a44, 0 0 18px #39ff14, 0 0 32px #39ff1488;
+  }
+}
+
+.mapa-title.less-glow {
+  text-shadow: 0 2px 6px #23232a44, 0 0 4px #39ff14, 0 0 8px #39ff1488;
+}
+
+.loading-top .loading-wrapper, .loading-top .loading-content {
+  top: 1.5rem !important;
+  margin: 0 auto !important;
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.loading-actualizando .loading-spinner-circles {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 auto !important;
+}
+
+.loading-actualizando .loading-content {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.refresh-spinner-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1002;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+  animation: spinnerBarIn 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.spinner-bar-inner {
+  margin-top: 0.7rem;
+  background: rgba(24, 24, 27, 0.98);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px 0 rgba(0,255,64,0.12), 0 1.5px 8px rgba(57,255,20,0.18);
+  padding: 0.45rem 1.2rem 0.45rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1.5px solid #39ff14;
+}
+.spinner-bar-inner ion-spinner {
+  color: #39ff14;
+  width: 28px;
+  height: 28px;
+  --color: #39ff14;
+}
+.refresh-text {
+  color: #39ff14;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.13rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 8px #39ff1488;
+}
+@keyframes spinnerBarIn {
+  from { opacity: 0; transform: translateY(-18px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.estrella-favorito {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 2rem;
+  color: #000000;
+  z-index: 10;
+  text-shadow: 0 0 8px #000, 0 0 2px #000, 0 0 12px #37ff00;
+  pointer-events: none;
+}
+
+.mapa-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(24, 24, 27, 0.85);
+  z-index: 1000;
+}
+
+.mapa-loading-overlay ion-spinner,
+.mapa-loading-overlay .loading-text {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mapa-loading-overlay ion-spinner {
+  width: 64px;
+  height: 64px;
+  color: #39ff14;
+}
+
+.mapa-loading-overlay .loading-text {
+  margin-top: 1.2rem;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: center;
 }

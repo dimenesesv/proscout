@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { Info } from 'src/app/interfaces/info';
 import { Stats } from 'src/app/interfaces/stats';
-import { IonModal } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { FiltrosModalComponent } from './filtros-modal.component';
 
 @Component({
   selector: 'app-busqueda',
@@ -11,13 +13,20 @@ import { IonModal } from '@ionic/angular';
   styleUrls: ['./busqueda.page.scss'],
   standalone: false, 
 })
-export class BusquedaPage implements OnInit {
+export class BusquedaPage implements OnInit, OnDestroy {
   usuarios: Usuario[] = [];
   resultados: { usuario: Usuario; puntaje: number; porcentaje: number; edadCalculada?: number }[] = [];
   filtrosActivos: { key: string, label: string, value: any }[] = [];
   filtrosActuales: any = {};
-  @ViewChild('modalFiltros') modalFiltros!: IonModal;
   cargandoUsuarios = false;
+  badgeState: 'none' | 'active' | 'loading' = 'none';
+
+  showWelcomeScreen = false;
+
+  // Infinite scroll support
+  page = 1;
+  pageSize = 10;
+  pagedResultados: { usuario: Usuario; puntaje: number; porcentaje: number; edadCalculada?: number }[] = [];
 
   // Diccionario para mostrar nombres bonitos en los chips
   filtroLabels: { [key: string]: string } = {
@@ -27,16 +36,64 @@ export class BusquedaPage implements OnInit {
     regate: 'Regate', pase: 'Pase', tiro: 'Tiro', cabeceo: 'Cabeceo'
   };
 
-  constructor(private firebaseService: FirebaseService) { }
+  testValue = 42;
+
+  constructor(private firebaseService: FirebaseService, private router: Router, private modalCtrl: ModalController) {
+    try {
+      console.log('[DEBUG] BusquedaPage constructor called');
+    } catch (err) {
+      console.error('[ERROR] Exception in BusquedaPage constructor:', err);
+    }
+  }
+
+  private deviceOrientationHandler = (event: DeviceOrientationEvent) => {
+    this.onWelcomeDeviceParallax(event);
+  };
 
   ngOnInit() {
+    try {
+      console.log('[DEBUG] BusquedaPage ngOnInit called');
+      // this.abrirModalFiltros(); // Quitar apertura automática del modal
+    } catch (err) {
+      console.error('[ERROR] Exception in BusquedaPage ngOnInit:', err);
+    }
+    this.setBadgeState();
     this.cargarUsuarios();
+    if (window && 'DeviceOrientationEvent' in window) {
+      window.addEventListener('deviceorientation', this.deviceOrientationHandler);
+    }
+  }
+
+  ionViewWillEnter() {
+    this.showWelcomeScreen = true;
+  }
+
+  ionViewDidEnter() {
+    console.log('[DEBUG] BusquedaPage ionViewDidEnter called (animation removed)');
+  }
+
+  ionViewWillLeave() {
+    this.showWelcomeScreen = false;
+    const welcome = document.getElementById('welcomeScreen');
+    if (welcome) {
+      welcome.style.display = 'none';
+    }
+  }
+
+  ngOnDestroy() {
+    if (window && 'DeviceOrientationEvent' in window) {
+      window.removeEventListener('deviceorientation', this.deviceOrientationHandler);
+    }
   }
 
   async cargarUsuarios() {
+    this.setBadgeState('loading');
     this.cargandoUsuarios = true;
     this.usuarios = await this.firebaseService.getCollection('playground');
     this.cargandoUsuarios = false;
+    this.page = 1;
+    this.updatePagedResultados();
+    this.setBadgeState();
   }
 
   async buscarPorProximidad(filtros: Partial<Info & Stats>) {
@@ -134,16 +191,43 @@ export class BusquedaPage implements OnInit {
       .filter(r => r.puntaje > 0)
       // 4. Ordena los resultados de mayor a menor puntaje (más cercanos primero)
       .sort((a, b) => b.puntaje - a.puntaje);
+    this.page = 1;
+    this.updatePagedResultados();
   }
 
-  abrirModalFiltros() {
-    this.modalFiltros.present();
+  updatePagedResultados() {
+    this.pagedResultados = this.resultados.slice(0, this.page * this.pageSize);
+  }
+
+  loadMore(event: any) {
+    this.page++;
+    this.updatePagedResultados();
+    event.target.complete();
+    // Si ya no hay más resultados para cargar, deshabilita el infinite scroll
+    if (this.pagedResultados.length >= this.resultados.length) {
+      event.target.disabled = true;
+    }
+  }
+
+  async abrirModalFiltros() {
+    console.log('[DEBUG] abrirModalFiltros called');
+    const modal = await this.modalCtrl.create({
+      component: FiltrosModalComponent
+    });
+    modal.onDidDismiss().then(result => {
+      console.log('[DEBUG] modal onDidDismiss', result);
+      if (result.data) {
+        this.aplicarFiltros(result.data, modal);
+      }
+    });
+    await modal.present();
+    console.log('[DEBUG] modal.present() called');
   }
 
   aplicarFiltros(valores: any, modal: any) {
-    // Guarda los valores originales del formulario para los chips
     this.filtrosActuales = { ...valores };
     this.actualizarFiltrosActivos();
+    this.setBadgeState('active');
     this.buscarPorProximidad(this.filtrosActuales);
     modal.dismiss();
   }
@@ -162,5 +246,47 @@ export class BusquedaPage implements OnInit {
     this.filtrosActuales[key] = undefined;
     this.actualizarFiltrosActivos();
     this.buscarPorProximidad(this.filtrosActuales);
+    this.setBadgeState(this.filtrosActivos.length > 0 ? 'active' : 'none');
+  }
+
+  setBadgeState(state?: 'none' | 'active' | 'loading') {
+    if (state) {
+      this.badgeState = state;
+      return;
+    }
+    if (this.cargandoUsuarios) {
+      this.badgeState = 'loading';
+    } else if (this.filtrosActivos && this.filtrosActivos.length > 0) {
+      this.badgeState = 'active';
+    } else {
+      this.badgeState = 'none';
+    }
+  }
+
+  verPerfil(usuario: any) {
+    if (!usuario || !usuario.id) return;
+    this.router.navigate(['/scouter/vista-perfil', usuario.id]);
+  }
+
+  onWelcomeParallax(event: MouseEvent) {
+    const welcome = event.currentTarget as HTMLElement;
+    const rect = welcome.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    welcome.style.setProperty('--gradient-x', `${x}%`);
+    welcome.style.setProperty('--gradient-y', `${y}%`);
+  }
+
+  onWelcomeDeviceParallax(event: DeviceOrientationEvent) {
+    // gamma: left-right [-90,90], beta: front-back [-180,180]
+    const welcome = document.querySelector('.welcome-screen') as HTMLElement;
+    if (!welcome) return;
+    // Normalize gamma and beta to [0,100]
+    const gamma = event.gamma || 0;
+    const beta = event.beta || 0;
+    const x = ((gamma + 90) / 180) * 100;
+    const y = ((beta + 180) / 360) * 100;
+    welcome.style.setProperty('--gradient-x', `${x}%`);
+    welcome.style.setProperty('--gradient-y', `${y}%`);
   }
 }

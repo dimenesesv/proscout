@@ -1,0 +1,223 @@
+// Use mapa colors and style for perfil page
+:host, ion-content.perfil-content, .perfil-content, .profile-content {
+  --background: #18181b !important;
+  background: #18181b !important;
+  min-height: 100vh;
+}
+
+.perfil-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.2rem;
+  margin-bottom: 1.2rem;
+}
+.perfil-title {
+  font-size: 2.1rem;
+  color: #39ff14;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+
+// Profile card (photo/info) - horizontal, modern, mapa style
+.profile-card-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.profile-photo-card-square {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  background: #18394a !important;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(79,195,247,0.10);
+  overflow: hidden;
+  border: 2px solid #39ff14;
+  width: 100%;
+  max-width: 540px;
+  min-height: 140px;
+  margin: 0 1rem 1.5rem 1rem;
+  padding: 0;
+}
+.profile-img-wrapper {
+  width: 120px;
+  background: #18394a;
+  flex-shrink: 0;
+  border-top-left-radius: 1.2rem;
+  border-bottom-left-radius: 1.2rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(57,255,20,0.10);
+  border-right: 2px solid #39ff14;
+}
+.profile-photo-image-square {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+  background: #18394a;
+}
+.edit-photo-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: #23232a;
+  color: #39ff14;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(57,255,20,0.10);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s, color 0.2s;
+}
+.edit-photo-btn:hover {
+  background: #39ff14;
+  color: #23232a;
+}
+.profile-progress-bar-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: #23232a;
+  border-bottom-left-radius: 1.2rem;
+}
+.profile-progress-bar {
+  height: 100%;
+  background: #39ff14;
+  border-radius: 6px;
+  transition: width 0.3s;
+}
+.profile-info-wrapper {
+  flex: 1;
+  padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #23232a;
+}
+.profile-info-wrapper h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #39ff14;
+  margin-bottom: 0.2em;
+}
+.profile-info-wrapper div {
+  font-size: 1.05rem;
+  color: #b3c7d6;
+  margin-bottom: 0.2em;
+}
+@media (max-width: 600px) {
+  .profile-photo-card-square {
+    flex-direction: column;
+    min-height: 0;
+  }
+  .profile-img-wrapper {
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+    height: 120px;
+    border-radius: 1.2rem 1.2rem 0 0;
+    border-right: none;
+    border-bottom: 2px solid #39ff14;
+  }
+}
+
+// Info cards (swiper slides)
+.profile-info-card-modern {
+  background: #23232a !important;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(79,195,247,0.10);
+  border: 2px solid #39ff14;
+  margin: 1.2rem 1rem 2rem 1rem;
+  padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+  color: #b3c7d6;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+}
+.profile-header-info {
+  margin-bottom: 1rem;
+}
+.profile-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #39ff14;
+  margin-bottom: 0.2em;
+}
+.profile-age {
+  font-size: 1.05rem;
+  color: #b3c7d6;
+  margin-bottom: 0.2em;
+}
+.profile-details {
+  margin-bottom: 1rem;
+}
+.profile-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  font-size: 1.05rem;
+  color: #b3c7d6;
+  margin-bottom: 0.2em;
+}
+.profile-detail-row ion-icon {
+  color: #39ff14;
+  font-size: 1.2em;
+}
+.bio-text {
+  font-size: 0.98rem;
+  color: #b3c7d6;
+  margin-bottom: 1.2em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: 1.2em;
+}
+.profile-actions ion-button {
+  --background: #39ff14;
+  --color: #23232a;
+  --border-radius: 1.2rem;
+  --box-shadow: 0 2px 8px rgba(57,255,20,0.10);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, color 0.2s;
+}
+.profile-actions ion-button:hover, .profile-actions ion-button:focus {
+  --background: #23232a;
+  --color: #39ff14;
+}
+
+.no-profile-msg {
+  text-align: center;
+  color: #b3c7d6;
+  font-size: 1.15rem;
+  margin-top: 2.5rem;
+}
+
+// Swiper container adjustments
+swiper-container {
+  width: 100%;
+  padding-bottom: 5.5rem; // Increased to avoid tab bar overlap
+}
+swiper-slide {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 2.5rem; // Extra space for last card
+}

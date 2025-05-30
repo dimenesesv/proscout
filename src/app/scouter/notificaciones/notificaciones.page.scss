@@ -8,7 +8,31 @@ $shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
 $font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+ion-header, ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: #fff;
+}
+
+ion-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+ion-list {
+  background: transparent;
+}
+
 .notificacion-item {
+  border-radius: 1rem;
+  margin: 0.5rem 0;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(34,92,115,0.07);
+  padding: 0.5rem 0.5rem 0.5rem 0.2rem;
+  align-items: flex-start;
   --background: $color-surface-dark;
   border-radius: $radius-lg;
   margin-bottom: 18px;
@@ -26,36 +50,74 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
     transform: scale(1.025) translateY(-2px);
   }
 
+  ion-avatar img {
+    border-radius: 50%;
+    border: 2px solid var(--ion-color-primary);
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    background: var(--ion-color-light);
+  }
+
   ion-label {
     h2 {
-      font-size: 1.18rem;
-      font-family: $font-main;
-      color: $color-primary;
-      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ion-color-primary);
+      margin-bottom: 0.2rem;
     }
 
     p {
-      font-size: 1.08rem;
-      margin-top: 4px;
-      color: $color-text-main;
+      font-size: 1rem;
+      color: #333;
+      margin: 0.1rem 0 0.2rem 0;
     }
 
     small {
-      font-size: 0.95rem;
-      color: #bdbdbd;
+      font-size: 0.92rem;
+      color: var(--ion-color-secondary);
     }
-  }
-
-  ion-avatar img {
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(255,214,0,0.10);
-    border: 2.5px solid $color-primary;
   }
 }
 
-.mensaje-vacio {
-  margin-top: 40px;
+.notificaciones-content {
+  --background: #18181b !important;
+}
+
+.notificaciones-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+
+.notificaciones-title {
+  font-size: 2.1rem;
+  color: #39ff14;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin: 0;
+  background: transparent;
   text-align: center;
-  font-size: 1.18rem;
-  color: #bdbdbd;
+}
+
+.mensaje-vacio {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--ion-color-secondary);
+}
+
+@media (max-width: 600px) {
+  .notificacion-item {
+    padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+  }
+  ion-label h2 {
+    font-size: 1rem;
+  }
+  ion-label p {
+    font-size: 0.95rem;
+  }
 }

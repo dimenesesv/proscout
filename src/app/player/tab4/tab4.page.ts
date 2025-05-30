@@ -80,6 +80,10 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     if (this.profileSubscription) {
       this.profileSubscription.unsubscribe();
     }
+    if (this.swiper) {
+      this.swiper.destroy(true, true);
+      this.swiper = undefined;
+    }
   }
 
   slideTo(index: number) {

@@ -1,19 +1,112 @@
-.custom-button {
+@import '../registro.page.scss';
+// Hereda los estilos globales de registro para un look unificado.
+
+ion-content {
+    --background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    height: 100px;
-    width: 100px;
-    text-align: center;
-    --padding-start: 0;
-  }
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
 
-  .custom-button ion-icon {
-    font-size: 40px;
-    margin-bottom: 5px;
-  }
+    .formulario-boton {
+        background: #18181b !important;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(57,255,20,0.10), 0 2px 12px rgba(0,0,0,0.22);
+        color: #b3c7d6;
+        border: 2px solid #39ff14;
+        padding: 2.2rem 2rem;
+        max-width: 400px;
+        margin: 2.5rem auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
 
-  .custom-button span {
-    font-size: 14px;
-  }
+        ion-item {
+            --background: transparent;
+            --highlight-background: transparent;
+            --min-height: 56px;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+
+            ion-label {
+                color: #fff !important;
+                font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+                font-size: 1.13rem;
+            }
+
+        }
+
+        ion-button {
+            all: unset;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 56px;
+            height: 56px;
+            font-size: 1.18rem;
+            font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+            font-weight: 700;
+            background: transparent !important;
+            color: #23232a !important;
+            border-radius: 18px;
+            width: 100%;
+            padding: 0.7rem 0;
+            border: none;
+            --background: transparent;
+            --color: #23232a;
+            gap: 0.7em;
+            cursor: pointer;
+            box-shadow: none !important;
+            --box-shadow: none !important;
+    }
+
+    @media (max-width: 500px) {
+        .formulario-boton {
+            padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+            max-width: 98vw;
+        }
+    }
+
+     .btn-nino {
+      background: #e0f7e9 !important;
+      color: #0d2f17 !important;
+      --background: #e0f7e9 !important;
+      --color: #0d2f17 !important;
+      box-shadow: none !important;
+      --box-shadow: none !important;
+    }
+     .btn-nino:active {
+      background: #23232a !important;
+      color: #39ff14 !important;
+      --background: #23232a !important;
+      --color: #39ff14 !important;
+    }
+
+    .btn-nina {
+      background: #23232a !important;
+      color: #e0f7e9 !important;
+      box-shadow:none !important;
+      --box-shadow: none !important;
+      }
+    .btn-other {
+      background: #1a1a1e !important;
+      color: #77ff77 !important;
+      box-shadow: none !important;
+      --box-shadow: none !important;
+    }
+    .btn-other:active {
+      background: #fff !important;
+      color: #23232a !important;
+      --background: #fff !important;
+      --color: #23232a !important;
+      box-shadow: none !important;
+      --box-shadow: none !important;
+    }
+}}

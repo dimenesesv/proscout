@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Usuario } from 'src/app/interfaces/usuario';
@@ -14,7 +14,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   standalone: true,
   imports: [IonicModule, CommonModule]
 })
-export class PerfilCardComponent {
+export class PerfilCardComponent implements OnInit, OnDestroy {
   @Input() perfilUsuario!: Usuario;
   @Input() jugadorId?: string; // Permite pasar el id explícitamente
   @Input() comuna: string = '';
@@ -23,6 +23,14 @@ export class PerfilCardComponent {
   private firebaseService = inject(FirebaseService);
   private notificacionesService = inject(NotificacionesService);
   private afAuth = inject(AngularFireAuth);
+
+  ngOnInit() {
+    // Inicialización de recursos si es necesario
+  }
+
+  ngOnDestroy() {
+    // Limpieza de recursos, listeners, timers, etc. si es necesario
+  }
 
   calcularEdad(fechaNacimiento?: string): string {
     if (!fechaNacimiento) return '-';

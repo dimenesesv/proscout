@@ -1,0 +1,93 @@
+// Estilo premium y consistente con busqueda.page.scss
+:host {
+  display: block;
+  background: #18181b;
+}
+
+ion-header, ion-toolbar {
+  --background: #23232a !important;
+  --color: #fff !important;
+  box-shadow: 0 2px 12px rgba(44,95,45,0.10);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+ion-title {
+  color: #fff !important;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.3rem !important;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+ion-button {
+  --background: #4e7d4a;
+  --color: #fff;
+  border-radius: 1.2rem;
+  font-weight: 700;
+  font-size: 1.08rem;
+  margin: 0.7rem 0 0.7rem 0;
+  box-shadow: 0 2px 8px rgba(27,64,34,0.10);
+  transition: background 0.18s, color 0.18s;
+}
+ion-button:active {
+  --background: #1b4022;
+}
+ion-button ion-icon {
+  color: #ffd600;
+  font-size: 1.5rem;
+}
+
+ion-content.no-modal-scroll {
+  --background: #18181b !important;
+  padding: 0 0 1.5rem 0;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+}
+
+.map-modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 340px;
+  padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+  background: transparent;
+}
+
+#google-map.map-modal-map {
+  width: 100%;
+  height: 260px;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(44,95,45,0.10);
+  margin-bottom: 1.2rem;
+  background: #23232a;
+}
+
+.map-modal-pin {
+  position: absolute;
+  left: 50%;
+  top: 120px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  background: url('/assets/pin.svg') no-repeat center center;
+  background-size: contain;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .map-modal-container {
+    padding: 0.5rem 0.2rem 0.7rem 0.2rem;
+    min-height: 220px;
+  }
+  #google-map.map-modal-map {
+    height: 180px;
+  }
+  .map-modal-pin {
+    top: 80px;
+    width: 28px;
+    height: 28px;
+  }
+}
