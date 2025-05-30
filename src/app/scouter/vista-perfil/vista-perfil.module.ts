@@ -1,3 +1,4 @@
+import { NgCircleProgressModule } from 'ng-circle-progress';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +15,8 @@ import { RadarChartComponent } from 'src/app/radar-chart/radar-chart.component';
     IonicModule,
     VistaPerfilPageRoutingModule,
     SharedModule,
-    RadarChartComponent
+    RadarChartComponent,
+    NgCircleProgressModule
   ],
   declarations: [
     VistaPerfilPage,

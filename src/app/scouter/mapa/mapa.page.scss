@@ -1,4 +1,22 @@
-@import 'src/theme/variables.scss';
+:host {
+  --ion-background-color: transparent !important;
+}
+
+
+ion-content.mapa-content {
+  background: url('/assets/soccer-field.svg') repeat, rgb(11, 106, 0) !important;
+  background-size: 300px 300px !important;
+  min-height: 100vh !important;
+  color-scheme: light !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
 
 $color-surface-dark: #18394a;
 $color-primary: #4FC3F7;
@@ -8,10 +26,7 @@ $shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
 $font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 
-ion-content {
-  --background: #18181b !important;
-  color: #fff;
-}
+
 .circle-top {
   position: absolute;
   top: -250px; /* Oculta la mitad superior */

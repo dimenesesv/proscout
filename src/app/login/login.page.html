@@ -2,7 +2,7 @@
   <div class="login-center-wrapper">
     <div class="login-card animate-card">
       <div class="login-logo">
-        <ion-icon name="football-outline" color="primary" style="font-size: 3.2rem;"></ion-icon>
+        <ion-icon name="football-outline" style="font-size: 3.2rem;"></ion-icon>
       </div>
       <form (submit)="login()" autocomplete="on" class="login-form">
         <div class="login-input-group">
@@ -18,11 +18,11 @@
           {{ errorMessage }}
         </div>
         <div class="login-actions-row">
-          <ion-button expand="block" class="login-btn" type="submit">
+          <ion-button expand="block" class="login-btn" color="dark" type="submit">
             <ion-icon slot="start" name="log-in-outline"></ion-icon>
             Ingresar
           </ion-button>
-          <ion-button expand="block" class="login-btn-secondary" type="button" (click)="goToRegister()">
+          <ion-button expand="block" class="login-btn-secondary" color="light" type="button" (click)="goToRegister()">
             <ion-icon slot="start" name="person-add-outline"></ion-icon>
             Crear cuenta nueva
           </ion-button>

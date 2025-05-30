@@ -14,6 +14,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
+import { NgCircleProgressModule } from 'ng-circle-progress'; // Import ng-circle-progress module
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,17 @@ import { AngularFireModule } from '@angular/fire/compat';
     HttpClientModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig), // <-- Add this for compat support
+    NgCircleProgressModule.forRoot({
+      radius: 40,
+      outerStrokeWidth: 8,
+      innerStrokeWidth: 0,
+      outerStrokeColor: "#00ffae",
+      animation: true,
+      animationDuration: 300,
+      showUnits: false,
+      showBackground: false,
+      showSubtitle: false
+    }),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

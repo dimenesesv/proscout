@@ -33,6 +33,21 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
   uploadProgress: number | null = null;
   loadedImages: { [url: string]: boolean } = {};
   esFavorito: boolean = false;
+  showAllStats: boolean = false;
+  allStatsKeys = [
+    { key: 'velocidad', label: 'Velocidad', color: '#00ffae' },
+    { key: 'resistencia', label: 'Resistencia', color: '#fdb71a' },
+    { key: 'fuerza', label: 'Fuerza', color: '#f44292' },
+    { key: 'agilidad', label: 'Agilidad', color: '#39a0ff' },
+    { key: 'equilibrio', label: 'Equilibrio', color: '#ff7f50' },
+    { key: 'coordinacion', label: 'Coordinación', color: '#b388ff' },
+    { key: 'salto', label: 'Salto', color: '#ffb300' },
+    { key: 'controlBalon', label: 'Control de balón', color: '#00e676' },
+    { key: 'regate', label: 'Regate', color: '#ff4081' },
+    { key: 'pase', label: 'Pase', color: '#2979ff' },
+    { key: 'tiro', label: 'Tiro', color: '#ff1744' },
+    { key: 'cabeceo', label: 'Cabeceo', color: '#ffd600' }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -298,6 +313,11 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
     }
   }
 
+  enviarMensaje() {
+    // Lógica para enviar mensaje (puedes mostrar un toast, modal, o navegar a chat)
+    console.log('Enviar mensaje al usuario');
+  }
+
   onSeguirClick() {
     const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
     const jugadorUid = this.userId;
@@ -306,7 +326,24 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
         this.esFavorito = true;
       });
     } else {
-      alert('No se pudo obtener el usuario actual o el perfil.');
+      alert('No se pudo obtener el usuario current or el perfil.');
     }
+  }
+
+  toggleStats() {
+    this.showAllStats = !this.showAllStats;
+  }
+
+  calcularEdad(fechaNacimiento?: string): string {
+    if (!fechaNacimiento) return '-';
+    const nacimiento = new Date(fechaNacimiento);
+    if (isNaN(nacimiento.getTime())) return '-';
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad.toString();
   }
 }

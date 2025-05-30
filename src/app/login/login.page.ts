@@ -55,5 +55,25 @@ export class LoginPage implements AfterViewInit {
     if (card) {
       motion.animate(card, { opacity: [0, 1], y: [40, 0] }, { duration: 0.7, easing: 'ease-out' });
     }
+
+    // Blur background on input focus
+    const ionContent = document.querySelector('ion-content.login-bg');
+    const inputs = document.querySelectorAll('.login-form input, .login-form ion-input input');
+    if (ionContent && inputs.length > 0) {
+      inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+          ionContent.classList.add('input-focused');
+        });
+        input.addEventListener('blur', () => {
+          // Si ningún input está enfocado, quita la clase
+          setTimeout(() => {
+            const stillFocused = Array.from(inputs).some(i => document.activeElement === i);
+            if (!stillFocused) {
+              ionContent.classList.remove('input-focused');
+            }
+          }, 10);
+        });
+      });
+    }
   }
 }

@@ -37,6 +37,7 @@
     "chart.js": "^4.4.9",
     "firebase": "^11.7.3",
     "ionicons": "^7.0.0",
+    "ng-circle-progress": "^1.7.1",
     "nodemailer": "^6.10.1",
     "rxjs": "~7.8.0",
     "swiper": "^11.2.8",
