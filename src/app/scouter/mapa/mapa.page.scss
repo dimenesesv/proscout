@@ -4,8 +4,7 @@
 
 
 ion-content.mapa-content {
-  background: url('/assets/soccer-field.svg') repeat, rgb(11, 106, 0) !important;
-  background-size: 300px 300px !important;
+  background: #e9f5ec !important; // Verde claro tipo favoritos
   min-height: 100vh !important;
   color-scheme: light !important;
   display: flex;
@@ -16,6 +15,28 @@ ion-content.mapa-content {
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+ion-title, .mapa-title {
+  color: #064420 !important; // Verde bosque igual que favoritos
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 2.2rem !important;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin: 0;
+  background: transparent;
+  text-align: center;
+  transition: color 0.35s cubic-bezier(0.4,0,0.2,1);
+  text-shadow: none;
+}
+
+ion-spinner, .spinner-center, .center-spinner {
+  color: #064420 !important; // Verde bosque
+  --color: #064420 !important;
+  width: 64px !important;
+  height: 64px !important;
+  margin: 2.5rem auto 1.5rem auto;
+  display: block !important;
 }
 
 $color-surface-dark: #18394a;
@@ -308,21 +329,27 @@ ion-header {
 }
 
 ion-chip {
-  background: #23232a;
-  color: #39ff14; // Neon green accent
+  background: #fff !important;
+  color: #064420 !important; // Verde bosque
   font-weight: 700;
   border-radius: 1.2rem;
   font-size: 1.08rem;
-  box-shadow: 0 2px 8px rgba(44,95,45,0.10);
-  transition: background 0.18s, color 0.18s;
+  box-shadow: none !important;
+  border: 2px solid #064420 !important;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+ion-chip[aria-selected="true"], ion-chip.chip-active, ion-chip.selected {
+  background: #064420 !important;
+  color: #fff !important;
+  border: 2px solid #064420 !important;
 }
 ion-chip:hover, ion-chip:focus {
-  background: #1b4022;
-  color: #fff;
+  background: #e9f5ec !important;
+  color: #064420 !important;
+  border: 2px solid #064420 !important;
 }
-
 ion-chip ion-icon {
-  color: #39ff14; // Neon green accent
+  color: #064420 !important;
   margin-right: 0.3rem;
 }
 
@@ -450,7 +477,7 @@ ion-note.ion-text-center {
   top: 8px;
   right: 8px;
   font-size: 2rem;
-  color: #000000;
+  color: #ffd600;
   z-index: 10;
   text-shadow: 0 0 8px #000, 0 0 2px #000, 0 0 12px #37ff00;
   pointer-events: none;
@@ -463,24 +490,21 @@ ion-note.ion-text-center {
   width: 100vw;
   height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  background: rgba(24, 24, 27, 0.85);
-  z-index: 1000;
-}
-
-.mapa-loading-overlay ion-spinner,
-.mapa-loading-overlay .loading-text {
-  margin-left: auto;
-  margin-right: auto;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 .mapa-loading-overlay ion-spinner {
-  width: 64px;
-  height: 64px;
-  color: #39ff14;
+  background: #191919;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  color: #fff !important;
+  --color: #fff !important;
+  width: 64px !important;
+  height: 64px !important;
 }
 
 .mapa-loading-overlay .loading-text {
@@ -489,4 +513,30 @@ ion-note.ion-text-center {
   font-size: 1.1rem;
   font-weight: 500;
   text-align: center;
+}
+
+.location-error-note {
+  color: #000000 !important;
+  background: #015e0a;
+  border: none;
+  border-radius: 1.2rem;
+  font-size: 1.13rem;
+  font-weight: 700;
+  padding: 1.1rem 1.2rem 1.1rem 1.2rem;
+  margin: 2.2rem auto 0 auto !important;
+  max-width: 420px;
+  box-shadow: 0 2px 12px rgba(176,0,32,0.10);
+  text-align: center;
+  letter-spacing: 0.01em;
+  transition: background 0.18s, color 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  justify-content: center;
+}
+h6{
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff !important; 
 }

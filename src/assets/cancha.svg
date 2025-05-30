@@ -1,0 +1,21 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="500" fill="#0b6623" />
+  <rect x="10" y="10" width="780" height="480" stroke="white" stroke-width="4" fill="none"/>
+
+  <!-- Línea mitad de cancha -->
+  <line x1="400" y1="10" x2="400" y2="490" stroke="white" stroke-width="2" />
+  
+  <!-- Círculo central -->
+  <circle cx="400" cy="250" r="60" stroke="white" stroke-width="2" fill="none"/>
+  <circle cx="400" cy="250" r="3" fill="white"/>
+
+  <!-- Área izquierda -->
+  <rect x="10" y="150" width="120" height="200" stroke="white" stroke-width="2" fill="none"/>
+  <rect x="10" y="200" width="40" height="100" stroke="white" stroke-width="2" fill="none"/>
+  <circle cx="90" cy="250" r="2" fill="white"/>
+  
+  <!-- Área derecha -->
+  <rect x="670" y="150" width="120" height="200" stroke="white" stroke-width="2" fill="none"/>
+  <rect x="750" y="200" width="40" height="100" stroke="white" stroke-width="2" fill="none"/>
+  <circle cx="710" cy="250" r="2" fill="white"/>
+</svg>

@@ -3,12 +3,10 @@
     <ion-grid>
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col>
+          <div class="profile-photo">
+          <ion-img  [src]="userData?.fotoPerfil || 'assets/default-profile.png'"></ion-img>
+          </div>
           <h2 class="perfil-nombre">{{ userData?.nombre || '-' }}</h2>
-        </ion-col>
-        <ion-col size="auto">
-          <ion-avatar>
-            <ion-img [src]="userData?.fotoPerfil || 'assets/default-profile.png'"></ion-img>
-          </ion-avatar>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -17,53 +15,53 @@
       <ion-row class="perfil-header-row">
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Edad:</div>
-          <div class="value">{{ userData?.fechaNacimiento ? calcularEdad(userData.fechaNacimiento) : '-' }}</div>
+          <div class="value"><ion-icon name="calendar-outline"></ion-icon> {{ userData?.fechaNacimiento ? calcularEdad(userData.fechaNacimiento) : '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Nacionalidad:</div>
-          <div class="value">{{ userData?.nacionalidad || '-' }}</div>
+          <div class="value"><ion-icon name="flag-outline"></ion-icon> {{ userData?.nacionalidad || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Ciudad:</div>
-          <div class="value">{{ userData?.ciudad || userData?.info?.ciudad || '-' }}</div>
+          <div class="value"><ion-icon name="location-outline"></ion-icon> {{ userData?.ciudad || userData?.info?.ciudad || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Comuna:</div>
-          <div class="value">{{ userData?.comuna || userData?.info?.comuna || '-' }}</div>
+          <div class="value"><ion-icon name="business-outline"></ion-icon> {{ userData?.comuna || userData?.info?.comuna || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Región:</div>
-          <div class="value">{{ userData?.region || userData?.info?.region || '-' }}</div>
+          <div class="value"><ion-icon name="map-outline"></ion-icon> {{ userData?.region || userData?.info?.region || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Club actual:</div>
-          <div class="value">{{ userData?.clubActual || userData?.info?.clubActual || '-' }}</div>
+          <div class="value"><ion-icon name="trophy-outline"></ion-icon> {{ userData?.clubActual || userData?.info?.clubActual || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Equipo:</div>
-          <div class="value">{{ userData?.info?.equipo || '-' }}</div>
+          <div class="value"><ion-icon name="people-outline"></ion-icon> {{ userData?.info?.equipo || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Posición:</div>
-          <div class="value">{{ userData?.posicion || userData?.info?.posicion || '-' }}</div>
+          <div class="value"><ion-icon name="accessibility-outline"></ion-icon> {{ userData?.posicion || userData?.info?.posicion || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Altura:</div>
-          <div class="value">{{ userData?.altura || userData?.info?.altura || '-' }}</div>
+          <div class="value"><ion-icon name="resize-outline"></ion-icon> {{ userData?.altura || userData?.info?.altura || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Peso:</div>
-          <div class="value">{{ userData?.peso || userData?.info?.peso || '-' }}</div>
+          <div class="value"><ion-icon name="barbell-outline"></ion-icon> {{ userData?.peso || userData?.info?.peso || '-' }}</div>
         </ion-col>
         <ion-col size="6" class="perfil-header-col">
           <div class="label">Pie hábil:</div>
-          <div class="value">{{ userData?.perfil || userData?.info?.pie || '-' }}</div>
+          <div class="value"><ion-icon name="footsteps-outline"></ion-icon> {{ userData?.perfil || userData?.info?.pie || '-' }}</div>
         </ion-col>
       </ion-row>
     </ion-grid>
   </ion-card>
 
-  <ion-card class="perfil-stats-card">
+  <ion-card class="perfil-stats-card" #statsCard>
     <ion-card-header>
       <ion-card-title>Estadísticas</ion-card-title>
     </ion-card-header>
@@ -73,7 +71,7 @@
           <ng-container *ngFor="let stat of (showAllStats ? allStatsKeys : allStatsKeys.slice(0, 6))">
             <ion-col size="6" size-md="4">
               <circle-progress
-                [percent]="(userData?.stats?.[stat.key] ? (userData.stats[stat.key] * 10) : 0)"
+                [percent]="statsCardInView ? (userData?.stats?.[stat.key] ? (userData.stats[stat.key] * 10) : 0) : 0"
                 [title]="stat.label"
                 [showTitle]="true"
                 [titleColor]="'#ffffff'"

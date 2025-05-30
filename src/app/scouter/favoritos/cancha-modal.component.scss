@@ -1,0 +1,213 @@
+:host {
+  background: transparent;
+}
+
+.cancha-container-modal {
+  background: #e9f5ec !important;
+  --background: #e9f5ec !important;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  /* Suma header, selector y safe-area */
+}
+
+ion-header, ion-toolbar {
+  background: #104800 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 12px rgba(56,128,255,0.10);
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+
+
+
+ion-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fff !important;
+}
+
+ion-button.cerrar-modal-btn {
+  color: #fff !important;
+  --color: #fff !important;
+  --background: transparent !important;
+  font-size: 1.5rem;
+}
+
+.cerrar-modal-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.cancha-3d-bg {
+  perspective: 900px;
+  width: 100vw;
+  height: 100vw;
+  max-width: 95vw;
+  max-height: 95vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 7rem auto 1rem auto; // Move the field down
+  position: relative;
+}
+
+.cancha-3d-inner {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  transform: scale(1.1);
+  will-change: transform;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
+  border-radius: 32px;
+  transition: transform 0.4s cubic-bezier(.4, 2, .6, 1);
+  mask-image: linear-gradient(white, white); /* fuerza redibujado en algunos navegadores */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('/assets/cancha.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(90deg);
+    z-index: 0;
+  }
+}
+
+
+
+/* Posicionamiento absoluto para cada jugador en la cancha */
+// Enforce fixed dimensions for consistent centering
+
+.zona {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.jugador-cancha {
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.jugador-cancha img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #000000;
+  margin-bottom: 0.3rem;
+}
+
+.jugador-cancha span {
+  font-size: 0.95rem;
+  color: #222;
+  font-weight: 500;
+}
+
+.formaciones-selector {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0e3a00;
+  border-bottom: 1px solid #1a5c1a;
+  padding: 0;
+  position: fixed;
+  top: calc(56px + env(safe-area-inset-top));
+  left: 0;
+  z-index: 999;
+
+  button {
+    background: #fff;
+    color: #104800;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 0.3rem 1.1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(16,72,0,0.08);
+    outline: none;
+  }
+  button.selected {
+    background: #104800;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(16,72,0,0.18);
+  }
+  button:hover:not(.selected) {
+    background: #e9f5ec;
+    color: #104800;
+  }
+}
+
+.formaciones-selector-chips {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  background: #0e3a00;
+  border-bottom: 1px solid #1a5c1a;
+  position: fixed;
+  top: calc(56px + env(safe-area-inset-top));
+  left: 0;
+  z-index: 999;
+}
+
+ion-chip {
+  margin: 0;
+  font-size: 1.05em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  --background: #fff;
+  --color: #104800;
+  --border-radius: 16px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(16,72,0,0.08);
+}
+ion-chip[color=primary] {
+  --background: #104800;
+  --color: #fff;
+  box-shadow: 0 2px 8px rgba(16,72,0,0.18);
+}
+ion-chip ion-icon {
+  margin-left: 0.3em;
+  font-size: 1.1em;
+  vertical-align: middle;
+}
+
+.centro-debug-linea {
+  position: fixed;
+  top: 0;
+  left: 50vw;
+  width: 2px;
+  height: 100vh;
+  background: red;
+  z-index: 2000;
+  pointer-events: none;
+}

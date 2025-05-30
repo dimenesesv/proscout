@@ -39,6 +39,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import './theme/variables.scss';
 
+body, html, ion-app {
+  color-scheme: dark !important;
+  --ion-color-scheme: dark !important;
+  background: #18181b !important;
+}
+
+body.dark, html.dark, ion-app.dark {
+  color-scheme: dark !important;
+  --ion-color-scheme: dark !important;
+  background: #18181b !important;
+}
+
 body, html, ion-app, ion-content, ion-card, ion-label, ion-card-title, ion-title, ion-button, h1, h2, h3, h4, h5, h6, p, div {
   font-family: 'Bebas Neue', sans-serif !important;
 

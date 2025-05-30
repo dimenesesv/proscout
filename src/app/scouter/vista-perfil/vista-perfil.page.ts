@@ -34,6 +34,7 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
   loadedImages: { [url: string]: boolean } = {};
   esFavorito: boolean = false;
   showAllStats: boolean = false;
+  statsFocused: boolean = false;
   allStatsKeys = [
     { key: 'velocidad', label: 'Velocidad', color: '#00ffae' },
     { key: 'resistencia', label: 'Resistencia', color: '#fdb71a' },
@@ -48,6 +49,8 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
     { key: 'tiro', label: 'Tiro', color: '#ff1744' },
     { key: 'cabeceo', label: 'Cabeceo', color: '#ffd600' }
   ];
+  statsCardInView: boolean = false;
+  private statsCardObserver: IntersectionObserver | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -191,6 +194,10 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
     if (this.swiper) {
       this.swiper.destroy(true, true);
       this.swiper = undefined;
+    }
+    if (this.statsCardObserver) {
+      this.statsCardObserver.disconnect();
+      this.statsCardObserver = null;
     }
   }
 
@@ -345,5 +352,19 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
       edad--;
     }
     return edad.toString();
+  }
+
+  ngAfterViewInit() {
+    const statsCard = document.querySelector('.perfil-stats-card');
+    if (statsCard) {
+      this.statsCardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          this.ngZone.run(() => {
+            this.statsCardInView = entry.isIntersecting;
+          });
+        });
+      }, { threshold: 0.25 });
+      this.statsCardObserver.observe(statsCard);
+    }
   }
 }

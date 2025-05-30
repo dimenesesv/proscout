@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { FavoritosPageRoutingModule } from './favoritos-routing.module';
 
 import { FavoritosPage } from './favoritos.page';
+import { SeleccionJugadorModalComponent } from './seleccion-jugador-modal.component';
+import { CanchaModalComponent } from './cancha-modal.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FavoritosPageRoutingModule
+    FavoritosPageRoutingModule,
+    SeleccionJugadorModalComponent,
+    CanchaModalComponent
   ],
   declarations: [FavoritosPage]
 })

@@ -8,8 +8,6 @@
   <ion-spinner name="crescent"></ion-spinner>
 </div>
 <ion-content class="mapa-content">
-  <div class="circle-top">
-  </div>
   <div class="mapa-title-container">
     <span class="mapa-subtitle">Explora</span>
     <h1 class="mapa-title">Jugadores Cercanos</h1>
@@ -22,8 +20,8 @@
     </ion-chip>
   </div>
 
-  <ion-note *ngIf="locationError" color="danger" class="ion-text-center" style="margin-top:2rem;">
-    No se pudo obtener tu ubicación. Por favor revisa los permisos de localización y vuelve a intentarlo.
+  <ion-note *ngIf="locationError" class="ion-text-center location-error-note" style="margin-top:2rem;">
+    <h6>No se pudo obtener tu ubicación. Por favor revisa los permisos de localización y vuelve a intentarlo.</h6>
   </ion-note>
   <div *ngIf="!isLoading && !locationError">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

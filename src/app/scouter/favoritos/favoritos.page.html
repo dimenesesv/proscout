@@ -1,11 +1,27 @@
-<ion-content class="ion-padding favoritos-content" [fullscreen]="true">
+<ion-content class="favoritos-content" [fullscreen]="true">
   <div *ngIf="loading" class="favoritos-loading-overlay">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
-  <div class="circle-top"></div>
-  <div class="favoritos-title-container">
-    <h1 class="favoritos-title">Jugadores Favoritos</h1>
+    <div class="mapa-title-container">
+    <span class="mapa-subtitle">Explora</span>
+    <h1 class="mapa-title">Jugadores Favoritos</h1>
+    <ion-button fill="clear" (click)="modalAbierto = true" style="margin-left: 8px;">
+      <ion-icon name="football-outline"></ion-icon>
+    </ion-button>
   </div>
+
+  <!-- Modal fullscreen con la cancha de fútbol -->
+  <ion-modal [isOpen]="modalAbierto" (didDismiss)="cerrarModal()" class="modal-fullscreen">
+    <ng-template>
+      <app-cancha-modal
+        [jugadoresActivosEnCancha]="jugadoresActivosEnCancha"
+        (cerrar)="cerrarModal()"
+        (jugadorSeleccionado)="seleccionarJugador($event)"
+        (agregarJugadorBusqueda)="agregarJugadorBusqueda($event)"
+      ></app-cancha-modal>
+    </ng-template>
+  </ion-modal>
+
   <div class="jugadores-grid" *ngIf="jugadoresFavoritos.length > 0">
     <div class="jugador-card perfil-card animate-card" *ngFor="let jugador of jugadoresFavoritos; let i = index" [style.animationDelay]="(i * 80) + 'ms'" (click)="verPerfil(jugador.uid)">
       <div class="imagen-con-label">
@@ -31,4 +47,3 @@
     </ion-text>
   </div>
 </ion-content>
-

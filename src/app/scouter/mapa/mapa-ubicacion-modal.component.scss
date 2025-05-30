@@ -1,11 +1,11 @@
 // Estilo premium y consistente con busqueda.page.scss
 :host {
   display: block;
-  background: #18181b;
+  background: #e9f5ec; // igual que favoritos
 }
 
 ion-header, ion-toolbar {
-  --background: #23232a !important;
+  --background: #064420 !important; // Verde bosque igual que favoritos
   --color: #fff !important;
   box-shadow: 0 2px 12px rgba(44,95,45,0.10);
   border-top-left-radius: 18px;
@@ -39,7 +39,7 @@ ion-button ion-icon {
 }
 
 ion-content.no-modal-scroll {
-  --background: #18181b !important;
+  --background: #e9f5ec !important;
   padding: 0 0 1.5rem 0;
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
@@ -75,6 +75,15 @@ ion-content.no-modal-scroll {
   background: url('/assets/pin.svg') no-repeat center center;
   background-size: contain;
   pointer-events: none;
+}
+
+ion-icon[name="star"], .estrella-favorito {
+  color: #ffd600 !important;
+  font-size: 1.7rem !important;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
 }
 
 @media (max-width: 600px) {

@@ -53,14 +53,32 @@ export class BusquedaPage implements OnInit, OnDestroy {
   ngOnInit() {
     try {
       console.log('[DEBUG] BusquedaPage ngOnInit called');
-      // this.abrirModalFiltros(); // Quitar apertura automática del modal
+      // Si hay filtro automático, abrir modal de filtros y aplicar
+      const filtroAuto = localStorage.getItem('filtroBusquedaAuto');
+      if (filtroAuto) {
+        const filtro = JSON.parse(filtroAuto);
+        localStorage.removeItem('filtroBusquedaAuto');
+        setTimeout(() => this.abrirModalFiltrosConPosicion(filtro.posicion), 300);
+      }
     } catch (err) {
       console.error('[ERROR] Exception in BusquedaPage ngOnInit:', err);
     }
     this.setBadgeState();
     this.cargarUsuarios();
+    // --- GIROSCOPIO: Solicitar permiso en iOS ---
     if (window && 'DeviceOrientationEvent' in window) {
-      window.addEventListener('deviceorientation', this.deviceOrientationHandler);
+      // iOS 13+ requiere permiso explícito
+      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+        (DeviceOrientationEvent as any).requestPermission().then((response: string) => {
+          if (response === 'granted') {
+            window.addEventListener('deviceorientation', this.deviceOrientationHandler);
+          }
+        }).catch((e: any) => {
+          console.warn('Permiso de giroscopio denegado o no soportado:', e);
+        });
+      } else {
+        window.addEventListener('deviceorientation', this.deviceOrientationHandler);
+      }
     }
   }
 
@@ -224,6 +242,28 @@ export class BusquedaPage implements OnInit, OnDestroy {
     console.log('[DEBUG] modal.present() called');
   }
 
+  async abrirModalFiltrosConPosicion(posicion: string) {
+    const modal = await this.modalCtrl.create({
+      component: FiltrosModalComponent
+    });
+    modal.onDidDismiss().then(result => {
+      if (result.data) {
+        this.aplicarFiltros(result.data, modal);
+      }
+    });
+    await modal.present();
+    // Espera a que el modal esté listo y setea el filtro de posición
+    setTimeout(() => {
+      const instance = (modal as any).componentProps?.instance || (modal as any)._component;
+      if (instance) {
+        instance.filtros = { ...instance.filtros, posicion };
+      }
+      // Si el modal tiene un input para posición, intenta setearlo visualmente (opcional)
+      const input = document.querySelector('ion-input[name=posicion], ion-select[name=posicion]') as HTMLInputElement;
+      if (input) input.value = posicion;
+    }, 300);
+  }
+
   aplicarFiltros(valores: any, modal: any) {
     this.filtrosActuales = { ...valores };
     this.actualizarFiltrosActivos();
@@ -275,6 +315,21 @@ export class BusquedaPage implements OnInit, OnDestroy {
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     welcome.style.setProperty('--gradient-x', `${x}%`);
     welcome.style.setProperty('--gradient-y', `${y}%`);
+    // Efecto 3D: tilt máximo de 14 grados
+    const tiltX = ((x - 50) / 50) * 14; // -14deg a +14deg
+    const tiltY = -((y - 50) / 50) * 14; // -14deg a +14deg (invertido para UX)
+    welcome.style.setProperty('--tilt-x', `${tiltX}deg`);
+    welcome.style.setProperty('--tilt-y', `${tiltY}deg`);
+    // welcome.style.transition = 'transform 0.2s ease-in'; // Eliminado según instrucciones
+  }
+
+  onWelcomeParallaxReset(event: MouseEvent) {
+    const welcome = event.currentTarget as HTMLElement;
+    welcome.style.setProperty('--gradient-x', '50%');
+    welcome.style.setProperty('--gradient-y', '50%');
+    welcome.style.setProperty('--tilt-x', '0deg');
+    welcome.style.setProperty('--tilt-y', '0deg');
+    // welcome.style.transition = 'transform 0.5s ease-out'; // Eliminado según instrucciones
   }
 
   onWelcomeDeviceParallax(event: DeviceOrientationEvent) {

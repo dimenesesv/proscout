@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Cancha de fútbol</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="cerrar.emit()">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="formaciones-selector">
+    <div class="formaciones-selector-chips">
+      <ion-chip
+        *ngFor="let key of (formaciones | keyvalue)"
+        [color]="formacionActual === key.key ? 'primary' : 'medium'"
+        [outline]="formacionActual !== key.key"
+        (click)="cambiarFormacion(key.key)"
+      >
+        <ion-label>{{ key.key }}</ion-label>
+        <ion-icon
+          *ngIf="formacionActual === key.key"
+          name="checkmark-circle"
+          color="primary"
+        ></ion-icon>
+      </ion-chip>
+    </div>
+  </div>
+</ion-header>
+<ion-content class="cancha-container-modal">
+  <div class="cancha-3d-bg">
+    <div class="cancha-3d-inner"></div>
+    <div class="cancha-container">
+      <div
+        *ngFor="let jugador of jugadoresEnCancha"
+        class="jugador-cancha"
+        [ngStyle]="jugador.estilo"
+        (click)="jugador.vacio ? agregarJugador(jugador.posicion) : seleccionarJugador(jugador.posicion)"
+      >
+        <ng-container *ngIf="!jugador.vacio; else vacioTemplate">
+          <img
+            [src]="jugador.fotoPerfil || 'assets/default-profile.png'"
+            alt="{{ jugador.posicion }}"
+          />
+          <span>{{ jugador.nombre }}</span>
+        </ng-container>
+        <ng-template #vacioTemplate>
+          <div class="jugador-vacio">
+            <ion-icon name="add-circle-outline" size="large"></ion-icon>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ion-content>
