@@ -48,12 +48,16 @@ export class FavoritosPage implements OnInit {
 
   async cargarJugadoresFavoritos() {
     let userUid: string | undefined;
-    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
-      const { user } = await FirebaseAuthentication.getCurrentUser();
-      userUid = user?.uid;
-    } else {
-      const auth = getAuth();
-      userUid = auth.currentUser?.uid;
+    // Usar el método multiplataforma del servicio
+    // (Requiere que FirebaseService esté disponible aquí, si no, importar y usar correctamente)
+    try {
+      const { FirebaseService } = await import('src/app/services/firebase.service');
+      const firebaseService = new FirebaseService(undefined as any); // Si tienes inyección, usa DI
+      const uid = await firebaseService.getCurrentUserUid();
+      userUid = uid === null ? undefined : uid;
+    } catch (e) {
+      console.error('[FavoritosPage] Error obteniendo UID:', e);
+      userUid = undefined;
     }
     if (!userUid) {
       console.warn('[FavoritosPage] No hay usuario autenticado');

@@ -125,7 +125,7 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
       console.log('[VistaPerfilPage] Perfil cargado correctamente', data);
 
       // --- Lógica para saber si el jugador está en favoritos ---
-      const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+      const scouterUid = await this.firebaseService.getCurrentUserUid();
       if (scouterUid && this.userId) {
         const scouterDoc = await this.firebaseService.getDocument(`usuarios/${scouterUid}`);
         const favoritos: string[] = scouterDoc?.scouter?.favoritos || [];
@@ -298,7 +298,7 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
   }
 
   async eliminarDeFavoritos() {
-    const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+    const scouterUid = await this.firebaseService.getCurrentUserUid();
     const jugadorUid = this.userId;
     if (!scouterUid || !jugadorUid) {
       alert('No se pudo obtener el usuario actual o el perfil.');
@@ -325,13 +325,12 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
     console.log('Enviar mensaje al usuario');
   }
 
-  onSeguirClick() {
-    const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+  async onSeguirClick() {
+    const scouterUid = await this.firebaseService.getCurrentUserUid();
     const jugadorUid = this.userId;
     if (scouterUid && jugadorUid) {
-      this.agregarAFavoritos(scouterUid, jugadorUid).then(() => {
-        this.esFavorito = true;
-      });
+      await this.agregarAFavoritos(scouterUid, jugadorUid);
+      this.esFavorito = true;
     } else {
       alert('No se pudo obtener el usuario current or el perfil.');
     }

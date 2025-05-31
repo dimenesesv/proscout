@@ -15,6 +15,9 @@ ion-content.login-bg {
   text-align: center;
   position: relative;
   overflow: hidden;
+  /* Permite que el fondo se extienda detrás del notch y safe area */
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 ion-content.login-bg::before {
@@ -22,12 +25,20 @@ ion-content.login-bg::before {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
+  width: 100vw !important;
+  height: 100vh !important;
   z-index: 1 !important;
   pointer-events: none !important;
   transition: background 0.3s !important;
   will-change: background;
+}
+
+/* Elimina padding de safe-area para el login sólo en esta página */
+:host ion-content.login-bg {
+  --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
+  --ion-safe-area-top: 0 !important;
+  --ion-safe-area-bottom: 0 !important;
 }
 
 .login-center-wrapper {
@@ -35,13 +46,22 @@ ion-content.login-bg::before {
   border-radius: 16px;
   padding: 24px;
   max-width: 340px;
-  margin: 32px auto;
+  min-width: 220px;
+  width: 90vw;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: calc(100vw - 48px);
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  height: auto;
+}
+
+.login-center-wrapper > * {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .login-logo {
@@ -92,11 +112,15 @@ ion-content.login-bg::before {
 
 .login-form ion-button {
   width: 100%;
-  background: #fff !important;
+  background: #39ff14 !important; /* Color fijo, verde flúor */
   border-radius: 10px !important;
   box-sizing: border-box;
   color: #111 !important;
   margin-top: 12px;
+  --ion-color-base: #ffffff !important;
+  --ion-color-contrast: #111 !important;
+  --color: #111 !important;
+  filter: none !important;
 }
 
 .login-input-group {

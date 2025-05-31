@@ -77,13 +77,9 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
       let userId: string | undefined = params.get('id') || undefined;
       console.log('[PerfilPage] paramMap changed, id:', userId);
       if (!userId) {
-        if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
-          const { user } = await FirebaseAuthentication.getCurrentUser();
-          userId = user?.uid;
-        } else {
-          const user = await this.afAuth.currentUser;
-          userId = user?.uid;
-        }
+        // Usar el método multiplataforma del servicio
+        const uid = await this.firebaseService.getCurrentUserUid();
+        userId = uid === null ? undefined : uid;
       }
       await this.loadUserData(userId || '');
     });
@@ -150,15 +146,9 @@ export class PerfilPage implements OnInit, OnDestroy, AfterViewInit {
 
   async uploadImage(file: File, isProfilePic: boolean = false) {
     let userId: string | undefined;
-    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
-      const { user } = await FirebaseAuthentication.getCurrentUser();
-      userId = user?.uid;
-      console.log('[uploadImage] Plataforma móvil, userId:', userId);
-    } else {
-      const user = await this.afAuth.currentUser;
-      userId = user?.uid;
-      console.log('[uploadImage] Plataforma web, userId:', userId);
-    }
+    // Usar el método multiplataforma del servicio
+    const uid = await this.firebaseService.getCurrentUserUid();
+    userId = uid === null ? undefined : uid;
     if (!userId) {
       console.warn('[uploadImage] No hay usuario autenticado.');
       return;

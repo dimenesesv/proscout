@@ -133,11 +133,24 @@ export class FirebaseService {
     }
   }
 
-  getCurrentUserUid(): string | null {
+  /**
+   * Obtiene el UID del usuario autenticado en cualquier plataforma (web o móvil).
+   * @returns Promise<string | null>
+   */
+  async getCurrentUserUid(): Promise<string | null> {
     try {
-      const user = getAuth().currentUser;
-      return user ? user.uid : null;
+      const platform = Capacitor.getPlatform();
+      if (platform === 'ios' || platform === 'android') {
+        // En móvil, usar Capacitor FirebaseAuthentication
+        const res = await FirebaseAuthentication.getCurrentUser();
+        return res.user?.uid || null;
+      } else {
+        // En web, usar Firebase Auth
+        const user = getAuth().currentUser;
+        return user ? user.uid : null;
+      }
     } catch (e) {
+      console.error('[FirebaseService] Error obteniendo UID:', e);
       return null;
     }
   }
