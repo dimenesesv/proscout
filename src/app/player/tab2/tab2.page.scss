@@ -29,6 +29,48 @@ ion-header, ion-toolbar, ion-title, ion-tabs, ion-tab-bar, ion-tab-button, ion-t
   color: #fff !important;
 }
 
+// Unificar visual con scouter: fondo negro, cards y títulos con Bebas Neue, bordes, sombras, acentos amarillo
+ion-header, ion-toolbar, ion-title {
+  --background: #000 !important;
+  background: #000 !important;
+  color: #fff !important;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  letter-spacing: 0.03em;
+}
+ion-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+ion-card {
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+  background: #23232a;
+  color: #fff;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.18rem;
+  margin-bottom: 1.2rem;
+  border: 2px solid transparent;
+  transition: box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s, border-color 0.22s;
+  &:hover, &:active {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    border-color: #ffd600;
+    transform: scale(1.025) translateY(-2px);
+  }
+}
+ion-card-title {
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  font-size: 1.5rem;
+  color: #ffd600;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+ion-card-subtitle {
+  color: #fff;
+  font-size: 1.1rem;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+}
+
 .objectives-wrapper {
   padding: 1.5rem 1rem;
   display: flex;

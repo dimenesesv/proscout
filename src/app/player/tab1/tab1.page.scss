@@ -9,6 +9,64 @@ $shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
 $font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 
+body, ion-app, ion-content {
+  background: #18181b !important;
+  color: $color-text-main;
+  font-family: $font-main;
+}
+
+ion-header, ion-toolbar, ion-title {
+  --background: #000 !important;
+  background: #000 !important;
+  color: #fff !important;
+  font-family: $font-main;
+  letter-spacing: 0.03em;
+}
+
+ion-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+ion-card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  background: $color-surface-dark;
+  color: $color-text-main;
+  font-family: $font-main;
+  font-size: 1.18rem;
+  margin-bottom: 1.2rem;
+  border: 2px solid transparent;
+  transition: box-shadow $transition-main, transform $transition-main, border-color $transition-main;
+
+  &:hover, &:active {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    border-color: $color-primary;
+    transform: scale(1.025) translateY(-2px);
+  }
+}
+
+ion-card-title {
+  font-family: $font-main;
+  font-size: 1.5rem;
+  color: $color-primary;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+ion-card-subtitle {
+  color: $color-text-main;
+  font-size: 1.1rem;
+  font-family: $font-main;
+}
+
+ion-list, ion-item {
+  background: transparent;
+  color: $color-text-main;
+  font-family: $font-main;
+}
+
 .horizontal-scroll {
   display: flex;
   overflow-x: auto;
@@ -23,7 +81,7 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
   background: $color-surface-dark;
-  color: #000;
+  color: $color-text-main;
   font-family: $font-main;
   font-size: 1.18rem;
   padding: 1.2rem 1rem;
@@ -36,4 +94,16 @@ $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
     border-color: $color-primary;
     transform: scale(1.025) translateY(-2px);
   }
+}
+
+h2, h3 {
+  font-family: $font-main;
+  color: $color-primary;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+p, span, label {
+  color: $color-text-main;
+  font-family: $font-main;
 }

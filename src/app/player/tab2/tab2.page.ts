@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, onSnapshot, collection, getDocs, QuerySnapshot } from 'firebase/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -52,10 +52,22 @@ export class Tab2Page implements OnInit, OnDestroy {
     if (!user) return;
     const db = getFirestore();
     const userRef = doc(db, 'usuarios', user.uid);
-    this.userUnsubscribe = onSnapshot(userRef, (userSnap) => {
+    this.userUnsubscribe = onSnapshot(userRef, async (userSnap) => {
       if (userSnap.exists()) {
         const data: any = userSnap.data();
-        this.favoritosCount = Array.isArray(data.favoritos) ? data.favoritos.length : 0;
+        // Cuenta cuántos scouters tienen a este jugador en favoritos
+        const scoutersRef = collection(db, 'usuarios');
+        const scoutersSnap: QuerySnapshot = await getDocs(scoutersRef);
+        let seguidores = 0;
+        scoutersSnap.forEach((docSnap) => {
+          const scouterData = docSnap.data();
+          if (scouterData && scouterData['scouter'] && Array.isArray(scouterData['scouter']['favoritos'])) {
+            if (scouterData['scouter']['favoritos'].includes(user.uid)) {
+              seguidores++;
+            }
+          }
+        });
+        this.favoritosCount = seguidores;
         this.perfilCompleto = this.verificarPerfilCompleto(data);
         this.fotosCount = Array.isArray(data.fotos) ? data.fotos.length : 0;
         this.primerVideoSubido = Array.isArray(data.videos) && data.videos.length > 0;

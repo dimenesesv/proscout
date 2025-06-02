@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NotificacionesService } from '../../services/notificaciones.service';
+import { Notificacion } from '../../interfaces/notificacion';
 
 @Component({
   selector: 'app-tab3',
@@ -9,16 +10,28 @@ import { NotificacionesService } from '../../services/notificaciones.service';
 })
 export class Tab3Page {
 
-  notifications: any[] = [];
+  notifications: Notificacion[] = [];
 
   constructor(private notificacionesService: NotificacionesService) {}
 
   async ngOnInit() {
-    await this.loadNotifications();
+    try {
+      console.log('[Tab3Page][ngOnInit] INICIO');
+      await this.loadNotifications();
+    } catch (error) {
+      console.error('[Tab3Page][ngOnInit] Error:', error);
+    }
   }
 
   async loadNotifications() {
-    this.notifications = await this.notificacionesService.getNotificacionesJugador();
+    try {
+      console.log('[Tab3Page][loadNotifications] INICIO');
+      const notificaciones = await this.notificacionesService.getNotificacionesUsuario();
+      console.log('[Tab3Page][loadNotifications] notificaciones recibidas:', notificaciones);
+      this.notifications = notificaciones;
+    } catch (error) {
+      console.error('[Tab3Page][loadNotifications] Error:', error);
+    }
   }
 
   getIcon(type: string): string {
@@ -35,6 +48,8 @@ export class Tab3Page {
   }
 
 }
+
+// Cambia notif.mensaje por notif.contenido en el template para mostrar el campo correcto
 
 
 
