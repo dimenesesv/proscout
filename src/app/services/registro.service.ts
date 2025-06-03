@@ -8,7 +8,10 @@ import { GeoPoint } from 'firebase/firestore';
 export class RegistroService {
   private usuario: Partial<Usuario> = {};
 
-  constructor() {}
+  constructor() {
+    // Todos los usuarios nuevos quedan inactivos hasta verificación
+    this.usuario.activo = false;
+  }
 
   // Setters
   setNombre(nombre: string) {
@@ -73,6 +76,9 @@ export class RegistroService {
   }
   setUsuario(usuario: Usuario) {
     this.usuario = usuario;
+  }
+  setActivo(activo: boolean) {
+    this.usuario.activo = activo;
   }
 
   // Getters
@@ -142,6 +148,9 @@ export class RegistroService {
   }
   getGaleria() {
     return this.usuario.galeria;
+  }
+  getActivo() {
+    return this.usuario.activo;
   }
 
 }

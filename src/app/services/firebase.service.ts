@@ -133,6 +133,23 @@ export class FirebaseService {
     }
   }
 
+  // Devuelve una referencia de consulta para una colección y filtros
+  async collectionQuery(collectionPath: string, filters: Array<{ field: string, op: any, value: any }>) {
+    const { collection, query, where } = await import('@angular/fire/firestore');
+    let q: any = collection(this.firestore, collectionPath);
+    for (const f of filters) {
+      q = query(q, where(f.field, f.op, f.value));
+    }
+    return q;
+  }
+
+  // Ejecuta una consulta y devuelve los documentos
+  async getDocsFromQuery(q: any): Promise<any[]> {
+    const { getDocs } = await import('@angular/fire/firestore');
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+  }
+
   /**
    * Obtiene el UID del usuario autenticado en cualquier plataforma (web o móvil).
    * @returns Promise<string | null>

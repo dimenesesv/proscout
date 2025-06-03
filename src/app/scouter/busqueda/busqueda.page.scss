@@ -39,7 +39,7 @@ ion-content.busqueda-page {
   transition: background-position 0.1s ease, opacity 0.15s, transform 0.08s ease;
   transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
   text-align: center;
-  margin: 2.5rem auto;
+  margin: 3rem auto;
   width: calc(100% - 2.4rem);
   max-width: 600px;
   opacity: 1;

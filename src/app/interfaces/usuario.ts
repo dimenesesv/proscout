@@ -29,4 +29,5 @@ export interface Usuario {
     stats?: Stats | undefined;         // Estadísticas del usuario
     scouter?: Scouter | undefined;         // Información del usuario como cazatalentos
     esFavorito?: boolean; // Indica si el usuario es favorito del scouter autenticado (solo para UI)
+    activo?: boolean; // Indica si el usuario está activo
 }

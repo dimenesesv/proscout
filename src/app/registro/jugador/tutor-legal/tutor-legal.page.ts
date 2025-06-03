@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 import { RegistroService } from 'src/app/services/registro.service';
 import { Tutor } from 'src/app/interfaces/tutor';
 import { Router } from '@angular/router';
-import { validarRut } from '../../utils/rut';
+import { validarRut } from '../../../utils/rut';
 import { autocompletarDireccion, obtenerDetallesDireccion, AutocompleteResult } from 'src/app/utils/autocompletar';
 
 // Validador de RUT basado en la lógica de rut.page.ts
