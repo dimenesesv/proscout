@@ -46,6 +46,10 @@ const routes: Routes = [
   {
     path: 'example',
     loadChildren: () => import('./example/example.module').then( m => m.ExamplePageModule)
+  },
+  {
+    path: 'evaluaciones',
+    loadChildren: () => import('./scouter/evaluaciones/evaluaciones.module').then( m => m.EvaluacionesPageModule)
   }
 ];
 

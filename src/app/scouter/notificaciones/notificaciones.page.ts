@@ -15,7 +15,7 @@ export class NotificacionesPage implements OnInit {
   constructor(private notificacionesService: NotificacionesService) {}
 
   async ngOnInit() {
-    let notificacionesRaw = await this.notificacionesService.getNotificacionesScouter();
+    let notificacionesRaw = await this.notificacionesService.getNotificacionesUsuario();
     // Normaliza y mapea a la interfaz Notificacion
     this.notificaciones = notificacionesRaw.map((n: any) => {
       let fecha: Date = n.fecha;

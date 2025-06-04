@@ -133,7 +133,7 @@ export class MapaPage implements OnInit, AfterViewInit {
         console.log('[MapaPage] Favoritos del scouter:', favoritosIds);
       }
       // 2. Obtener todos los usuarios
-      const allUsers = await this.firebaseService.getCollection('playground');
+      const allUsers = await this.firebaseService.getCollection('usuarios');
       this.users = allUsers
         .filter((u: any) =>
           u.ubicacion &&

@@ -18,7 +18,7 @@ export class Tab3Page {
   }
 
   async loadNotifications() {
-    this.notifications = await this.notificacionesService.getNotificacionesJugador();
+    this.notifications = await this.notificacionesService.getNotificacionesUsuario();
   }
 
   getIcon(type: string): string {

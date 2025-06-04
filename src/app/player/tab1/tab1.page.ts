@@ -105,7 +105,7 @@ export class Tab1Page {
       this.jugadoresDestacados = [];
       return;
     }
-    const todos = await this.firebaseService.getCollection('playground');
+    const todos = await this.firebaseService.getCollection('usuarios');
     // Solo jugadores con la misma posición y que no sean el usuario actual
     const mismos = todos.filter((u: any) =>
       u.esJugador &&

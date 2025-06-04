@@ -139,3 +139,25 @@ ion-content.favoritos-content {
   width: 64px !important;
   height: 64px !important;
 }
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 600px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.jugador-card.empty-card {
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+  border: none;
+}

@@ -130,10 +130,10 @@ export class BusquedaPage implements OnInit, OnDestroy {
         filtersArr.push({ field: 'fechaNacimiento', op: '>=', value: `${minYear}-01-01` });
         filtersArr.push({ field: 'fechaNacimiento', op: '<=', value: `${maxYear}-12-31` });
       }
-      const q = await this.firebaseService.collectionQuery('playground', filtersArr);
+      const q = await this.firebaseService.collectionQuery('usuarios', filtersArr);
       usuarios = await this.firebaseService.getDocsFromQuery(q);
     } else {
-      usuarios = await this.firebaseService.getCollection('playground');
+      usuarios = await this.firebaseService.getCollection('usuarios');
     }
     this.usuarios = usuarios;
     this.cargandoUsuarios = false;
