@@ -104,10 +104,38 @@ export class BusquedaPage implements OnInit, OnDestroy {
     }
   }
 
-  async cargarUsuarios() {
+  async cargarUsuarios(filtros?: Partial<Info & Stats>) {
     this.setBadgeState('loading');
     this.cargandoUsuarios = true;
-    this.usuarios = await this.firebaseService.getCollection('playground');
+    let usuarios: Usuario[] = [];
+    if (filtros && (filtros.altura || filtros.peso || filtros.edad)) {
+      const alturaRango = 10;
+      const pesoRango = 10;
+      const edadRango = 2;
+      const filtersArr: Array<{ field: string, op: any, value: any }> = [
+        { field: 'esJugador', op: '==', value: true }
+      ];
+      if (filtros.altura) {
+        filtersArr.push({ field: 'info.altura', op: '>=', value: filtros.altura - alturaRango });
+        filtersArr.push({ field: 'info.altura', op: '<=', value: filtros.altura + alturaRango });
+      }
+      if (filtros.peso) {
+        filtersArr.push({ field: 'info.peso', op: '>=', value: filtros.peso - pesoRango });
+        filtersArr.push({ field: 'info.peso', op: '<=', value: filtros.peso + pesoRango });
+      }
+      if (filtros.edad) {
+        const hoy = new Date();
+        const minYear = hoy.getFullYear() - (filtros.edad + edadRango);
+        const maxYear = hoy.getFullYear() - (filtros.edad - edadRango);
+        filtersArr.push({ field: 'fechaNacimiento', op: '>=', value: `${minYear}-01-01` });
+        filtersArr.push({ field: 'fechaNacimiento', op: '<=', value: `${maxYear}-12-31` });
+      }
+      const q = await this.firebaseService.collectionQuery('usuarios', filtersArr);
+      usuarios = await this.firebaseService.getDocsFromQuery(q);
+    } else {
+      usuarios = await this.firebaseService.getCollection('usuarios');
+    }
+    this.usuarios = usuarios;
     this.cargandoUsuarios = false;
     this.page = 1;
     this.updatePagedResultados();
@@ -115,6 +143,8 @@ export class BusquedaPage implements OnInit, OnDestroy {
   }
 
   async buscarPorProximidad(filtros: Partial<Info & Stats>) {
+    // Usa la consulta optimizada para cargar usuarios filtrados
+    await this.cargarUsuarios(filtros);
     // Espera a que los usuarios estén cargados antes de buscar
     if (this.cargandoUsuarios) {
       await new Promise(resolve => {
@@ -136,35 +166,26 @@ export class BusquedaPage implements OnInit, OnDestroy {
         filtrosLimpios[key as keyof (Info & Stats)] = valor as any;
       }
     });
-    const rango = 20; // Rango de variación aceptado para cada campo numérico
     this.resultados = this.usuarios
-      // 1. Filtra solo los usuarios que son jugadores
       .filter(u => u.esJugador)
-      // 2. Mapea cada usuario a un objeto con su puntaje de proximidad
       .map(usuario => {
-        let puntaje = 0; // Puntaje acumulado según cercanía a los filtros
-        let total = 0;   // Total posible de puntaje (para normalización si se desea)
+        let puntaje = 0;
+        let total = 0;
         // --- Comparación de datos físicos (Info) ---
-        // Si el filtro de altura está definido y el usuario tiene altura
         if (filtrosLimpios.altura && usuario.info?.altura) {
-          // Convertir altura del usuario a centímetros si es menor a 3 (probablemente está en metros)
           let alturaUsuario = usuario.info.altura;
           if (alturaUsuario < 3) {
             alturaUsuario = alturaUsuario * 100;
           }
           const diff = Math.abs(filtrosLimpios.altura - alturaUsuario);
-          // Si la diferencia está dentro del rango, suma puntaje proporcional
-          if (diff <= rango) puntaje += (rango - diff); // Más cerca, más puntaje
-          // Suma al total posible
-          total += rango;
+          puntaje -= diff; // Penaliza por diferencia absoluta
+          total++;
         }
-        // Repite el proceso para peso
         if (filtrosLimpios.peso && usuario.info?.peso) {
           const diff = Math.abs(filtrosLimpios.peso - usuario.info.peso);
-          if (diff <= rango) puntaje += (rango - diff);
-          total += rango;
+          puntaje -= diff;
+          total++;
         }
-        // Calcular edad a partir de la fecha de nacimiento
         let edadCalculada: number | undefined = undefined;
         if (usuario.fechaNacimiento) {
           const hoy = new Date();
@@ -177,38 +198,29 @@ export class BusquedaPage implements OnInit, OnDestroy {
           edadCalculada = edad;
           if (filtrosLimpios.edad) {
             const diff = Math.abs(filtrosLimpios.edad - edad);
-            if (diff <= rango) puntaje += (rango - diff);
-            total += rango;
+            puntaje -= diff;
+            total++;
           }
         }
-        // --- Comparación de estadísticas deportivas (Stats) ---
-        // Lista de todas las stats numéricas a comparar
         const statKeys: (keyof Stats)[] = [
           'velocidad','resistencia','fuerza','agilidad','equilibrio','coordinacion','salto','controlBalon','regate','pase','tiro','cabeceo'
         ];
-        // Itera sobre cada stat
         for (const key of statKeys) {
-          // Si el filtro y el usuario tienen el valor definido para esa stat
           if (
             filtrosLimpios[key] !== undefined && filtrosLimpios[key] !== null &&
             usuario.stats && usuario.stats[key] !== undefined && usuario.stats[key] !== null
           ) {
-            // Calcula la diferencia absoluta
             const diff = Math.abs((filtrosLimpios[key] as number) - (usuario.stats[key] as number));
-            // Si está dentro del rango, suma puntaje proporcional
-            if (diff <= rango) puntaje += (rango - diff);
-            total += rango;
+            puntaje -= diff;
+            total++;
           }
         }
-        // Calcula el porcentaje de coincidencia
-        const porcentaje = total > 0 ? Math.round((puntaje / total) * 100) : 0;
-        // Devuelve el usuario y su puntaje (solo si hay algún puntaje posible)
-        return { usuario, puntaje: total > 0 ? puntaje : 0, porcentaje, edadCalculada };
+        // El puntaje será menos negativo cuanto más parecido sea el usuario
+        // Para mostrar un porcentaje de coincidencia, puedes normalizar si lo deseas
+        return { usuario, puntaje, porcentaje: 0, edadCalculada };
       })
-      // 3. Filtra solo los usuarios que tienen algún puntaje (coinciden en al menos un filtro)
-      .filter(r => r.puntaje > 0)
-      // 4. Ordena los resultados de mayor a menor puntaje (más cercanos primero)
-      .sort((a, b) => b.puntaje - a.puntaje);
+      .filter(r => r.puntaje < 0)
+      .sort((a, b) => b.puntaje - a.puntaje); // Menor diferencia (menos negativo) es mejor
     this.page = 1;
     this.updatePagedResultados();
   }

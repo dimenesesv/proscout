@@ -24,14 +24,7 @@ export class Tab3Page {
   }
 
   async loadNotifications() {
-    try {
-      console.log('[Tab3Page][loadNotifications] INICIO');
-      const notificaciones = await this.notificacionesService.getNotificacionesUsuario();
-      console.log('[Tab3Page][loadNotifications] notificaciones recibidas:', notificaciones);
-      this.notifications = notificaciones;
-    } catch (error) {
-      console.error('[Tab3Page][loadNotifications] Error:', error);
-    }
+    this.notifications = await this.notificacionesService.getNotificacionesUsuario();
   }
 
   getIcon(type: string): string {

@@ -125,7 +125,7 @@ export class MapaPage implements OnInit, AfterViewInit {
     console.log('[MapaPage] loadUsers INICIO');
     try {
       // 1. Obtener UID del scouter autenticado
-      const scouterUid = this.firebaseService.getCurrentUserUid && this.firebaseService.getCurrentUserUid();
+      const scouterUid = await this.firebaseService.getCurrentUserUid();
       let favoritosIds: string[] = [];
       if (scouterUid) {
         const scouterDoc = await this.firebaseService.getDocument(`usuarios/${scouterUid}`);

@@ -14,7 +14,7 @@ ion-content.favoritos-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1.2rem;
+  margin-top: 3rem;
   margin-bottom: 0.7rem;
 }
 
@@ -138,4 +138,26 @@ ion-content.favoritos-content {
   --color: #fff !important;
   width: 64px !important;
   height: 64px !important;
+}
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 600px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.jugador-card.empty-card {
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+  border: none;
 }

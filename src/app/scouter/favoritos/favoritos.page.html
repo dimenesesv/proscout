@@ -6,7 +6,7 @@
     <span class="mapa-subtitle">Explora</span>
     <h1 class="mapa-title">Jugadores Favoritos</h1>
     <ion-button fill="clear" (click)="modalAbierto = true" style="margin-left: 8px;">
-      <ion-icon name="football-outline"></ion-icon>
+      <ion-icon n ame="football-outline"></ion-icon>
     </ion-button>
   </div>
 
@@ -22,7 +22,7 @@
     </ng-template>
   </ion-modal>
 
-  <div class="jugadores-grid" *ngIf="jugadoresFavoritos.length > 0">
+  <div class="jugadores-grid responsive-grid" *ngIf="jugadoresFavoritos.length > 0">
     <div class="jugador-card perfil-card animate-card" *ngFor="let jugador of jugadoresFavoritos; let i = index" [style.animationDelay]="(i * 80) + 'ms'" (click)="verPerfil(jugador.uid)">
       <div class="imagen-con-label">
         <img [src]="jugador.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" />
@@ -40,6 +40,8 @@
         </div>
       </div>
     </div>
+    <!-- Forzar al menos 2 columnas -->
+    <div class="jugador-card empty-card" *ngIf="jugadoresFavoritos.length === 1"></div>
   </div>
   <div *ngIf="jugadoresFavoritos.length === 0 && !loading" class="mensaje-vacio">
     <ion-text color="medium">

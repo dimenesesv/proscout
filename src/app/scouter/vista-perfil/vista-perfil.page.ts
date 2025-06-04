@@ -5,6 +5,8 @@ import { Location } from '@angular/common';
 import { ModalController } from '@ionic/angular';
 import Swiper from 'swiper';
 import { Notificacion } from 'src/app/interfaces/notificacion';
+import { NotificacionesService } from 'src/app/services/notificaciones.service';
+import { CorreoService } from 'src/app/services/correo.service';
 
 @Component({
   selector: 'app-vista-perfil',
@@ -58,7 +60,9 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     private modalCtrl: ModalController,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private notificacionesService: NotificacionesService,
+    private correoService: CorreoService
   ) { }
 
   ngOnInit() {
@@ -105,7 +109,7 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
         if (this.isModal) this.closeModal();
         this.isLoading = false;
       }, 8000);
-      const data = await this.firebaseService.getDocument(`playground/${this.userId}`);
+      const data = await this.firebaseService.getDocument(`usuarios/${this.userId}`);
       clearTimeout(timeoutId);
       if (!data) {
         this.errorMsg = 'No se encontró el perfil.';
@@ -276,22 +280,8 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
     if (!favoritos.includes(jugadorUid)) {
       favoritos.push(jugadorUid);
       await (await import('firebase/firestore')).updateDoc(scouterRef, { 'scouter.favoritos': favoritos });
-      // Crear notificación usando la interfaz Notificacion
-      const notificacion: Notificacion = {
-        id: '', // Firestore lo asigna
-        tipo: 'actividad',
-        contenido: `¡Un scouter te ha añadido a favoritos!`,
-        fecha: new Date(),
-        leida: false,
-        remitenteId: scouterUid,
-        destinatarioId: jugadorUid,
-        prioridad: 'media',
-      };
-      console.log('[DEBUG][VistaPerfilPage] Notificación a guardar:', notificacion);
-      // Guardar notificación en Firestore
-      const notificacionesRef = (await import('firebase/firestore')).collection(db, 'notificaciones');
-      const docRef = await (await import('firebase/firestore')).addDoc(notificacionesRef, notificacion);
-      console.log('[DEBUG][VistaPerfilPage] Notificación guardada con ID:', docRef.id);
+      // Usar NotificacionesService para notificar
+      await this.notificacionesService.notificarFavorito(jugadorUid, scouterUid);
     }
     alert('¡Jugador agregado a favoritos!');
     this.router.navigate(['/scouter/scouter/favoritos']);
@@ -320,9 +310,35 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
     }
   }
 
-  enviarMensaje() {
+  async enviarMensaje() {
     // Lógica para enviar mensaje (puedes mostrar un toast, modal, o navegar a chat)
     console.log('Enviar mensaje al usuario');
+    const scouterUid = await this.firebaseService.getCurrentUserUid();
+    const jugadorUid = this.userId;
+    if (scouterUid && jugadorUid) {
+      await this.notificacionesService.notificarContacto(jugadorUid, scouterUid);
+      // Enviar correo si el jugador tiene email
+      const jugadorDoc = await this.firebaseService.getDocument(`usuarios/${jugadorUid}`);
+      const scouterDoc = await this.firebaseService.getDocument(`usuarios/${scouterUid}`);
+      const destinatario = jugadorDoc?.correo;
+      // Obtiene el nombre del scouter desde la raíz o desde el objeto scouter
+      const nombreScouter = scouterDoc?.nombre || scouterDoc?.scouter?.nombre || 'Un scouter';
+      if (destinatario) {
+        const asunto = 'Un scouter quiere contactarte en ProScout';
+        const mensaje = `${nombreScouter} está interesado en contactarte. ¡Revisa la app para más detalles!`;
+        console.log('[VistaPerfilPage] Enviando correo a:', { destinatario, asunto, mensaje });
+        try {
+          await this.correoService.enviarCorreoContacto(destinatario, asunto, mensaje);
+        } catch (e) {
+          console.error('Error enviando correo de contacto:', e);
+        }
+      } else {
+        console.warn('[VistaPerfilPage] El jugador no tiene correo, no se enviará correo. UID:', jugadorUid, jugadorDoc);
+      }
+      alert('Se ha notificado al jugador que quieres contactarlo.');
+    } else {
+      alert('No se pudo obtener el usuario actual o el perfil.');
+    }
   }
 
   async onSeguirClick() {

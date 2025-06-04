@@ -32,6 +32,28 @@ export class NotificacionesService {
     }
   }
 
+  // Envía una notificación personalizada de contacto
+  async notificarContacto(destinatarioId: string, remitenteId: string) {
+    console.log('[NotificacionesService] notificarContacto INICIO', { destinatarioId, remitenteId });
+    const notificacionesRef = collection(this.firestore, 'notificaciones');
+    const data = {
+      destinatarioId,
+      remitenteId,
+      tipo: 'actividad',
+      contenido: '¡Un scouter quiere contactarse contigo!',
+      prioridad: 'media',
+      fecha: new Date(),
+      leida: false
+    };
+    try {
+      const docRef = await addDoc(notificacionesRef, data);
+      console.log('[NotificacionesService] Notificación de contacto creada en Firestore', { docId: docRef.id, data });
+    } catch (error) {
+      console.error('[NotificacionesService] Error al crear notificación de contacto en Firestore', error, data);
+      throw error;
+    }
+  }
+
   // Obtiene las notificaciones para el usuario autenticado (jugador o scouter)
   async getNotificacionesUsuario(): Promise<Notificacion[]> {
     const user = await this.afAuth.currentUser;

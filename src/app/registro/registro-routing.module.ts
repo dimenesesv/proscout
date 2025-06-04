@@ -10,31 +10,31 @@ const routes: Routes = [
   },
   {
     path: 'rut',
-    loadChildren: () => import('./rut/rut.module').then( m => m.RutPageModule)
+    loadChildren: () => import('./jugador/rut/rut.module').then( m => m.RutPageModule)
   },
   {
     path: 'nombre',
-    loadChildren: () => import('./nombre/nombre.module').then( m => m.NombrePageModule)
+    loadChildren: () => import('./jugador/nombre/nombre.module').then( m => m.NombrePageModule)
   },
   {
     path: 'sexo',
-    loadChildren: () => import('./sexo/sexo.module').then( m => m.SexoPageModule)
+    loadChildren: () => import('./jugador/sexo/sexo.module').then( m => m.SexoPageModule)
   },
   {
     path: 'nacionalidad',
-    loadChildren: () => import('./nacionalidad/nacionalidad.module').then( m => m.NacionalidadPageModule)
+    loadChildren: () => import('./jugador/nacionalidad/nacionalidad.module').then( m => m.NacionalidadPageModule)
   },
   {
     path: 'correo',
-    loadChildren: () => import('./correo/correo.module').then( m => m.CorreoPageModule)
+    loadChildren: () => import('./jugador/correo/correo.module').then( m => m.CorreoPageModule)
   },
   {
     path: 'verificacion',
-    loadChildren: () => import('./verificacion/verificacion.module').then( m => m.VerificacionPageModule)
+    loadChildren: () => import('./jugador/verificacion/verificacion.module').then( m => m.VerificacionPageModule)
   },
   {
     path: 'contrasena',
-    loadChildren: () => import('./contrasena/contrasena.module').then( m => m.ContrasenaPageModule)
+    loadChildren: () => import('./jugador/contrasena/contrasena.module').then( m => m.ContrasenaPageModule)
   },
   {
     path: 'bienvenida',
@@ -42,11 +42,11 @@ const routes: Routes = [
   },
   {
     path: 'fecha-nacimiento',
-    loadChildren: () => import('./fecha-nacimiento/fecha-nacimiento.module').then( m => m.FechaNacimientoPageModule)
+    loadChildren: () => import('./jugador/fecha-nacimiento/fecha-nacimiento.module').then( m => m.FechaNacimientoPageModule)
   },
   {
     path: 'tutor-legal',
-    loadChildren: () => import('./tutor-legal/tutor-legal.module').then( m => m.TutorLegalPageModule)
+    loadChildren: () => import('./jugador/tutor-legal/tutor-legal.module').then( m => m.TutorLegalPageModule)
   }
 ];
 

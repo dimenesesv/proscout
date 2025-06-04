@@ -78,14 +78,14 @@ export class FavoritosPage implements OnInit {
       const jugadores: any[] = [];
 
       for (const uid of favoritosIds) {
-        const jugadorRef = doc(db, 'playground', uid);
+        const jugadorRef = doc(db, 'usuarios', uid);
         const jugadorSnap = await getDoc(jugadorRef);
         if (jugadorSnap.exists()) {
           const jugadorData = jugadorSnap.data();
           console.log('[FavoritosPage] Datos jugador favorito:', uid, jugadorData);
           jugadores.push({ uid, ...jugadorData });
         } else {
-          console.warn('[FavoritosPage] Jugador favorito no encontrado en playground:', uid);
+          console.warn('[FavoritosPage] Jugador favorito no encontrado en usuarios:', uid);
         }
       }
 
