@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegistroService } from 'src/app/services/registro.service';
-import { validarRut } from '../../utils/rut';
 
 @Component({
-  selector: 'app-rut',
+  selector: 'app-scouter-rut',
   templateUrl: './rut.page.html',
   styleUrls: ['./rut.page.scss'],
   standalone: false,
@@ -69,7 +68,7 @@ export class RutPage implements OnInit {
       const rut = this.rutForm.value.rut;
       this.registroService.setRut(rut) // Almacena el RUT en el servicio
       console.log('Usuario actualizado:', this.registroService.getUsuario());
-      this.router.navigate(['/registro/sexo']); // Navega a la siguiente página
+      this.router.navigate(['/registro/scouter/sexo']); // Navega a la siguiente página
     } else {
       console.log('Form is invalid');
     }

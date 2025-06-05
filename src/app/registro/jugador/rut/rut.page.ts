@@ -5,7 +5,7 @@ import { RegistroService } from 'src/app/services/registro.service';
 import { validarRut } from 'src/app/utils/rut';
 
 @Component({
-  selector: 'app-rut',
+  selector: 'app-jugador-rut',
   templateUrl: './rut.page.html',
   styleUrls: ['./rut.page.scss'],
   standalone: false,
@@ -69,7 +69,7 @@ export class RutPage implements OnInit {
       const rut = this.rutForm.value.rut;
       this.registroService.setRut(rut) // Almacena el RUT en el servicio
       console.log('Usuario actualizado:', this.registroService.getUsuario());
-      this.router.navigate(['/registro/sexo']); // Navega a la siguiente página
+      this.router.navigate(['/registro/jugador/sexo']); // Navega a la siguiente página
     } else {
       console.log('Form is invalid');
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-contrasena',
+  selector: 'app-jugador-contrasena',
   templateUrl: './contrasena.page.html',
   styleUrls: ['./contrasena.page.scss'],
   standalone: false,

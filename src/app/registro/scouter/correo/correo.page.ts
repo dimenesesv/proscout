@@ -13,6 +13,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class CorreoPage {
   email: string = '';
   password: string = '';
+  password2: string = '';
+  passwordError: string = '';
 
   constructor(
     private authService: AuthService,
@@ -21,7 +23,26 @@ export class CorreoPage {
     private router: Router
   ) {}
 
+  validarPassword(): boolean {
+    // Reglas: mínimo 8 caracteres, al menos una mayúscula, una minúscula y un número
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!regex.test(this.password)) {
+      this.passwordError = 'La contraseña no cumple con las reglas de seguridad.';
+      return false;
+    }
+    if (this.password !== this.password2) {
+      this.passwordError = 'Las contraseñas no coinciden.';
+      return false;
+    }
+    this.passwordError = '';
+    return true;
+  }
+
   async registrarCuenta() {
+    if (!this.validarPassword()) {
+      return;
+    }
+
     try {
       // Crear cuenta en Firebase Auth
       const userCredential = await this.authService.register(this.email, this.password);

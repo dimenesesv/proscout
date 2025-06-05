@@ -1,38 +1,82 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title class="text-center">{{ perfilUsuario?.nombre }}</ion-title>
-    <ion-button (click)="logout()">Cerrar sesión</ion-button>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="perfil-page">
-  <app-tabs-header [activeTab]="activeTab" (tabChange)="slideTo($event)"></app-tabs-header>
-
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <!-- Slide 1: Perfil -->
-      <div class="swiper-slide">
-       
-        <app-perfil-card [perfilUsuario]="perfilUsuario" [comuna]="perfilUsuario?.comuna" [ciudad]="perfilUsuario?.ciudad"></app-perfil-card>
-      </div>
-
-      <!-- Slide 2: Estadísticas -->
-      <div class="swiper-slide">
-        <ion-card>
-          <ion-card-content>
-            <app-estadisticas-card [perfilUsuario]="perfilUsuario"></app-estadisticas-card>
-          </ion-card-content>
-        </ion-card>
-      </div>
-
-      <!-- Slide 3: Galería -->
-      <div class="swiper-slide">
-        <app-galeria-card
-          [galleryUrls]="galleryUrls"
-          [uploadProgress]="uploadProgress"
-          [selectImage]="selectImage.bind(this)"
-        ></app-galeria-card>
-      </div>
-    </div>
+<!-- Copia de perfil.page.html para jugador -->
+<ion-content class="profile-content perfil-content" [fullscreen]="true">
+  <div class="circle-top"></div>
+  <div class="perfil-title-container" style="position:relative;">
+    <h1 class="perfil-title">Perfil</h1>
+    <ion-button fill="clear" class="config-btn" (click)="goToConfiguracion()" style="position:absolute;top:0;right:0;z-index:2;">
+      <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+    </ion-button>
   </div>
+  <ng-container *ngIf="!perfilUsuario">
+    <div class="no-profile-msg">No se encontró información de perfil.</div>
+  </ng-container>
+  <ng-container *ngIf="perfilUsuario">
+    <ion-card class="perfil-card">
+      <div class="profile-header">
+        <img [src]="perfilUsuario.fotoPerfil || 'assets/default-profile.png'" class="player-photo" />
+        <div class="profile-main-info">
+          <h2>{{ perfilUsuario?.name }}</h2>
+          <div *ngIf="perfilUsuario?.fechaNacimiento">Edad: {{ calcularEdad(perfilUsuario?.fechaNacimiento) }} años</div>
+          <div *ngIf="perfilUsuario?.nacionalidad">Nacionalidad: {{ perfilUsuario.nacionalidad }}</div>
+        </div>
+      </div>
+      <div class="profile-details">
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.email">
+          <ion-icon name="mail-outline"></ion-icon>
+          <span>{{ perfilUsuario.email }}</span>
+        </div>
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.rut">
+          <ion-icon name="card-outline"></ion-icon>
+          <span>RUT: {{ perfilUsuario.rut }}</span>
+        </div>
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.sex">
+          <ion-icon name="male-female-outline"></ion-icon>
+          <span>Sexo: {{ perfilUsuario.sex }}</span>
+        </div>
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.clubActual">
+          <ion-icon name="trophy-outline"></ion-icon>
+          <span>Club: {{ perfilUsuario.clubActual }}</span>
+        </div>
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.equipoActual">
+          <ion-icon name="people-outline"></ion-icon>
+          <span>Equipo: {{ perfilUsuario.equipoActual }}</span>
+        </div>
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.posicion">
+          <ion-icon name="football-outline"></ion-icon>
+          <span>Posición: {{ perfilUsuario.posicion }}</span>
+        </div>
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.altura">
+          <ion-icon name="accessibility-outline"></ion-icon>
+          <span>Altura: {{ perfilUsuario.altura }} cm</span>
+        </div>
+        <div class="profile-detail-row" *ngIf="perfilUsuario?.peso">
+          <ion-icon name="barbell-outline"></ion-icon>
+          <span>Peso: {{ perfilUsuario.peso }} kg</span>
+        </div>
+      </div>
+      <div class="bio-text" *ngIf="perfilUsuario?.biografia">
+        <ion-icon name="document-text-outline"></ion-icon> {{ perfilUsuario?.biografia }}
+      </div>
+    </ion-card>
+    <!-- Galería de imágenes -->
+    <ion-card class="galeria-card">
+      <ion-card-header>
+        <ion-card-title>Galería</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button expand="block" (click)="selectImage()">Subir Imagen</ion-button>
+        <ion-progress-bar *ngIf="uploadProgress !== null" [value]="uploadProgress"></ion-progress-bar>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6" *ngFor="let imageUrl of galleryUrls">
+              <div class="galeria-img-wrapper">
+                <ion-spinner *ngIf="!imageUrl" name="crescent" class="galeria-img-spinner"></ion-spinner>
+                <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
 </ion-content>

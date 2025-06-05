@@ -1,13 +1,119 @@
-@import 'src/theme/variables.scss';
+ion-tab-bar {
+  --background: #ffffff !important;
+  background: #ffffff !important;
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 80px;
+  border-top: 2px solid #2c2c2c !important;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.4) !important;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
+}
 
-$color-bg-dark: #18181b;
-$color-text-main: #fff;
-body, ion-app, ion-content {
-  background: $color-bg-dark !important;
-  color: $color-text-main;
+.tab-bar {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.tab-bar-placeholder {
+  flex: 1 1 0%;
+  pointer-events: none;
+  background: transparent;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+ion-tab-button {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 0;
+  margin: 0;
+  background: transparent;
+  color: #888 !important;
+  transition: background 0.2s ease, color 0.2s ease !important;
+}
+
+ion-tab-button.tab-selected {
+  background: #111 !important;
+  color: #00ff84 !important;
+
+}
+
+/* Keep .tab-bar, .tab-bar-placeholder, [disabled] rules as is */
+
+ion-tab-button[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+ion-tab-button ion-icon {
+  font-size: 2.1rem;
+  color: inherit;
+  transition: color 0.18s;
+}
+
+ion-tab-button.tab-selected ion-icon {
+  color: #00ff84 !important;
+}
+
+ion-tab-button:hover ion-icon,
+ion-tab-button:focus ion-icon {
+  color: #00813e !important;
+  transition: color 0.16s cubic-bezier(0.4,0,0.2,1);
 }
 
 ion-content {
   padding-bottom: 2.5rem !important;
 }
 
+/* === Custom Tab Bar Styling (Visual Upgrade) === */
+ion-tab-bar {
+  --background: #003300 !important;
+  background: #003300 !important;
+  border-top: none !important;
+  border-radius: 1.5rem 1.5rem 0 0 !important;
+  margin: 0 auto;
+  width: calc(100% - 1.5rem);
+  max-width: 480px;
+  bottom: 0;
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.3) !important;
+  padding: 0.5rem 0.25rem !important;
+}
+
+
+ion-tab-button {
+  background: transparent;
+  border-radius: 1rem;
+  color: #fff !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease-in-out;
+}
+
+ion-tab-button.tab-selected {
+  background: #00ff84 !important;
+  color: #000 !important;
+  box-shadow: 0 0 6px rgba(0, 255, 132, 0.4) !important;
+}
+
+ion-tab-button.tab-selected ion-icon {
+  color: #000 !important;
+  font-weight: bold;
+}
+
+ion-tab-button ion-icon {
+  font-size: 1.8rem;
+  transition: color 0.2s ease-in-out;
+}

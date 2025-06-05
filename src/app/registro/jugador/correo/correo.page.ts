@@ -13,6 +13,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class CorreoPage {
   email: string = '';
   password: string = '';
+  password2: string = '';
 
   constructor(
     private authService: AuthService,
@@ -37,10 +38,25 @@ export class CorreoPage {
         const usuario = this.registroService.getUsuario(); // Obtener los datos del usuario
         await this.firebaseService.setDocument(`usuarios/${uid}`, usuario);
 
-        console.log('Usuario registrado y datos guardados en Firestore:', usuario);
+        // Subir documento de tutor legal si existe
+        if (this.registroService.archivoTutorLegal) {
+          try {
+            const ext = this.registroService.nombreArchivoTutorLegal.split('.').pop();
+            const path = `usuarios/${uid}/documents/tutor-legal.${ext}`;
+            // Importa StorageService dinámicamente para evitar dependencias circulares
+            const { StorageService } = await import('src/app/services/storage.service');
+            const storageService = new StorageService();
+            const url = await storageService.uploadImageAndGetUrl(path, this.registroService.archivoTutorLegal);
+            await this.firebaseService.updateDocument(`usuarios/${uid}`, { 'tutor.documentoUrl': url });
+            console.log('Documento de tutor legal subido y URL guardada:', url);
+          } catch (err) {
+            console.error('Error al subir documento de tutor legal:', err);
+            alert('El registro fue exitoso, pero hubo un problema al subir el documento del tutor legal. Puedes intentarlo más tarde en tu perfil.');
+          }
+        }
 
         // Redirigir a la página de confirmación de correo
-        this.router.navigate(['/registro/verificacion']);
+        this.router.navigate(['/registro/jugador/verificacion']);
       } else {
         throw new Error('No se pudo obtener el UID del usuario.');
       }
@@ -48,5 +64,10 @@ export class CorreoPage {
       console.error('Error al registrar la cuenta:', error);
       alert('Hubo un error al crear la cuenta. Por favor, intenta nuevamente.');
     }
+  }
+
+  validarPassword(pwd: string): boolean {
+    // Mínimo 8 caracteres, al menos una mayúscula, una minúscula y un número
+    return /[A-Z]/.test(pwd) && /[a-z]/.test(pwd) && /[0-9]/.test(pwd) && pwd.length >= 8;
   }
 }

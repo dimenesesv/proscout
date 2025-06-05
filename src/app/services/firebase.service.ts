@@ -18,7 +18,6 @@ export class FirebaseService {
       console.log('[FirebaseService] Documento guardado correctamente en:', path);
     } catch (error: any) {
       console.error('Error al establecer el documento:', error);
-      alert('Ocurrió un error al guardar el documento. Por favor, inténtalo de nuevo.');
     }
   }
 
@@ -75,7 +74,7 @@ export class FirebaseService {
       }
     } catch (error: any) {
       console.error('[FirebaseService] Error al obtener el documento:', error);
-      alert('Ocurrió un error al obtener el documento. Por favor, inténtalo de nuevo.');
+
       return null;
     }
   }
@@ -129,7 +128,7 @@ export class FirebaseService {
       console.log('[FirebaseService] Documento actualizado correctamente en:', path);
     } catch (error: any) {
       console.error('Error al actualizar el documento:', error);
-      alert('Ocurrió un error al actualizar el documento. Por favor, inténtalo de nuevo.');
+
     }
   }
 

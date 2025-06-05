@@ -8,6 +8,10 @@ import { GeoPoint } from 'firebase/firestore';
 export class RegistroService {
   private usuario: Partial<Usuario> = {};
 
+  // Archivo de tutor legal (temporal hasta crear usuario)
+  public archivoTutorLegal: File | null = null;
+  public nombreArchivoTutorLegal: string = '';
+
   constructor() {
     // Todos los usuarios nuevos quedan inactivos hasta verificación
     this.usuario.activo = false;
@@ -151,6 +155,9 @@ export class RegistroService {
   }
   getActivo() {
     return this.usuario.activo;
+  }
+  limpiarUsuario() {
+    this.usuario = {};
   }
 
 }

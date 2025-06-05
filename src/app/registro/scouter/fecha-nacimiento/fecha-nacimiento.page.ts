@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 import { RegistroService } from 'src/app/services/registro.service';
 
 @Component({
-  selector: 'app-fecha-nacimiento',
+  selector: 'app-scouter-fecha-nacimiento',
   templateUrl: './fecha-nacimiento.page.html',
   styleUrls: ['./fecha-nacimiento.page.scss'],
   standalone: false,
@@ -33,9 +33,13 @@ export class FechaNacimientoPage implements OnInit {
     this.registroService.setFechaNacimiento(birthDate.toISOString());
 
     if (edad < 18) {
-      this.navCtrl.navigateForward('/registro/tutor-legal');
+      // Borra el usuario temporal del registro y redirige a login
+      this.registroService.limpiarUsuario();
+      alert('Debes ser mayor de 18 años para registrarte como scouter.');
+      this.navCtrl.navigateRoot('/login');
+      return;
     } else {
-      this.navCtrl.navigateForward('/registro/correo'); // Ajusta esta ruta
+      this.navCtrl.navigateForward('/registro/scouter/correo');
     }
   }
 

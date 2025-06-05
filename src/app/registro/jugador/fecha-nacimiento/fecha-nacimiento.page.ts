@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 import { RegistroService } from 'src/app/services/registro.service';
 
 @Component({
-  selector: 'app-fecha-nacimiento',
+  selector: 'app-jugador-fecha-nacimiento',
   templateUrl: './fecha-nacimiento.page.html',
   styleUrls: ['./fecha-nacimiento.page.scss'],
   standalone: false,
@@ -33,9 +33,9 @@ export class FechaNacimientoPage implements OnInit {
     this.registroService.setFechaNacimiento(birthDate.toISOString());
 
     if (edad < 18) {
-      this.navCtrl.navigateForward('/registro/tutor-legal');
+      this.navCtrl.navigateForward('/registro/jugador/tutor-legal');
     } else {
-      this.navCtrl.navigateForward('/registro/correo'); // Ajusta esta ruta
+      this.navCtrl.navigateForward('/registro/jugador/correo'); // Ajusta esta ruta
     }
   }
 

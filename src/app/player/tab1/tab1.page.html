@@ -6,15 +6,15 @@
 
 <ion-content>
   <!-- Bienvenida -->
-  <ion-card>
+  <ion-card class="bienvenida-card animate-card">
     <ion-card-header>
       <ion-card-title>¡Hola, {{ userData.nombre }}!</ion-card-title>
       <ion-card-subtitle>Prepárate para mejorar tus habilidades</ion-card-subtitle>
     </ion-card-header>
   </ion-card>
 
-    <!-- Consejo del día -->
-  <ion-card>
+  <!-- Consejo del día -->
+  <ion-card class="tip-card animate-card">
     <ion-card-header>
       <ion-card-title>Consejo del día</ion-card-title>
     </ion-card-header>
@@ -24,49 +24,33 @@
   </ion-card>
 
 
-  <!-- Pruebas pendientes -->
-  <ion-card>
+  <!-- Jugadores destacados -->
+  <ion-card class="destacados-card animate-card">
     <ion-card-header>
-      <ion-card-title>Tus pruebas pendientes</ion-card-title>
+      <ion-card-title>Jugadores destacados</ion-card-title>
     </ion-card-header>
-    <ion-list>
-      <ion-item *ngFor="let prueba of pruebas">
-        <ion-label>
-          <h2>{{ prueba.nombre }}</h2>
-          <p>Estado: {{ prueba.estado }} | Fecha: {{ prueba.fecha | date }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+    <div class="horizontal-scroll">
+      <ion-card *ngFor="let destacado of jugadoresDestacados" class="jugador-card animate-card">
+        <ion-card-content>
+          <h3>{{ destacado.nombre }}</h3>
+          <p *ngIf="destacado.info && destacado.info.posicion">Posición: {{ destacado.info.posicion }}</p>
+          <p *ngIf="destacado.info && destacado.info.altura">Altura: {{ destacado.info.altura }} cm</p>
+          <p *ngIf="destacado.info && destacado.info.peso">Peso: {{ destacado.info.peso }} kg</p>
+          <p *ngIf="destacado.fechaNacimiento">Edad: {{ calcularEdad(destacado.fechaNacimiento) }}</p>
+          <ng-container *ngIf="destacado.stats">
+            <p *ngIf="destacado.stats.velocidad !== undefined">Velocidad: {{ destacado.stats.velocidad }}</p>
+            <p *ngIf="destacado.stats.resistencia !== undefined">Resistencia: {{ destacado.stats.resistencia }}</p>
+            <p *ngIf="destacado.stats.fuerza !== undefined">Fuerza: {{ destacado.stats.fuerza }}</p>
+            <p *ngIf="destacado.stats.agilidad !== undefined">Agilidad: {{ destacado.stats.agilidad }}</p>
+            <p *ngIf="destacado.stats.pase !== undefined">Pase: {{ destacado.stats.pase }}</p>
+          </ng-container>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </ion-card>
 
-<!-- Jugadores destacados -->
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>Jugadores destacados</ion-card-title>
-  </ion-card-header>
-  <div class="horizontal-scroll">
-    <ion-card *ngFor="let destacado of jugadoresDestacados" class="jugador-card animate-card">
-      <ion-card-content>
-        <h3>{{ destacado.nombre }}</h3>
-        <p *ngIf="destacado.info && destacado.info.posicion">Posición: {{ destacado.info.posicion }}</p>
-        <p *ngIf="destacado.info && destacado.info.altura">Altura: {{ destacado.info.altura }} cm</p>
-        <p *ngIf="destacado.info && destacado.info.peso">Peso: {{ destacado.info.peso }} kg</p>
-        <p *ngIf="destacado.fechaNacimiento">Edad: {{ calcularEdad(destacado.fechaNacimiento) }}</p>
-        <ng-container *ngIf="destacado.stats">
-          <p *ngIf="destacado.stats.velocidad !== undefined">Velocidad: {{ destacado.stats.velocidad }}</p>
-          <p *ngIf="destacado.stats.resistencia !== undefined">Resistencia: {{ destacado.stats.resistencia }}</p>
-          <p *ngIf="destacado.stats.fuerza !== undefined">Fuerza: {{ destacado.stats.fuerza }}</p>
-          <p *ngIf="destacado.stats.agilidad !== undefined">Agilidad: {{ destacado.stats.agilidad }}</p>
-          <p *ngIf="destacado.stats.pase !== undefined">Pase: {{ destacado.stats.pase }}</p>
-        </ng-container>
-      </ion-card-content>
-    </ion-card>
-  </div>
-</ion-card>
-
-
   <!-- Estadísticas -->
-  <ion-card>
+  <ion-card class="stats-card animate-card">
     <ion-card-header>
       <ion-card-title>Tu rendimiento</ion-card-title>
     </ion-card-header>

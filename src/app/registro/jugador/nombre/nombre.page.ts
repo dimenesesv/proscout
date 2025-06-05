@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { RegistroService } from 'src/app/services/registro.service';
 
 @Component({
-  selector: 'app-nombre',
+  selector: 'app-jugador-nombre',
   templateUrl: './nombre.page.html',
   styleUrls: ['./nombre.page.scss'],
   standalone: false,
@@ -41,7 +41,7 @@ export class NombrePage implements OnInit {
       const name = this.nameForm.value.name;
       this.registroService.setNombre(name); // Almacena el nombre en el servicio
       console.log('Usuario actualizado:', this.registroService.getUsuario());
-      this.router.navigate(['/registro/rut']); // Navega a la siguiente página
+      this.router.navigate(['/registro/jugador/rut']); // Navega a la siguiente página
     } else {
       console.log('Form is invalid');
     }

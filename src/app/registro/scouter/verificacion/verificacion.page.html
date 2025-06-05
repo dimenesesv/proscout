@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Verificar Correo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="ion-text-center">
+    <h2>¡Gracias por registrarte!</h2>
+    <p>Te hemos enviado un correo de verificación a <strong>{{ email }}</strong>.</p>
+    <p>Por favor, verifica tu correo antes de continuar.</p>
+  </div>
+
+  <ion-button expand="full" (click)="reenviarCorreo()">
+    Reenviar Correo de Verificación
+  </ion-button>
+
+  <ion-button expand="full" color="success" (click)="continuar()" *ngIf="!isCheckingVerification">
+    Continuar
+  </ion-button>
+</ion-content>

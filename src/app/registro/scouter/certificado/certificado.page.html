@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Subir Certificado Profesional</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Certificado de Scouter</ion-card-title>
+      <ion-card-subtitle>Sube un documento que acredite tu calidad de profesional.</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <input type="file" accept="application/pdf,image/*" (change)="onFileSelected($event)" [disabled]="isUploading" />
+      <ion-progress-bar *ngIf="isUploading && uploadProgress !== null" [value]="uploadProgress / 100"></ion-progress-bar>
+      <div *ngIf="certificadoUrl" class="certificado-exito">
+        <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+        <p>Certificado subido correctamente.</p>
+        <a [href]="certificadoUrl" target="_blank">Ver certificado</a>
+      </div>
+      <ion-text color="danger" *ngIf="errorMsg">{{ errorMsg }}</ion-text>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

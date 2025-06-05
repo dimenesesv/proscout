@@ -9,31 +9,31 @@ const routes: Routes = [
     component: RegistroPage
   },
   {
-    path: 'rut',
+    path: 'jugador/rut',
     loadChildren: () => import('./jugador/rut/rut.module').then( m => m.RutPageModule)
   },
   {
-    path: 'nombre',
+    path: 'jugador/nombre',
     loadChildren: () => import('./jugador/nombre/nombre.module').then( m => m.NombrePageModule)
   },
   {
-    path: 'sexo',
+    path: 'jugador/sexo',
     loadChildren: () => import('./jugador/sexo/sexo.module').then( m => m.SexoPageModule)
   },
   {
-    path: 'nacionalidad',
+    path: 'jugador/nacionalidad',
     loadChildren: () => import('./jugador/nacionalidad/nacionalidad.module').then( m => m.NacionalidadPageModule)
   },
   {
-    path: 'correo',
+    path: 'jugador/correo',
     loadChildren: () => import('./jugador/correo/correo.module').then( m => m.CorreoPageModule)
   },
   {
-    path: 'verificacion',
+    path: 'jugador/verificacion',
     loadChildren: () => import('./jugador/verificacion/verificacion.module').then( m => m.VerificacionPageModule)
   },
   {
-    path: 'contrasena',
+    path: 'jugador/contrasena',
     loadChildren: () => import('./jugador/contrasena/contrasena.module').then( m => m.ContrasenaPageModule)
   },
   {
@@ -41,12 +41,45 @@ const routes: Routes = [
     loadChildren: () => import('./bienvenida/bienvenida.module').then( m => m.BienvenidaPageModule)
   },
   {
-    path: 'fecha-nacimiento',
+    path: 'jugador/fecha-nacimiento',
     loadChildren: () => import('./jugador/fecha-nacimiento/fecha-nacimiento.module').then( m => m.FechaNacimientoPageModule)
   },
   {
-    path: 'tutor-legal',
+    path: 'jugador/tutor-legal',
     loadChildren: () => import('./jugador/tutor-legal/tutor-legal.module').then( m => m.TutorLegalPageModule)
+  },
+  // Rutas para registro de SCOUTER
+  {
+    path: 'scouter/rut',
+    loadChildren: () => import('./scouter/rut/rut.module').then(m => m.RutPageModule)
+  },
+  {
+    path: 'scouter/nombre',
+    loadChildren: () => import('./scouter/nombre/nombre.module').then(m => m.NombrePageModule)
+  },
+  {
+    path: 'scouter/sexo',
+    loadChildren: () => import('./scouter/sexo/sexo.module').then(m => m.SexoPageModule)
+  },
+  {
+    path: 'scouter/nacionalidad',
+    loadChildren: () => import('./scouter/nacionalidad/nacionalidad.module').then(m => m.NacionalidadPageModule)
+  },
+  {
+    path: 'scouter/correo',
+    loadChildren: () => import('./scouter/correo/correo.module').then(m => m.CorreoPageModule)
+  },
+  {
+    path: 'scouter/contrasena',
+    loadChildren: () => import('./scouter/contrasena/contrasena.module').then(m => m.ContrasenaPageModule)
+  },
+  {
+    path: 'scouter/fecha-nacimiento',
+    loadChildren: () => import('./scouter/fecha-nacimiento/fecha-nacimiento.module').then(m => m.FechaNacimientoPageModule)
+  },
+  {
+    path: 'scouter/certificado',
+    loadChildren: () => import('./scouter/certificado/certificado.module').then(m => m.CertificadoPageModule)
   }
 ];
 

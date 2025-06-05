@@ -166,4 +166,20 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     const path = `usuarios/${userId}`;
     await this.firebaseService.updateDocument(path, { gallery: this.galleryUrls });
   }
+
+  goToConfiguracion() {
+    this.router.navigate(['/configuracion']);
+  }
+
+  calcularEdad(fechaNacimiento: string): number {
+    if (!fechaNacimiento) return 0;
+    const nacimiento = new Date(fechaNacimiento);
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  }
 }

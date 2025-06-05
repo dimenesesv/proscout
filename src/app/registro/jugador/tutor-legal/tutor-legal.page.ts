@@ -6,6 +6,9 @@ import { Tutor } from 'src/app/interfaces/tutor';
 import { Router } from '@angular/router';
 import { validarRut } from '../../../utils/rut';
 import { autocompletarDireccion, obtenerDetallesDireccion, AutocompleteResult } from 'src/app/utils/autocompletar';
+import { StorageService } from 'src/app/services/storage.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { getAuth } from 'firebase/auth';
 
 // Validador de RUT basado en la lógica de rut.page.ts
 
@@ -28,10 +31,18 @@ export class TutorLegalPage implements OnInit {
   suggestions: AutocompleteResult[] = [];
   showSuggestions: boolean = false;
 
+  // Progreso de subida
+  uploadProgress: number | null = null;
+  documentoUrl: string | null = null;
+  isUploading = false;
+  errorMsg: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private router : Router,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private storageService: StorageService,
+    private firebaseService: FirebaseService
   ) {
     // Inicialización de Google Autocomplete
     if ((window as any).google && (window as any).google.maps) {
@@ -53,14 +64,18 @@ export class TutorLegalPage implements OnInit {
     });
   }
 
-  guardar() {
+  async guardar() {
     const datosTutor: Tutor = this.formulario.value;
-
     // Guardar tutor en RegistroService
     this.registroService.setTutor(datosTutor);
-
+    // Guardar archivo seleccionado en RegistroService para subirlo después
+    if (this.archivoSeleccionado) {
+      this.registroService.archivoTutorLegal = this.archivoSeleccionado;
+      this.registroService.nombreArchivoTutorLegal = this.nombreArchivo;
+    }
+    // No subir archivo aquí, solo navegar
     console.log('Tutor registrado:', datosTutor);
-    this.router.navigate(['/registro/correo']); // Ajusta esta ruta según tu flujo
+    this.router.navigate(['/registro/jugador/correo']);
   }
 
   onFileSelected(event: Event) {

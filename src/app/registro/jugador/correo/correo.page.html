@@ -16,7 +16,32 @@
       <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
     </ion-item>
 
-    <ion-button expand="full" type="submit" class="ion-margin-top">
+    <ion-item>
+      <ion-label position="floating">Verificar Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="password2" name="password2" required></ion-input>
+    </ion-item>
+    <ion-list lines="none" class="ion-padding-top ion-padding-bottom">
+      <ion-item lines="none">
+        <ion-text color="medium">
+          <small>La contraseña debe cumplir con:</small>
+          <ul style="margin:0 0 0 1em;padding:0;font-size:0.95em;">
+            <li>Mínimo 8 caracteres</li>
+            <li>Al menos una letra mayúscula</li>
+            <li>Al menos una letra minúscula</li>
+            <li>Al menos un número</li>
+          </ul>
+        </ion-text>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-text color="danger" *ngIf="password && !validarPassword(password)">
+          La contraseña no cumple con los requisitos.
+        </ion-text>
+        <ion-text color="danger" *ngIf="password2 && password !== password2">
+          Las contraseñas no coinciden.
+        </ion-text>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="full" type="submit" class="ion-margin-top" [disabled]="!email || !password || !password2 || password !== password2 || !validarPassword(password)">
       Crear Cuenta
     </ion-button>
   </form>

@@ -23,7 +23,7 @@ esJugador() {
 esScouter() {
     this.registroService.setEsScouter(true);
     this.registroService.setEsJugador(false);
-    this.router.navigate(['registro/jugador/nombre']);
+    this.router.navigate(['registro/scouter/nombre']);
   }
 
 }

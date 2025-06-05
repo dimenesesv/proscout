@@ -10,6 +10,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   standalone: false,
 })
 export class BienvenidaPage {
+  pendienteActivacion: boolean = false;
 
   constructor(
     private firebaseService: FirebaseService,
@@ -29,6 +30,11 @@ export class BienvenidaPage {
 
     this.firebaseService.getDocument(path)
       .then((data) => {
+        if (!data?.activo) {
+          this.pendienteActivacion = true;
+          return;
+        }
+        this.pendienteActivacion = false;
         if (data?.esScouter) {
           this.router.navigate(['/scouter/scouter/mapa']);
         } else if (data?.esJugador) {

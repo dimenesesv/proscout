@@ -27,8 +27,12 @@
 
   <div class="welcome-container">
     <h1>¡Bienvenido a nuestra aplicación!</h1>
-    <p>Haz clic en el botón de abajo para ir a la página de inicio.</p>
-    <ion-button expand="full" (click)="irAHOME()">Ir a Home</ion-button>
+    <p *ngIf="!pendienteActivacion">Haz clic en el botón de abajo para ir a la página de inicio.</p>
+    <ion-text color="warning" *ngIf="pendienteActivacion">
+      <h2>Cuenta pendiente de activación</h2>
+      <p>Tu cuenta aún no ha sido activada. Por favor, espera la verificación por parte del equipo antes de continuar.</p>
+    </ion-text>
+    <ion-button expand="full" (click)="irAHOME()" [disabled]="pendienteActivacion">Ir a Home</ion-button>
   </div>
 </ion-content>
 
