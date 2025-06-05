@@ -9,6 +9,8 @@ import { Usuario } from 'src/app/interfaces/usuario';
 import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import Cropper from 'cropperjs';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-tab4',
@@ -25,6 +27,13 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   activeTab: number = 0;
   swiper: Swiper | undefined;
   cargando: boolean = true;
+
+  // Variables para el ajuste de foto
+  showAjusteFoto = false;
+  ajusteFotoUrl: string | null = null;
+  ajusteFotoFile: File | null = null;
+  cropper: Cropper | null = null;
+  cropperReady = false;
 
   constructor(
     private firebaseService: FirebaseService,
@@ -109,20 +118,93 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  // Cambia selectImage para abrir el flujo de crop directamente
   async selectImage() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = async (event: any) => {
-      const file = event.target.files[0];
-      if (file) {
-        await this.uploadImage(file);
-      }
-    };
-    input.click();
+    this.abrirAjusteFoto();
   }
 
-  async uploadImage(file: File) {
+  abrirAjusteFoto() {
+    this.showAjusteFoto = true;
+    this.ajusteFotoUrl = null;
+    this.ajusteFotoFile = null;
+    this.cropperReady = false;
+    setTimeout(() => {
+      // Dispara el input file automáticamente
+      const input = document.querySelector<HTMLInputElement>('input[type="file"]');
+      if (input) input.value = '';
+      if (input) input.click();
+    }, 100);
+  }
+
+  cancelarAjusteFoto() {
+    this.showAjusteFoto = false;
+    this.ajusteFotoUrl = null;
+    this.ajusteFotoFile = null;
+    this.cropperReady = false;
+    if (this.cropper) {
+      // Cropper v2.x: no destroy(), simplemente elimina la referencia
+      this.cropper = null;
+    }
+  }
+
+  async onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+    this.ajusteFotoFile = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.ajusteFotoUrl = e.target.result;
+      setTimeout(() => this.initCropper(), 100); // Espera a que la imagen esté en el DOM
+    };
+    reader.readAsDataURL(file);
+  }
+
+  initCropper() {
+    if (this.cropper) {
+      this.cropper = null;
+    }
+    const image = document.querySelector<HTMLImageElement>('img[alt="Ajuste previo"]');
+    if (image) {
+      // Forzar uso de opciones avanzadas aunque TypeScript no las tipa
+      this.cropper = new (Cropper as any)(image, {
+        aspectRatio: 1,
+        viewMode: 1,
+        autoCropArea: 1,
+        responsive: true,
+        dragMode: 'move',
+        zoomable: true,
+        scalable: false,
+        cropBoxResizable: false,
+        minCropBoxWidth: 200,
+        minCropBoxHeight: 200
+      });
+      this.cropperReady = true;
+    }
+  }
+
+  async comprimirYSubirFoto() {
+    if (!this.cropper || !this.ajusteFotoFile) return;
+    const cropperCanvas = this.cropper.getCropperCanvas();
+    if (!cropperCanvas) return;
+    const canvas = await cropperCanvas.$toCanvas({ width: 800, height: 800 });
+    canvas.toBlob(async (croppedBlob: Blob | null) => {
+      if (!croppedBlob) return;
+      // Convertir Blob a File para browser-image-compression
+      const fileName = this.ajusteFotoFile ? this.ajusteFotoFile.name : 'cropped.jpg';
+      const croppedFile = new File([croppedBlob], fileName, { type: 'image/jpeg' });
+      const compressedFile = await imageCompression(croppedFile, {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 800,
+        useWebWorker: true
+      });
+      // Llama a la función de subida real
+      await this.subirImagenGaleria(compressedFile as File);
+      this.cancelarAjusteFoto();
+    }, 'image/jpeg', 0.9);
+  }
+
+  // Nueva función para subir la imagen comprimida a la galería
+  async subirImagenGaleria(file: File) {
     let userId: string | undefined;
     if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
       const { user } = await FirebaseAuthentication.getCurrentUser();
@@ -143,13 +225,11 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     await loading.present();
     try {
       const task = this.storageService.uploadFileWithProgress(filePath, file);
-      // Escuchar el progreso de la subida usando el evento 'state_changed'
       task.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         this.uploadProgress = progress / 100;
         loading.message = `Subiendo imagen... ${Math.round(progress)}%`;
       });
-      // Esperar a que la subida termine y obtener la URL
       await task;
       const downloadUrl = await this.storageService.getDownloadUrl(filePath);
       this.galleryUrls.push(downloadUrl);
@@ -162,9 +242,15 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  async updateGalleryInFirestore(userId: string) {
+  updateGalleryInFirestore(userId: string) {
     const path = `usuarios/${userId}`;
-    await this.firebaseService.updateDocument(path, { gallery: this.galleryUrls });
+    this.firebaseService.updateDocument(path, { gallery: this.galleryUrls })
+      .then(() => {
+        console.log('Galería actualizada en Firestore');
+      })
+      .catch((error) => {
+        console.error('Error al actualizar la galería en Firestore:', error);
+      });
   }
 
   goToConfiguracion() {

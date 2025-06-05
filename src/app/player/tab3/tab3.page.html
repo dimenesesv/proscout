@@ -12,8 +12,8 @@
         <ion-icon [name]="getIcon(notif.tipo)" size="large"></ion-icon>
       </ion-avatar>
       <ion-label>
-        <p>{{ notif.mensaje }}</p>
-        <small *ngIf="notif.fecha">{{ notif.fecha.toDate ? (notif.fecha.toDate() | date:'medium') : (notif.fecha | date:'medium') }}</small>
+        <p>{{ notif.contenido }}</p>
+        <small *ngIf="notif.fecha">{{ notif.fecha | date:'medium' }}</small>
       </ion-label>
     </ion-item>
   </ion-list>

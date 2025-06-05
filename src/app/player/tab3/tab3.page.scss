@@ -16,10 +16,22 @@ $shadow-card: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
 $transition-main: 0.22s cubic-bezier(0.4,0,0.2,1);
 $font-main: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 
-body, ion-app, ion-content {
-  background: $color-bg-dark !important;
-  color: $color-text-main;
-  font-family: $font-main;
+ion-header, ion-toolbar, ion-title {
+  --background: #000 !important;
+  background: #000 !important;
+  color: #fff !important;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+  letter-spacing: 0.03em;
+}
+ion-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+ion-list, ion-item {
+  background: transparent;
+  color: #fff;
+  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
 }
 
 ion-list {
@@ -28,20 +40,16 @@ ion-list {
 }
 
 ion-item {
-  --background: #23232a;
-  border-radius: $radius-lg;
-  margin-bottom: 18px;
-  box-shadow: $shadow-card;
-  transition: box-shadow $transition-main, transform $transition-main, background $transition-main;
-  align-items: flex-start;
-  color: $color-text-main;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(255,214,0,0.10), 0 1.5px 8px rgba(0,0,0,0.18);
+  background: #23232a;
+  color: #fff;
   font-size: 1.18rem;
-  font-family: $font-main;
-  border: 1.5px solid transparent;
+  border: 2px solid transparent;
+  transition: box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s, border-color 0.22s;
   &:hover, &:active {
-    box-shadow: $shadow-lg;
-    background: lighten($color-surface-dark, 3%);
-    border-color: $color-primary;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    border-color: #ffd600;
     transform: scale(1.025) translateY(-2px);
   }
 }
@@ -52,11 +60,11 @@ ion-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $color-surface-dark;
+  background: #23232a;
   border-radius: 50%;
   margin-right: 16px;
   box-shadow: 0 2px 8px rgba(255,214,0,0.10);
-  border: 2.5px solid $color-primary;
+  border: 2.5px solid #ffd600;
 }
 
 ion-icon {
@@ -78,7 +86,7 @@ ion-label {
 ion-label p {
   margin: 0 0 2px 0;
   font-size: 1.22rem;
-  color: $color-text-main;
+  color: #39ff14; // verde fluor
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(0,0,0,0.18);
 }
