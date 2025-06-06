@@ -21,35 +21,40 @@
       </ion-chip>
     </div>
     <!-- Resultados -->
-    <div class="resultados-wrapper" *ngIf="resultados.length > 0">
-      <h2 class="titulo-resultados">Resultados</h2>
-      <div class="resultados-lista">
-        <div *ngFor="let r of pagedResultados" class="jugador-card perfil-card animate-card">
-          <div class="imagen-con-label">
-            <img [src]="r.usuario.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" />
+    <div class="jugadores-grid responsive-grid" *ngIf="resultados.length > 0">
+      <div class="jugador-card perfil-card animate-card" *ngFor="let r of pagedResultados; let i = index" [style.animationDelay]="(i * 80) + 'ms'" (click)="verPerfil(r.usuario)">
+        <div class="imagen-con-label">
+          <img [src]="r.usuario.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" />
+        </div>
+        <div class="info-contenido">
+          <div class="ubicacion">
+            <ion-icon name="location-outline"></ion-icon>
+            {{ r.usuario.comuna || 'Comuna desconocida' }}
           </div>
-          <div class="info-contenido">
-            <div class="nombre-edad">
-              <strong class="nombre">{{ r.usuario.nombre }}</strong>
-              <span class="edad">{{ r.edadCalculada != null ? r.edadCalculada + ' años' : 'N/A' }}</span>
-            </div>
-            <div class="descripcion">
-              Altura: {{ r.usuario.info && r.usuario.info.altura != null ? (r.usuario.info.altura < 3 ? (r.usuario.info.altura * 100) : r.usuario.info.altura) + ' cm' : 'N/A' }} |
-              Peso: {{ r.usuario.info && r.usuario.info.peso != null ? r.usuario.info.peso + ' kg' : 'N/A' }}
-            </div>
-            <div class="coincidencia">
-              <ion-chip color="success" class="chip-coincidencia">
-                <ion-label>Coincidencia: {{ r.porcentaje }}%</ion-label>
-              </ion-chip>
-            </div>
+          <div class="nombre-edad">
+            <strong class="nombre">{{ r.usuario.nombre }}</strong>
+            <span class="edad">{{ r.edadCalculada != null ? r.edadCalculada + ' años' : '--' }}</span>
+          </div>
+          <div class="descripcion">
+            Altura: {{ r.usuario.info && r.usuario.info.altura != null ? (r.usuario.info.altura < 3 ? (r.usuario.info.altura * 100) : r.usuario.info.altura) + ' cm' : 'N/A' }}
+            <span *ngIf="filtrosActuales.altura && r.usuario.info && r.usuario.info.altura != null">
+              &nbsp;| Δ: {{ getAlturaDiff(r.usuario) !== null ? getAlturaDiff(r.usuario) : '?' }}cm
+            </span>
+            | Peso: {{ r.usuario.info && r.usuario.info.peso != null ? r.usuario.info.peso + ' kg' : 'N/A' }}
+          </div>
+          <div class="coincidencia">
+            <ion-chip color="success" class="chip-coincidencia">
+              <ion-label>{{ getCoincidenciaLabel(r.usuario) }}</ion-label>
+            </ion-chip>
           </div>
         </div>
       </div>
-      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
-        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más resultados..."></ion-infinite-scroll-content>
-      </ion-infinite-scroll>
+      <div class="jugador-card empty-card" *ngIf="resultados.length === 1"></div>
     </div>
     <ion-note *ngIf="resultados.length === 0">No hay resultados para los filtros seleccionados.</ion-note>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Cargando más resultados..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </ng-container>
   <!-- Modal de filtros -->
   <!-- El modal ahora es un componente externo abierto por ModalController -->

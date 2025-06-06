@@ -1,10 +1,6 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Notificaciones</ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content class="ion-padding">
+      <ion-title class="tab3-title">Notificaciones</ion-title>
 
   <ion-list *ngIf="notifications.length > 0; else noNotifications">
     <ion-item *ngFor="let notif of notifications" lines="full">

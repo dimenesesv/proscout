@@ -132,10 +132,11 @@ export class MapaPage implements OnInit, AfterViewInit {
         favoritosIds = Array.isArray(scouterDoc?.scouter?.favoritos) ? scouterDoc.scouter.favoritos : [];
         console.log('[MapaPage] Favoritos del scouter:', favoritosIds);
       }
-      // 2. Obtener todos los usuarios
+      // 2. Obtener todos los usuarios que sean jugadores
       const allUsers = await this.firebaseService.getCollection('usuarios');
       this.users = allUsers
         .filter((u: any) =>
+          u.esJugador === true &&
           u.ubicacion &&
           typeof u.ubicacion.latitude === 'number' &&
           typeof u.ubicacion.longitude === 'number'

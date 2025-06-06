@@ -35,6 +35,28 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   cropper: Cropper | null = null;
   cropperReady = false;
 
+  // --- PROPIEDADES Y MÉTODOS PARA LA UI DEL PERFIL (GALERÍA Y ESTADÍSTICAS) ---
+  get userData() {
+    return this.perfilUsuario;
+  }
+  loadedImages: { [url: string]: boolean } = {};
+  showAllStats = false;
+  allStatsKeys = [
+    { key: 'velocidad', label: 'Velocidad', color: '#39ff14' },
+    { key: 'resistencia', label: 'Resistencia', color: '#00bcd4' },
+    { key: 'fuerza', label: 'Fuerza', color: '#ff9800' },
+    { key: 'agilidad', label: 'Agilidad', color: '#e91e63' },
+    { key: 'equilibrio', label: 'Equilibrio', color: '#9c27b0' },
+    { key: 'coordinacion', label: 'Coordinación', color: '#3f51b5' },
+    { key: 'salto', label: 'Salto', color: '#8bc34a' },
+    { key: 'controlBalon', label: 'Control Balón', color: '#ffc107' },
+    { key: 'regate', label: 'Regate', color: '#f44336' },
+    { key: 'pase', label: 'Pase', color: '#00bcd4' },
+    { key: 'tiro', label: 'Tiro', color: '#ff9800' },
+    { key: 'cabeceo', label: 'Cabeceo', color: '#9c27b0' },
+  ];
+  statsCardInView = true;
+
   constructor(
     private firebaseService: FirebaseService,
     private storageService: StorageService,
@@ -254,7 +276,7 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   }
 
   goToConfiguracion() {
-    this.router.navigate(['/configuracion']);
+    this.router.navigate(['../scouter/configuracion']);
   }
 
   calcularEdad(fechaNacimiento: string): number {
@@ -267,5 +289,23 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
       edad--;
     }
     return edad;
+  }
+
+  onImgWillLoad(url: string) {
+    this.loadedImages[url] = false;
+  }
+  onImgDidLoad(url: string) {
+    this.loadedImages[url] = true;
+  }
+  toggleStats() {
+    this.showAllStats = !this.showAllStats;
+  }
+  enviarMensaje() {
+    // Implementa lógica de mensajería aquí
+    alert('Funcionalidad de mensajería próximamente');
+  }
+  onSeguirClick() {
+    // Implementa lógica de favoritos aquí
+    alert('Funcionalidad de favoritos próximamente');
   }
 }

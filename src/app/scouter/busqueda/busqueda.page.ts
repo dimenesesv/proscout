@@ -109,27 +109,10 @@ export class BusquedaPage implements OnInit, OnDestroy {
     this.cargandoUsuarios = true;
     let usuarios: Usuario[] = [];
     if (filtros && (filtros.altura || filtros.peso || filtros.edad)) {
-      const alturaRango = 10;
-      const pesoRango = 10;
-      const edadRango = 2;
+      // Solo filtra por esJugador, no por rango de altura
       const filtersArr: Array<{ field: string, op: any, value: any }> = [
         { field: 'esJugador', op: '==', value: true }
       ];
-      if (filtros.altura) {
-        filtersArr.push({ field: 'info.altura', op: '>=', value: filtros.altura - alturaRango });
-        filtersArr.push({ field: 'info.altura', op: '<=', value: filtros.altura + alturaRango });
-      }
-      if (filtros.peso) {
-        filtersArr.push({ field: 'info.peso', op: '>=', value: filtros.peso - pesoRango });
-        filtersArr.push({ field: 'info.peso', op: '<=', value: filtros.peso + pesoRango });
-      }
-      if (filtros.edad) {
-        const hoy = new Date();
-        const minYear = hoy.getFullYear() - (filtros.edad + edadRango);
-        const maxYear = hoy.getFullYear() - (filtros.edad - edadRango);
-        filtersArr.push({ field: 'fechaNacimiento', op: '>=', value: `${minYear}-01-01` });
-        filtersArr.push({ field: 'fechaNacimiento', op: '<=', value: `${maxYear}-12-31` });
-      }
       const q = await this.firebaseService.collectionQuery('usuarios', filtersArr);
       usuarios = await this.firebaseService.getDocsFromQuery(q);
     } else {
@@ -140,6 +123,9 @@ export class BusquedaPage implements OnInit, OnDestroy {
     this.page = 1;
     this.updatePagedResultados();
     this.setBadgeState();
+
+    // Log de alturas de usuarios cargados para depuración
+    console.log('[DEBUG] Alturas de usuarios:', this.usuarios.map(u => u.info?.altura));
   }
 
   async buscarPorProximidad(filtros: Partial<Info & Stats>) {
@@ -166,6 +152,7 @@ export class BusquedaPage implements OnInit, OnDestroy {
         filtrosLimpios[key as keyof (Info & Stats)] = valor as any;
       }
     });
+    // Ordena por puntaje (más parecido primero) y limita a los 10 primeros
     this.resultados = this.usuarios
       .filter(u => u.esJugador)
       .map(usuario => {
@@ -215,12 +202,11 @@ export class BusquedaPage implements OnInit, OnDestroy {
             total++;
           }
         }
-        // El puntaje será menos negativo cuanto más parecido sea el usuario
-        // Para mostrar un porcentaje de coincidencia, puedes normalizar si lo deseas
         return { usuario, puntaje, porcentaje: 0, edadCalculada };
       })
       .filter(r => r.puntaje < 0)
-      .sort((a, b) => b.puntaje - a.puntaje); // Menor diferencia (menos negativo) es mejor
+      .sort((a, b) => b.puntaje - a.puntaje) // Menor diferencia (menos negativo) es mejor
+      .slice(0, 10); // Limita a los 10 primeros
     this.page = 1;
     this.updatePagedResultados();
   }
@@ -355,5 +341,24 @@ export class BusquedaPage implements OnInit, OnDestroy {
     const y = ((beta + 180) / 360) * 100;
     welcome.style.setProperty('--gradient-x', `${x}%`);
     welcome.style.setProperty('--gradient-y', `${y}%`);
+  }
+
+  // Utilidad para calcular diferencia absoluta de altura en la template
+  getAlturaDiff(usuario: any): number | null {
+    if (!usuario || !usuario.info || usuario.info.altura == null || this.filtrosActuales.altura == null) return null;
+    let alturaUsuario = usuario.info.altura < 3 ? usuario.info.altura * 100 : usuario.info.altura;
+    return Math.abs(alturaUsuario - this.filtrosActuales.altura);
+  }
+
+  // Devuelve un string de coincidencia para mostrar en el chip según la diferencia de altura
+  getCoincidenciaLabel(usuario: any): string {
+    if (!usuario || !usuario.info || usuario.info.altura == null || this.filtrosActuales.altura == null) return '';
+    let alturaUsuario = usuario.info.altura < 3 ? usuario.info.altura * 100 : usuario.info.altura;
+    const diff = Math.abs(alturaUsuario - this.filtrosActuales.altura);
+    if (diff === 0) return 'Coincidencia exacta';
+    if (diff <= 2) return 'Muy cercano';
+    if (diff <= 5) return 'Cercano';
+    if (diff <= 10) return 'Lejano';
+    return 'Muy lejano';
   }
 }

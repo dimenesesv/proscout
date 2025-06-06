@@ -1,82 +1,147 @@
-<!-- Copia de perfil.page.html para jugador -->
-<ion-content class="profile-content perfil-content" [fullscreen]="true">
-  <div class="circle-top"></div>
-  <div class="perfil-title-container" style="position:relative;">
-    <h1 class="perfil-title">Perfil</h1>
-    <ion-button fill="clear" class="config-btn" (click)="goToConfiguracion()" style="position:absolute;top:0;right:0;z-index:2;">
-      <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
-    </ion-button>
-  </div>
-  <ng-container *ngIf="!perfilUsuario">
-    <div class="no-profile-msg">No se encontró información de perfil.</div>
-  </ng-container>
-  <ng-container *ngIf="perfilUsuario">
-    <ion-card class="perfil-card">
-      <div class="profile-header">
-        <img [src]="perfilUsuario.fotoPerfil || 'assets/default-profile.png'" class="player-photo" />
-        <div class="profile-main-info">
-          <h2>{{ perfilUsuario?.name }}</h2>
-          <div *ngIf="perfilUsuario?.fechaNacimiento">Edad: {{ calcularEdad(perfilUsuario?.fechaNacimiento) }} años</div>
-          <div *ngIf="perfilUsuario?.nacionalidad">Nacionalidad: {{ perfilUsuario.nacionalidad }}</div>
-        </div>
-      </div>
-      <div class="profile-details">
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.email">
-          <ion-icon name="mail-outline"></ion-icon>
-          <span>{{ perfilUsuario.email }}</span>
-        </div>
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.rut">
-          <ion-icon name="card-outline"></ion-icon>
-          <span>RUT: {{ perfilUsuario.rut }}</span>
-        </div>
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.sex">
-          <ion-icon name="male-female-outline"></ion-icon>
-          <span>Sexo: {{ perfilUsuario.sex }}</span>
-        </div>
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.clubActual">
-          <ion-icon name="trophy-outline"></ion-icon>
-          <span>Club: {{ perfilUsuario.clubActual }}</span>
-        </div>
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.equipoActual">
-          <ion-icon name="people-outline"></ion-icon>
-          <span>Equipo: {{ perfilUsuario.equipoActual }}</span>
-        </div>
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.posicion">
-          <ion-icon name="football-outline"></ion-icon>
-          <span>Posición: {{ perfilUsuario.posicion }}</span>
-        </div>
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.altura">
-          <ion-icon name="accessibility-outline"></ion-icon>
-          <span>Altura: {{ perfilUsuario.altura }} cm</span>
-        </div>
-        <div class="profile-detail-row" *ngIf="perfilUsuario?.peso">
-          <ion-icon name="barbell-outline"></ion-icon>
-          <span>Peso: {{ perfilUsuario.peso }} kg</span>
-        </div>
-      </div>
-      <div class="bio-text" *ngIf="perfilUsuario?.biografia">
-        <ion-icon name="document-text-outline"></ion-icon> {{ perfilUsuario?.biografia }}
-      </div>
-    </ion-card>
-    <!-- Galería de imágenes -->
-    <ion-card class="galeria-card">
-      <ion-card-header>
-        <ion-card-title>Galería</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-button expand="block" (click)="selectImage()">Subir Imagen</ion-button>
-        <ion-progress-bar *ngIf="uploadProgress !== null" [value]="uploadProgress"></ion-progress-bar>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="6" *ngFor="let imageUrl of galleryUrls">
-              <div class="galeria-img-wrapper">
-                <ion-spinner *ngIf="!imageUrl" name="crescent" class="galeria-img-spinner"></ion-spinner>
-                <ion-img [src]="imageUrl" alt="Imagen subida"></ion-img>
-              </div>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="perfil-page">
+  <ion-card class="perfil-header-card">
+    <ion-grid>
+      <ion-row class="ion-justify-content-between ion-align-items-center">
+        <ion-col>
+          <div class="profile-photo">
+          <ion-img  [src]="userData?.fotoPerfil || 'assets/default-profile.png'"></ion-img>
+          </div>
+          <h2 class="perfil-nombre">{{ userData?.nombre || '-' }}</h2>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid class="perfil-header-info">
+      <ion-row class="perfil-header-row">
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Edad:</div>
+          <div class="value"><ion-icon name="calendar-outline"></ion-icon> {{ userData?.fechaNacimiento ? calcularEdad(userData.fechaNacimiento) : '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Nacionalidad:</div>
+          <div class="value"><ion-icon name="flag-outline"></ion-icon> {{ userData?.nacionalidad || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Ciudad:</div>
+          <div class="value"><ion-icon name="location-outline"></ion-icon> {{ userData?.ciudad || userData?.info?.ciudad || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Comuna:</div>
+          <div class="value"><ion-icon name="business-outline"></ion-icon> {{ userData?.comuna || userData?.info?.comuna || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Región:</div>
+          <div class="value"><ion-icon name="map-outline"></ion-icon> {{ userData?.region || userData?.info?.region || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Club actual:</div>
+          <div class="value"><ion-icon name="trophy-outline"></ion-icon> {{ userData?.clubActual || userData?.info?.clubActual || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Equipo:</div>
+          <div class="value"><ion-icon name="people-outline"></ion-icon> {{ userData?.info?.equipo || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Posición:</div>
+          <div class="value"><ion-icon name="accessibility-outline"></ion-icon> {{ userData?.posicion || userData?.info?.posicion || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Altura:</div>
+          <div class="value"><ion-icon name="resize-outline"></ion-icon> {{ userData?.altura || userData?.info?.altura || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Peso:</div>
+          <div class="value"><ion-icon name="barbell-outline"></ion-icon> {{ userData?.peso || userData?.info?.peso || '-' }}</div>
+        </ion-col>
+        <ion-col size="6" class="perfil-header-col">
+          <div class="label">Pie hábil:</div>
+          <div class="value"><ion-icon name="footsteps-outline"></ion-icon> {{ userData?.perfil || userData?.info?.pie || '-' }}</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+  <!-- Galería de imágenes del jugador -->
+  <ion-card class="galeria-card perfil-stats-card">
+    <ion-card-header>
+      <ion-card-title>Galería</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" *ngFor="let imageUrl of userData?.gallery">
+            <div class="galeria-img-wrapper galeria-img-loading-wrapper">
+              <ion-skeleton-text *ngIf="!loadedImages[imageUrl]" animated style="width: 100%; height: 0; padding-bottom: 100%; border-radius: 12px;"></ion-skeleton-text>
+              <ion-img [src]="imageUrl" alt="Imagen subida" (ionImgWillLoad)="onImgWillLoad(imageUrl)" (ionImgDidLoad)="onImgDidLoad(imageUrl)" [class.loaded]="loadedImages[imageUrl]" style="aspect-ratio: 1/1; object-fit: cover; border-radius: 12px;"></ion-img>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="perfil-stats-card" #statsCard>
+    <ion-card-header>
+      <ion-card-title>Estadísticas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ng-container *ngFor="let stat of (showAllStats ? allStatsKeys : allStatsKeys.slice(0, 6))">
+            <ion-col size="6" size-md="4">
+              <circle-progress
+                [percent]="statsCardInView ? (userData?.stats?.[stat.key] ? (userData.stats[stat.key] * 10) : 0) : 0"
+                [title]="stat.label"
+                [showTitle]="true"
+                [titleColor]="'#ffffff'"
+                [titleFontSize]="'14'"
+                [unitsColor]="'#ffffff'"
+                [showUnits]="false"
+                [outerStrokeColor]="stat.color"
+                [outerStrokeWidth]="8"
+                [innerStrokeWidth]="0"
+                [backgroundColor]="'transparent'"
+                [responsive]="false">
+              </circle-progress>
             </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-  </ng-container>
+          </ng-container>
+        </ion-row>
+      </ion-grid>
+      <ion-button expand="block" fill="clear" size="small" (click)="toggleStats()">
+        {{ showAllStats ? 'Ver menos' : 'Ver todas las estadísticas' }}
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="perfil-similares-card">
+    <ion-card-header>
+      <ion-card-title>Acciones</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="6" class="ion-text-center">
+            <ion-button expand="block" color="primary" (click)="enviarMensaje()">
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+              Enviar mensaje
+            </ion-button>
+          </ion-col>
+          <ion-col size="6" class="ion-text-center">
+            <ion-button expand="block" color="secondary" (click)="onSeguirClick()">
+              <ion-icon name="heart-outline" slot="start"></ion-icon>
+              Agregar a favoritos
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

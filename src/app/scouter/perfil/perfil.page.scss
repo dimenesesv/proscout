@@ -1,223 +1,342 @@
-// Use mapa colors and style for perfil page
-:host, ion-content.perfil-content, .perfil-content, .profile-content {
-  --background: #18181b !important;
-  background: #18181b !important;
-  min-height: 100vh;
-}
-
-.perfil-title-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2.2rem;
-  margin-bottom: 1.2rem;
-}
-.perfil-title {
-  font-size: 2.1rem;
-  color: #39ff14;
-  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  margin: 0;
-}
-
-// Profile card (photo/info) - horizontal, modern, mapa style
-.profile-card-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-.profile-photo-card-square {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  background: #18394a !important;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 12px rgba(79,195,247,0.10);
+/* Profile card layout */
+.profile-card {
+  background: #003300 !important; /* dark green */;
+  border-radius: 18px;
+  border: 2px solid #39ff14; /* fluorescent green */
+  box-shadow: 0 2px 10px rgba(27, 64, 34, 0.08);
+  padding: 0 0 1.5rem 0;
+  margin-bottom: 1.5rem;
   overflow: hidden;
-  border: 2px solid #39ff14;
-  width: 100%;
-  max-width: 540px;
-  min-height: 140px;
-  margin: 0 1rem 1.5rem 1rem;
-  padding: 0;
-}
-.profile-img-wrapper {
-  width: 120px;
-  background: #18394a;
-  flex-shrink: 0;
-  border-top-left-radius: 1.2rem;
-  border-bottom-left-radius: 1.2rem;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  box-shadow: 0 2px 8px rgba(57,255,20,0.10);
-  border-right: 2px solid #39ff14;
 }
-.profile-photo-image-square {
+
+/* Profile photo */
+.profile-photo {
+  width: 96%;
+  aspect-ratio: 1 / 1;
+  margin: 1% auto 0.6rem auto;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-photo ion-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
   display: block;
-  border-radius: 0;
-  background: #18394a;
 }
-.edit-photo-btn {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: #23232a;
+
+/* Name and age */
+.profile-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Profile name and age */
+.profile-name {
+  font-size: 1.8rem;
+  font-weight: 700;
   color: #39ff14;
-  border: none;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(57,255,20,0.10);
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 2;
-  transition: background 0.2s, color 0.2s;
+  margin-bottom: 0.3rem;
 }
-.edit-photo-btn:hover {
-  background: #39ff14;
-  color: #23232a;
+
+.profile-age {
+  font-size: 1.1rem;
+  color: #8aff80;
+  font-weight: 500;
 }
-.profile-progress-bar-wrapper {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background: #23232a;
-  border-bottom-left-radius: 1.2rem;
-}
-.profile-progress-bar {
-  height: 100%;
-  background: #39ff14;
-  border-radius: 6px;
-  transition: width 0.3s;
-}
-.profile-info-wrapper {
-  flex: 1;
-  padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+
+/* Detail rows */
+.profile-details {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  background: #23232a;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0 1.5rem;
 }
-.profile-info-wrapper h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
+
+/* Detail rows text */
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #d0ffd4;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.detail-row ion-icon {
+  font-size: 1.2rem;
   color: #39ff14;
-  margin-bottom: 0.2em;
 }
-.profile-info-wrapper div {
-  font-size: 1.05rem;
-  color: #b3c7d6;
-  margin-bottom: 0.2em;
+
+/* Bio section */
+/* Bio text */
+.profile-bio {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #d0ffd4;
+  font-style: italic;
+  margin-top: 1.5rem;
 }
-@media (max-width: 600px) {
-  .profile-photo-card-square {
-    flex-direction: column;
-    min-height: 0;
+
+/* Action buttons */
+.profile-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+ion-button {
+  --border-radius: 20px;
+  --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+:host {
+  --ion-background-color: #e9f5ec !important;
+}
+
+ion-content.perfil-page {
+  --padding-bottom: 6rem !important;
+  padding-bottom: 6rem !important;
+  min-height: 100vh !important;
+  box-sizing: border-box;
+}
+
+.perfil-page {
+  background: #e9f5ec !important;
+  background-size: 300px 300px !important;
+  min-height: 100vh !important;
+  box-sizing: border-box;
+  width: 100vw;
+  text-align: center;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-bottom: 0 !important;
+  display: block;
+  animation: motionFadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.profile-card,
+.perfil-header-card,
+.perfil-stats-card,
+.perfil-similares-card {
+  animation: motionCardIn 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes motionFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
   }
-  .profile-img-wrapper {
-    max-width: 100%;
-    min-width: 0;
-    width: 100%;
-    height: 120px;
-    border-radius: 1.2rem 1.2rem 0 0;
-    border-right: none;
-    border-bottom: 2px solid #39ff14;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-// Info cards (swiper slides)
-.profile-info-card-modern {
-  background: #23232a !important;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 12px rgba(79,195,247,0.10);
-  border: 2px solid #39ff14;
-  margin: 1.2rem 1rem 2rem 1rem;
-  padding: 1.2rem 1.2rem 1.2rem 1.2rem;
-  color: #b3c7d6;
-  font-family: 'Bebas Neue', 'Roboto', Arial, sans-serif;
+@keyframes motionCardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
-.profile-header-info {
-  margin-bottom: 1rem;
+
+// Animación fade para info de perfil
+.fade-info-in {
+  animation: fadeInfoIn 0.5s cubic-bezier(0.4,0,0.2,1);
 }
-.profile-name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #39ff14;
-  margin-bottom: 0.2em;
+.fade-info-out {
+  animation: fadeInfoOut 0.4s cubic-bezier(0.4,0,0.2,1);
 }
-.profile-age {
-  font-size: 1.05rem;
-  color: #b3c7d6;
-  margin-bottom: 0.2em;
+
+@keyframes fadeInfoIn {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
 }
-.profile-details {
-  margin-bottom: 1rem;
+
+@keyframes fadeInfoOut {
+  from {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(24px);
+  }
 }
-.profile-detail-row {
-  display: flex;
-  align-items: center;
-  gap: 0.7em;
-  font-size: 1.05rem;
-  color: #b3c7d6;
-  margin-bottom: 0.2em;
+
+.perfil-header-card,
+.perfil-stats-card,
+.perfil-similares-card {
+  background: #000 !important;
+  border-radius: 35px !important;
+  color: #fff !important;
+  margin: 1rem !important;
+  padding: 1rem !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid #222 !important;
 }
-.profile-detail-row ion-icon {
-  color: #39ff14;
-  font-size: 1.2em;
+
+.perfil-nombre {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
 }
-.bio-text {
-  font-size: 0.98rem;
-  color: #b3c7d6;
-  margin-bottom: 1.2em;
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
+
+.perfil-header-card ion-avatar {
+  width: 64px !important;
+  height: 64px !important;
+  border: 2px solid #fff !important;
 }
-.profile-actions {
+
+.perfil-header-card ion-col > .label {
+  font-size: 0.7rem !important;
+  color: #aaa !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.2rem !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.perfil-header-card ion-col > .value {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  color: #fff !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.perfil-header-col .label,
+.perfil-header-col .value {
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.perfil-stats-card ion-card-title {
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 0.5rem !important;
+  text-transform: uppercase !important;
+}
+
+.perfil-similares-card ion-col div {
+  text-align: center !important;
+  margin-top: 0.5rem !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+}
+
+.perfil-header-col {
+  background-color: rgb(15, 15, 15) !important;
+  border-radius: 10px !important;
+  padding: 0.7rem 1rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 70px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10) !important;
+  flex: 0 0 48% !important;
+  max-width: 48% !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+}
+
+.perfil-header-info {
+  text-align: center;
+}
+
+.perfil-header-info .perfil-header-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.7em;
-  margin-top: 1.2em;
-}
-.profile-actions ion-button {
-  --background: #39ff14;
-  --color: #23232a;
-  --border-radius: 1.2rem;
-  --box-shadow: 0 2px 8px rgba(57,255,20,0.10);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  transition: background 0.2s, color 0.2s;
-}
-.profile-actions ion-button:hover, .profile-actions ion-button:focus {
-  --background: #23232a;
-  --color: #39ff14;
-}
-
-.no-profile-msg {
-  text-align: center;
-  color: #b3c7d6;
-  font-size: 1.15rem;
-  margin-top: 2.5rem;
-}
-
-// Swiper container adjustments
-swiper-container {
-  width: 100%;
-  padding-bottom: 5.5rem; // Increased to avoid tab bar overlap
-}
-swiper-slide {
-  display: flex;
   justify-content: center;
-  padding-bottom: 2.5rem; // Extra space for last card
+  text-align: center;
+}
+
+.perfil-header-info .perfil-header-col {
+  flex: 0 0 48%;
+  max-width: 48%;
+  margin: 1%;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep circle-progress .circle-progress-bar {
+  transition: stroke-dashoffset 0.35s cubic-bezier(0.4,0,0.2,1), stroke 0.18s, filter 0.18s;
+}
+:host ::ng-deep circle-progress .circle-progress-bar {
+  will-change: stroke-dashoffset;
+}
+
+.galeria-card.perfil-stats-card {
+  background: #000 !important;
+  border-radius: 35px !important;
+  color: #fff !important;
+  margin: 1rem !important;
+  padding: 1rem !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid #222 !important;
+  animation: motionCardIn 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.galeria-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #181818;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.galeria-img-wrapper ion-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+.galeria-img-wrapper ion-img.loaded {
+  opacity: 1;
+}
+.galeria-img-wrapper ion-skeleton-text {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  z-index: 1;
 }

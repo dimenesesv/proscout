@@ -30,7 +30,7 @@
     <div class="jugadores-grid" *ngIf="pagedUsers.length > 0" style="margin: 0 12px;">
       <div class="jugador-card perfil-card animate-card" *ngFor="let user of pagedUsers; let i = index" (click)="verPerfil(user)" [style.animationDelay]="(i * 80) + 'ms'">
         <div class="imagen-con-label">
-          <img [src]="user.fotoPerfil || 'assets/default-profile.png'" alt="Foto de perfil" />
+          <img [src]="user.fotoPerfil ? user.fotoPerfil : 'assets/default-profile.png'" alt="Foto de perfil" />
           <ion-icon *ngIf="user.esFavorito" name="star" class="estrella-favorito"></ion-icon>
         </div>
         <div class="info-contenido">
