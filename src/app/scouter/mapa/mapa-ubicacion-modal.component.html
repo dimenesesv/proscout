@@ -9,9 +9,16 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [scrollY]="false" class="no-modal-scroll">
+  <div class="modal-drag-handle"></div>
   <div class="map-modal-container">
+    <!-- LOG: Google Map container about to render -->
     <div id="google-map" class="map-modal-map" style="touch-action: none;"></div>
     <div class="map-modal-pin"></div>
-    <ion-button expand="block" color="primary" (click)="confirmLocation()" style="margin-top: 1rem;">Usar esta ubicación</ion-button>
+    <ion-button expand="block" color="primary" (click)="logAndConfirmLocation()" style="margin-top: 1rem;">Usar esta ubicación</ion-button>
+    <ion-note class="ion-text-center" style="margin-top: 1rem;">
+      <p>Arrastra el mapa para ajustar la ubicación exacta.</p>
+      <!-- LOG: Modal de ubicación cargado correctamente -->
+    </ion-note>
   </div>
 </ion-content>
+<!-- LOG: Modal de ubicación renderizado -->

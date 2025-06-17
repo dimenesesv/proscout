@@ -122,21 +122,12 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
     this.swiper?.slideTo(index);
   }
 
-  logout() {
-    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
-      FirebaseAuthentication.signOut().then(() => {
-        console.log('Sesión cerrada correctamente');
-        this.router.navigate(['/login']);
-      }).catch((error) => {
-        console.error('Error al cerrar sesión:', error);
-      });
-    } else {
-      this.afAuth.signOut().then(() => {
-        console.log('Sesión cerrada correctamente');
-        this.router.navigate(['/login']);
-      }).catch((error) => {
-        console.error('Error al cerrar sesión:', error);
-      });
+  async logout() {
+    try {
+      await this.afAuth.signOut();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
     }
   }
 

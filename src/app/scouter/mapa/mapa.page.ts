@@ -360,21 +360,27 @@ export class MapaPage implements OnInit, AfterViewInit {
   }
 
   async abrirModalUbicacion() {
+    // Abre el modal de ubicación con el mapa interactivo (versión simplificada fullscreen)
     const modal = await this.modalCtrl.create({
       component: (await import('./mapa-ubicacion-modal.component')).MapaUbicacionModalComponent,
       componentProps: {
         lat: this.currentLocation.lat,
         lng: this.currentLocation.lng
       },
-      breakpoints: [0, 0.8],
-      initialBreakpoint: 0.8,
-      cssClass: 'mapa-ubicacion-modal',
+      cssClass: 'mapa-ubicacion-modal'
     });
-    modal.onDidDismiss().then((result) => {
-      if (result.data && result.data.lat && result.data.lng) {
-        this.currentLocation = { lat: result.data.lat, lng: result.data.lng };
-        this.obtenerComunaCiudad(result.data.lat, result.data.lng);
-        this.updateUserDistances();
+    modal.onDidDismiss().then(async result => {
+      console.log('[MapaPage] Modal de ubicación cerrado', result);
+      if (result.data) {
+        // Actualiza la ubicación si el usuario la seleccionó
+        this.currentLocation = {
+          lat: result.data.lat,
+          lng: result.data.lng
+        };
+        // Mostrar loader mientras se consulta la API
+        await this.presentUpdatingLoading();
+        await this.obtenerComunaCiudad(result.data.lat, result.data.lng);
+        this.dismissUpdatingLoading();
       }
     });
     await modal.present();
@@ -405,4 +411,5 @@ export class MapaPage implements OnInit, AfterViewInit {
     const blur = Math.max(4, 18 - scrollTop / 8);
     this.setGlowBlur(blur);
   }
+  
 }

@@ -86,6 +86,15 @@ ion-icon[name="star"], .estrella-favorito {
   z-index: 20;
 }
 
+.modal-drag-handle {
+  width: 44px;
+  height: 5px;
+  background: #b3c7d6;
+  border-radius: 3px;
+  margin: 0.7rem auto 0.7rem auto;
+  opacity: 0.7;
+}
+
 @media (max-width: 600px) {
   .map-modal-container {
     padding: 0.5rem 0.2rem 0.7rem 0.2rem;
@@ -99,4 +108,57 @@ ion-icon[name="star"], .estrella-favorito {
     width: 28px;
     height: 28px;
   }
+}
+
+.sheet-modal-force, .mapa-ubicacion-modal {
+  ion-modal,
+  & {
+    --height: 95vh !important;
+    --max-height: 100vh !important;
+    --min-height: 320px !important;
+    --border-radius: 18px 18px 0 0 !important;
+    --box-shadow: 0 4px 32px rgba(44,95,45,0.10);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  ion-content.no-modal-scroll {
+    min-height: 320px;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  .map-modal-container {
+    min-height: 220px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  #google-map.map-modal-map {
+    height: 340px !important;
+    min-height: 220px;
+    max-height: 60vh;
+  }
+}
+
+.mapa-ubicacion-modal-fullscreen,
+.mapa-ubicacion-modal-fullscreen ion-modal,
+.mapa-ubicacion-modal-fullscreen .modal-wrapper,
+.mapa-ubicacion-modal-fullscreen .ion-page,
+.mapa-ubicacion-modal-fullscreen ion-content {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  z-index: 9999 !important;
+  background: #e9f5ec !important;
 }
