@@ -15,7 +15,14 @@
           <div class="profile-photo">
           <ion-img  [src]="userData?.fotoPerfil || 'assets/default-profile.png'"></ion-img>
           </div>
-          <h2 class="perfil-nombre">{{ userData?.nombre || '-' }}</h2>
+          <h2 class="perfil-nombre">
+            {{ userData?.nombre || '-' }}
+            <span *ngIf="promedioCalificacion > 0" class="promedio-calificacion">
+              <ion-icon name="star" class="estrella-promedio"></ion-icon>
+              {{ promedioCalificacion | number:'1.1-2' }}
+              <span class="total-calificaciones">({{ totalCalificaciones }})</span>
+            </span>
+          </h2>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -141,6 +148,25 @@
               <ion-icon name="heart-outline" slot="start"></ion-icon>
               Agregar a favoritos
             </ion-button>
+          </ion-col>
+          <ion-col size="12" class="ion-text-center">
+            <ion-button expand="block" color="warning" class="btn-evaluar-perfil" (click)="abrirModalEvaluarPerfil()">
+              <ion-icon name="star-outline" slot="start"></ion-icon>
+              Evaluar perfil
+            </ion-button>
+            <div *ngIf="mostrarEstrellas" class="estrellas-container">
+              <ng-container *ngFor="let estrella of estrellas; let i = index">
+                <ion-icon
+                  [name]="i < evaluacion ? 'star' : 'star-outline'"
+                  (click)="setEvaluacion(i + 1)"
+                  class="estrella"
+                  [class.seleccionada]="i < evaluacion"
+                ></ion-icon>
+              </ng-container>
+              <span class="evaluacion-label">{{ evaluacion > 0 ? evaluacion + ' / 7' : 'Sin evaluar' }}</span>
+              <ion-button size="small" color="success" class="btn-guardar-evaluacion" (click)="enviarCalificacion()">Enviar calificación</ion-button>
+              <ion-button size="small" fill="clear" color="medium" (click)="cancelarEvaluacion()">Cancelar</ion-button>
+            </div>
           </ion-col>
         </ion-row>
       </ion-grid>

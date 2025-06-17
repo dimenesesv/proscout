@@ -54,6 +54,13 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
   statsCardInView: boolean = false;
   private statsCardObserver: IntersectionObserver | null = null;
 
+  mostrarEstrellas: boolean = false;
+  evaluacion: number = 0;
+  estrellas: number[] = [1, 2, 3, 4, 5, 6, 7];
+
+  promedioCalificacion: number = 0;
+  totalCalificaciones: number = 0;
+
   constructor(
     private route: ActivatedRoute,
     private firebaseService: FirebaseService,
@@ -147,12 +154,40 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
         };
         this.biografia = this.userData.biografia || '';
       }
+
+      // Cargar promedio de calificaciones
+      await this.cargarPromedioCalificacion();
     } catch (err) {
       clearTimeout(timeoutId);
       console.error('[VistaPerfilPage] Error al cargar datos:', err);
       this.errorMsg = 'Error al cargar el perfil. Intenta más tarde.';
       if (this.isModal) this.closeModal();
       this.isLoading = false;
+    }
+  }
+
+  async cargarPromedioCalificacion() {
+    try {
+      const db = (await import('firebase/firestore')).getFirestore();
+      const q = (await import('firebase/firestore')).query(
+        (await import('firebase/firestore')).collection(db, 'evaluacion'),
+        (await import('firebase/firestore')).where('jugadorId', '==', this.userId)
+      );
+      const snapshot = await (await import('firebase/firestore')).getDocs(q);
+      let suma = 0;
+      let total = 0;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (typeof data['calificacion'] === 'number') {
+          suma += data['calificacion'];
+          total++;
+        }
+      });
+      this.promedioCalificacion = total > 0 ? (suma / total) : 0;
+      this.totalCalificaciones = total;
+    } catch (e) {
+      this.promedioCalificacion = 0;
+      this.totalCalificaciones = 0;
     }
   }
 
@@ -381,5 +416,60 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
       }, { threshold: 0.25 });
       this.statsCardObserver.observe(statsCard);
     }
+  }
+
+  abrirModalEvaluarPerfil() {
+    this.mostrarEstrellas = true;
+  }
+
+  setEvaluacion(valor: number) {
+    this.evaluacion = valor;
+  }
+
+  async guardarEvaluacion() {
+    if (!this.userId || this.evaluacion < 1) {
+      alert('Selecciona una evaluación válida.');
+      return;
+    }
+    // Aquí puedes guardar la evaluación en Firestore o donde corresponda
+    try {
+      await this.firebaseService.updateDocument(`usuarios/${this.userId}`, { evaluacion: this.evaluacion });
+      alert('¡Evaluación guardada!');
+      this.mostrarEstrellas = false;
+    } catch (e) {
+      alert('Error al guardar la evaluación.');
+    }
+  }
+
+  async enviarCalificacion() {
+    if (!this.userId || this.evaluacion < 1) {
+      alert('Selecciona una calificación válida.');
+      return;
+    }
+    try {
+      const scouterUid = await this.firebaseService.getCurrentUserUid();
+      if (!scouterUid) {
+        alert('No se pudo identificar al scouter.');
+        return;
+      }
+      // Guardar la calificación en la colección 'evaluacion' en Firestore
+      const db = (await import('firebase/firestore')).getFirestore();
+      const docRef = (await import('firebase/firestore')).doc(db, 'evaluacion', `${this.userId}_${scouterUid}`);
+      await (await import('firebase/firestore')).setDoc(docRef, {
+        jugadorId: this.userId,
+        scouterId: scouterUid,
+        calificacion: this.evaluacion,
+        fecha: new Date()
+      });
+      alert('¡Calificación enviada!');
+      this.mostrarEstrellas = false;
+    } catch (e) {
+      alert('Error al enviar la calificación.');
+    }
+  }
+
+  cancelarEvaluacion() {
+    this.mostrarEstrellas = false;
+    this.evaluacion = 0;
   }
 }

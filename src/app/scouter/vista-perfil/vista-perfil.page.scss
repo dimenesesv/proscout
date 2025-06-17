@@ -208,6 +208,32 @@ ion-content.perfil-page {
   color: #fff !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.promedio-calificacion {
+  display: flex;
+  align-items: center;
+  background: #222;
+  border-radius: 12px;
+  padding: 0.18rem 0.7rem 0.18rem 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffd600;
+  margin-left: 0.5rem;
+  box-shadow: 0 2px 8px rgba(44,95,45,0.10);
+}
+.estrella-promedio {
+  color: #ffd600;
+  font-size: 1.3em;
+  margin-right: 0.18em;
+}
+.total-calificaciones {
+  color: #aaa;
+  font-size: 0.95em;
+  margin-left: 0.3em;
 }
 
 .perfil-header-card ion-avatar {
@@ -339,4 +365,58 @@ ion-content.perfil-page {
   height: 100%;
   border-radius: 12px;
   z-index: 1;
+}
+
+.btn-evaluar-perfil {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  --background: #ffd600;
+  --color: #222;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.estrellas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.7rem;
+  margin-bottom: 0.7rem;
+  background: #181818;
+  border-radius: 18px;
+  padding: 1rem 1.2rem 0.7rem 1.2rem;
+  box-shadow: 0 2px 8px rgba(27,64,34,0.10);
+  animation: motionFadeInUp 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.estrellas-container .estrella {
+  font-size: 2.2rem;
+  color: #ffd600;
+  margin: 0 0.18rem;
+  cursor: pointer;
+  transition: color 0.18s, filter 0.18s;
+  filter: grayscale(0.3);
+}
+
+.estrellas-container .estrella.seleccionada {
+  color: #ffd600;
+  filter: grayscale(0) drop-shadow(0 0 6px #ffd60088);
+}
+
+.evaluacion-label {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  color: #ffd600;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.btn-guardar-evaluacion {
+  margin-top: 0.7rem;
+  margin-right: 0.5rem;
+  --background: #00c853;
+  --color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
