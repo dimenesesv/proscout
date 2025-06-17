@@ -196,6 +196,23 @@ ion-card-subtitle {
   text-transform: uppercase !important;
 }
 
+.promedio-calificacion {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+.estrella-promedio {
+  color: #FFD700;
+  font-size: 1.3em;
+  margin-right: 0.15em;
+  vertical-align: middle;
+}
+.total-calificaciones {
+  color: #888;
+  font-size: 0.95em;
+  margin-left: 0.2em;
+}
+
 // Animaciones
 @keyframes motionFadeInUp {
   from {

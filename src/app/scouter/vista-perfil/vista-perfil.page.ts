@@ -455,12 +455,24 @@ export class VistaPerfilPage implements OnInit, OnDestroy {
       // Guardar la calificación en la colección 'evaluacion' en Firestore
       const db = (await import('firebase/firestore')).getFirestore();
       const docRef = (await import('firebase/firestore')).doc(db, 'evaluacion', `${this.userId}_${scouterUid}`);
+      const fecha = new Date();
       await (await import('firebase/firestore')).setDoc(docRef, {
         jugadorId: this.userId,
         scouterId: scouterUid,
         calificacion: this.evaluacion,
-        fecha: new Date()
+        fecha: fecha
       });
+      // Obtener nombre del scouter
+      const scouterDoc = await this.firebaseService.getDocument(`usuarios/${scouterUid}`);
+      const nombreScouter = scouterDoc?.nombre || scouterDoc?.scouter?.nombre || 'Un scouter';
+      // Notificar al jugador
+      await this.notificacionesService.notificarCalificacion(
+        this.userId,
+        scouterUid,
+        nombreScouter,
+        this.evaluacion,
+        fecha
+      );
       alert('¡Calificación enviada!');
       this.mostrarEstrellas = false;
     } catch (e) {

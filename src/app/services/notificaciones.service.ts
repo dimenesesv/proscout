@@ -54,6 +54,28 @@ export class NotificacionesService {
     }
   }
 
+  // Notifica a un jugador cuando un scouter lo califica
+  async notificarCalificacion(destinatarioId: string, remitenteId: string, nombreScouter: string, nota: number, fecha: Date) {
+    const notificacionesRef = collection(this.firestore, 'notificaciones');
+    const contenido = `${nombreScouter} te evaluó con ${nota} estrellas`;
+    const data = {
+      destinatarioId,
+      remitenteId,
+      tipo: 'metricRated', // Cambiado para mostrar ícono de estrella
+      contenido: contenido,
+      prioridad: 'media',
+      fecha: fecha,
+      leida: false
+    };
+    try {
+      await addDoc(notificacionesRef, data);
+      console.log('[NotificacionesService] Notificación de calificación creada', data);
+    } catch (error) {
+      console.error('[NotificacionesService] Error al crear notificación de calificación', error, data);
+      throw error;
+    }
+  }
+
   // Obtiene las notificaciones para el usuario autenticado (jugador o scouter)
   async getNotificacionesUsuario(): Promise<Notificacion[]> {
     const user = await this.afAuth.currentUser;

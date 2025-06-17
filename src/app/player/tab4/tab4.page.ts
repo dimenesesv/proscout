@@ -57,6 +57,9 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
   ];
   statsCardInView = true;
 
+  promedioCalificacion: number = 0;
+  totalCalificaciones: number = 0;
+
   constructor(
     private firebaseService: FirebaseService,
     private storageService: StorageService,
@@ -94,6 +97,34 @@ export class Tab4Page implements OnInit, OnDestroy, AfterViewInit {
         console.error('Error al obtener el perfil del usuario:', error);
         this.cargando = false;
       });
+
+    // Calcular promedio de calificaciones
+    await this.cargarPromedioCalificacion(userId);
+  }
+
+  async cargarPromedioCalificacion(userId: string) {
+    try {
+      const db = (await import('firebase/firestore')).getFirestore();
+      const q = (await import('firebase/firestore')).query(
+        (await import('firebase/firestore')).collection(db, 'evaluacion'),
+        (await import('firebase/firestore')).where('jugadorId', '==', userId)
+      );
+      const snapshot = await (await import('firebase/firestore')).getDocs(q);
+      let suma = 0;
+      let total = 0;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (typeof data['calificacion'] === 'number') {
+          suma += data['calificacion'];
+          total++;
+        }
+      });
+      this.promedioCalificacion = total > 0 ? (suma / total) : 0;
+      this.totalCalificaciones = total;
+    } catch (e) {
+      this.promedioCalificacion = 0;
+      this.totalCalificaciones = 0;
+    }
   }
 
   ngAfterViewInit() {

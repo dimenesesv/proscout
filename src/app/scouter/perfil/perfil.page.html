@@ -4,6 +4,11 @@
       <ion-back-button defaultHref="/scouter/scouter/mapa" ></ion-back-button>
     </ion-buttons>
     <ion-title>Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="danger" fill="clear" (click)="logout()" class="logout-btn">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

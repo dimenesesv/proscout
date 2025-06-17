@@ -17,7 +17,14 @@
           <div class="profile-photo">
           <ion-img  [src]="userData?.fotoPerfil || 'assets/default-profile.png'"></ion-img>
           </div>
-          <h2 class="perfil-nombre">{{ userData?.nombre || '-' }}</h2>
+          <h2 class="perfil-nombre">
+            {{ userData?.nombre || '-' }}
+            <span *ngIf="promedioCalificacion > 0" class="promedio-calificacion">
+              <ion-icon name="star" class="estrella-promedio"></ion-icon>
+              {{ promedioCalificacion | number:'1.1-2' }}
+              <span class="total-calificaciones">({{ totalCalificaciones }})</span>
+            </span>
+          </h2>
         </ion-col>
       </ion-row>
     </ion-grid>
