@@ -99,6 +99,26 @@
               </p>
             </ion-text>
           </ion-item>
+
+          <ion-item>
+            <ion-checkbox formControlName="aceptaTerminos"></ion-checkbox>
+            <ion-label class="ion-margin-start">
+              Acepto los 
+              <ion-button fill="clear" size="small" (click)="mostrarTerminos()">
+                <ion-text color="primary">términos y condiciones</ion-text>
+              </ion-button>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-checkbox formControlName="aceptaPrivacidad"></ion-checkbox>
+            <ion-label class="ion-margin-start">
+              Acepto la 
+              <ion-button fill="clear" size="small" (click)="mostrarPoliticaPrivacidad()">
+                <ion-text color="primary">política de privacidad</ion-text>
+              </ion-button>
+            </ion-label>
+          </ion-item>
         </ion-list>
         <ion-button expand="block" type="submit" [disabled]="formulario.invalid" class="ion-margin-top">
           Guardar
